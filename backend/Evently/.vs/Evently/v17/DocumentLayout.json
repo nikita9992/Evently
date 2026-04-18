@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\data\\eventlydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\data\\eventlydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -45,11 +49,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 34,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
+              "Title": "EventlyDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Data\\EventlyDbContext.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Data\\EventlyDbContext.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Data\\EventlyDbContext.cs",
+              "RelativeToolTip": "Evently.API\\Data\\EventlyDbContext.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAIwB4AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T14:04:07.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "DetallePedido.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\DetallePedido.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\DetallePedido.cs",
@@ -57,12 +74,11 @@
               "RelativeToolTip": "Evently.API\\Models\\DetallePedido.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAQwB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-18T13:26:59.369Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-18T13:26:59.369Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Pedido.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Pedido.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Pedido.cs",
@@ -70,12 +86,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Pedido.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAAwBkAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-18T13:20:30.07Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-18T13:20:30.07Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Estado.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Estado.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Estado.cs",
@@ -83,12 +98,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Estado.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-18T13:19:32.846Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-18T13:19:32.846Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Actividad.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Actividad.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Actividad.cs",
@@ -96,12 +110,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Actividad.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAswCIAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-18T13:17:13.013Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-18T13:17:13.013Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Categoria.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Categoria.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Categoria.cs",
@@ -109,12 +122,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Categoria.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-18T13:15:00.824Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-18T13:15:00.824Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Cliente.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Cliente.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Cliente.cs",
@@ -122,12 +134,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Cliente.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAgwAQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-18T13:09:58.333Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-18T13:09:58.333Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Usuario.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Usuario.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Usuario.cs",
@@ -140,7 +151,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "secrets.json",
               "DocumentMoniker": "C:\\Users\\nikva\\AppData\\Roaming\\Microsoft\\UserSecrets\\d730e356-5e33-40a8-b2cc-cbff230ff969\\secrets.json",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\d730e356-5e33-40a8-b2cc-cbff230ff969\\secrets.json",
@@ -148,12 +159,11 @@
               "RelativeToolTip": "..\\..\\..\\..\\..\\AppData\\Roaming\\Microsoft\\UserSecrets\\d730e356-5e33-40a8-b2cc-cbff230ff969\\secrets.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-04-17T21:04:10.983Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-17T21:04:10.983Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\appsettings.json",
               "RelativeDocumentMoniker": "Evently.API\\appsettings.json",
@@ -161,8 +171,7 @@
               "RelativeToolTip": "Evently.API\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-04-17T21:02:20.401Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-17T21:02:20.401Z"
             }
           ]
         }
