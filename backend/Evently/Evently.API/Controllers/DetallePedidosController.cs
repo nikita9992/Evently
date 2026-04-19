@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
@@ -25,14 +20,20 @@ namespace Evently.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DetallePedido>>> GetDetallesPedido()
         {
-            return await _context.DetallesPedido.ToListAsync();
+            return await _context.DetallesPedido
+                .Include(d => d.Pedido)
+                .Include(d => d.Actividad)
+                .ToListAsync();
         }
 
         // GET: api/DetallePedidos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DetallePedido>> GetDetallePedido(int id)
         {
-            var detallePedido = await _context.DetallesPedido.FindAsync(id);
+            var detallePedido = await _context.DetallesPedido
+                .Include(d => d.Pedido)
+                .Include(d => d.Actividad)
+                .FirstOrDefaultAsync(d => d.IdPedido == id);
 
             if (detallePedido == null)
             {
@@ -42,8 +43,41 @@ namespace Evently.API.Controllers
             return detallePedido;
         }
 
+        // GET: api/DetallePedidos/pedido/5
+        [HttpGet("pedido/{idPedido}")]
+        public async Task<ActionResult<IEnumerable<DetallePedido>>> GetDetallesPorPedido(int idPedido)
+        {
+            return await _context.DetallesPedido
+                .Include(d => d.Actividad)
+                .Where(d => d.IdPedido == idPedido)
+                .ToListAsync();
+        }
+
+        // POST: api/DetallePedidos
+        [HttpPost]
+        public async Task<ActionResult<DetallePedido>> PostDetallePedido(DetallePedido detallePedido)
+        {
+            _context.DetallesPedido.Add(detallePedido);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (DetallePedidoExists(detallePedido.IdPedido))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetDetallePedido", new { id = detallePedido.IdPedido }, detallePedido);
+        }
+
         // PUT: api/DetallePedidos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDetallePedido(int id, DetallePedido detallePedido)
         {
@@ -73,36 +107,12 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/DetallePedidos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<DetallePedido>> PostDetallePedido(DetallePedido detallePedido)
-        {
-            _context.DetallesPedido.Add(detallePedido);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (DetallePedidoExists(detallePedido.IdPedido))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetDetallePedido", new { id = detallePedido.IdPedido }, detallePedido);
-        }
-
         // DELETE: api/DetallePedidos/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDetallePedido(int id)
         {
             var detallePedido = await _context.DetallesPedido.FindAsync(id);
+
             if (detallePedido == null)
             {
                 return NotFound();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
@@ -25,14 +20,38 @@ namespace Evently.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
-            return await _context.Clientes.ToListAsync();
+            return await _context.Clientes
+                .Include(c => c.Usuario)
+                .Include(c => c.Pedidos)
+                .ToListAsync();
         }
 
         // GET: api/Clientes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Clientes
+                .Include(c => c.Usuario)
+                .Include(c => c.Pedidos)
+                    .ThenInclude(p => p.Estado)
+                .FirstOrDefaultAsync(c => c.IdCliente == id);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return cliente;
+        }
+
+        // GET: api/Clientes/usuario/5
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<Cliente>> GetClientePorUsuario(int idUsuario)
+        {
+            var cliente = await _context.Clientes
+                .Include(c => c.Pedidos)
+                    .ThenInclude(p => p.Estado)
+                .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario);
 
             if (cliente == null)
             {
@@ -43,7 +62,6 @@ namespace Evently.API.Controllers
         }
 
         // PUT: api/Clientes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
@@ -74,13 +92,11 @@ namespace Evently.API.Controllers
         }
 
         // POST: api/Clientes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetCliente", new { id = cliente.IdCliente }, cliente);
         }
 
@@ -89,6 +105,7 @@ namespace Evently.API.Controllers
         public async Task<IActionResult> DeleteCliente(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
+
             if (cliente == null)
             {
                 return NotFound();

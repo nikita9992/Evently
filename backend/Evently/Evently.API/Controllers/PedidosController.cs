@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
@@ -25,14 +20,24 @@ namespace Evently.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
         {
-            return await _context.Pedidos.ToListAsync();
+            return await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .ToListAsync();
         }
 
         // GET: api/Pedidos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Pedido>> GetPedido(int id)
         {
-            var pedido = await _context.Pedidos.FindAsync(id);
+            var pedido = await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .FirstOrDefaultAsync(p => p.IdPedido == id);
 
             if (pedido == null)
             {
@@ -42,8 +47,19 @@ namespace Evently.API.Controllers
             return pedido;
         }
 
+        // GET: api/Pedidos/cliente/5
+        [HttpGet("cliente/{idCliente}")]
+        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorCliente(int idCliente)
+        {
+            return await _context.Pedidos
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .Where(p => p.IdCliente == idCliente)
+                .ToListAsync();
+        }
+
         // PUT: api/Pedidos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPedido(int id, Pedido pedido)
         {
@@ -74,13 +90,12 @@ namespace Evently.API.Controllers
         }
 
         // POST: api/Pedidos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Pedido>> PostPedido(Pedido pedido)
         {
+            pedido.FechaCreacion = DateTime.UtcNow;
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetPedido", new { id = pedido.IdPedido }, pedido);
         }
 
@@ -89,6 +104,7 @@ namespace Evently.API.Controllers
         public async Task<IActionResult> DeletePedido(int id)
         {
             var pedido = await _context.Pedidos.FindAsync(id);
+
             if (pedido == null)
             {
                 return NotFound();

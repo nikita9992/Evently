@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
@@ -25,14 +20,18 @@ namespace Evently.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Estado>>> GetEstados()
         {
-            return await _context.Estados.ToListAsync();
+            return await _context.Estados
+                .Include(e => e.Pedidos)
+                .ToListAsync();
         }
 
         // GET: api/Estados/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Estado>> GetEstado(int id)
         {
-            var estado = await _context.Estados.FindAsync(id);
+            var estado = await _context.Estados
+                .Include(e => e.Pedidos)
+                .FirstOrDefaultAsync(e => e.IdEstado == id);
 
             if (estado == null)
             {
@@ -43,7 +42,6 @@ namespace Evently.API.Controllers
         }
 
         // PUT: api/Estados/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEstado(int id, Estado estado)
         {
@@ -74,13 +72,11 @@ namespace Evently.API.Controllers
         }
 
         // POST: api/Estados
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Estado>> PostEstado(Estado estado)
         {
             _context.Estados.Add(estado);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetEstado", new { id = estado.IdEstado }, estado);
         }
 
@@ -89,6 +85,7 @@ namespace Evently.API.Controllers
         public async Task<IActionResult> DeleteEstado(int id)
         {
             var estado = await _context.Estados.FindAsync(id);
+
             if (estado == null)
             {
                 return NotFound();
