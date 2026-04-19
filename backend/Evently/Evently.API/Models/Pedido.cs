@@ -1,4 +1,6 @@
-﻿namespace Evently.API.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Evently.API.Models
 {
     public class Pedido
     {
@@ -6,8 +8,8 @@
         public DateTime Fecha { get; set; } = DateTime.UtcNow;
         public decimal Total { get; set; }
 
-        public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; } = null!;
+        public string UsuarioId { get; set; } = string.Empty;
+        public IdentityUser Usuario { get; set; } = null!;
 
         public int EstadoId { get; set; }
         public Estado Estado { get; set; } = null!;

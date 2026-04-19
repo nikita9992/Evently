@@ -1,4 +1,6 @@
-﻿namespace Evently.API.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Evently.API.Models
 {
     public class Cliente
     {
@@ -8,7 +10,8 @@
         public string Telefono { get; set; } = string.Empty;
         public string Direccion { get; set; } = string.Empty;
 
-        public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; } = null!;
+        
+        public string UsuarioId { get; set; } = string.Empty;
+        public IdentityUser Usuario { get; set; } = null!;
     }
 }

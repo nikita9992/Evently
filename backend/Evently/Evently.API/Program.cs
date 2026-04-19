@@ -1,8 +1,6 @@
 using Evently.API.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,22 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EventlyContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ConexionEvently")));
 
-// Autenticación 
-var clave = builder.Configuration["Jwt:Clave"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Emisor"],
-            ValidAudience = builder.Configuration["Jwt:Audiencia"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clave!))
-        };
-    });
+// Identity para autenticación y autorización
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<EventlyContext>()
+    .AddDefaultTokenProviders();
+
+// Configuración de cookies de sesión
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/api/auth/login";
+    options.AccessDeniedPath = "/api/auth/denegado";
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
