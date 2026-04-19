@@ -46,7 +46,7 @@ namespace Evently.API.Data
                 .HasForeignKey(p => p.IdCliente)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //Relación Estado (1) > Pedidos (N)
+            //Relación Estado (1) > Pedidos(N)
             modelBuilder.Entity<Pedido>()
                 .HasOne(p => p.Estado)
                 .WithMany(e => e.Pedidos)
