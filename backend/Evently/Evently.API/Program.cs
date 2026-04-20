@@ -108,4 +108,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+// Inicializamos la base de datos con datos de prueba
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<EventlyDbContext>();
+    DbInicializador.Inicializar(context);
+}
+
 app.Run();
