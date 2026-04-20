@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientesController : ControllerBase
@@ -16,7 +23,7 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/Clientes
+        // Devuelve todos los clientes con sus datos relacionados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
@@ -26,7 +33,7 @@ namespace Evently.API.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/Clientes/5
+        // Devuelve un cliente concreto con sus pedidos
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(int id)
         {
@@ -44,7 +51,7 @@ namespace Evently.API.Controllers
             return cliente;
         }
 
-        // GET: api/Clientes/usuario/5
+        // Devuelve el cliente asociado a un usuario concreto
         [HttpGet("usuario/{idUsuario}")]
         public async Task<ActionResult<Cliente>> GetClientePorUsuario(int idUsuario)
         {
@@ -61,7 +68,7 @@ namespace Evently.API.Controllers
             return cliente;
         }
 
-        // PUT: api/Clientes/5
+        // Actualiza los datos de un cliente
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
@@ -91,7 +98,7 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Clientes
+        // Crea un nuevo cliente
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
@@ -100,7 +107,7 @@ namespace Evently.API.Controllers
             return CreatedAtAction("GetCliente", new { id = cliente.IdCliente }, cliente);
         }
 
-        // DELETE: api/Clientes/5
+        // Elimina un cliente
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {

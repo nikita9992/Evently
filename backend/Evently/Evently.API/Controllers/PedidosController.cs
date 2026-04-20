@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PedidosController : ControllerBase
@@ -16,7 +23,7 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/Pedidos
+        // Devuelve todos los pedidos con sus datos relacionados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
         {
@@ -28,7 +35,7 @@ namespace Evently.API.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/Pedidos/5
+        // Devuelve un pedido concreto con todos sus datos
         [HttpGet("{id}")]
         public async Task<ActionResult<Pedido>> GetPedido(int id)
         {
@@ -47,7 +54,7 @@ namespace Evently.API.Controllers
             return pedido;
         }
 
-        // GET: api/Pedidos/cliente/5
+        // Devuelve todos los pedidos de un cliente concreto
         [HttpGet("cliente/{idCliente}")]
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorCliente(int idCliente)
         {
@@ -59,7 +66,7 @@ namespace Evently.API.Controllers
                 .ToListAsync();
         }
 
-        // PUT: api/Pedidos/5
+        // Actualiza un pedido existente
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPedido(int id, Pedido pedido)
         {
@@ -89,7 +96,7 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Pedidos
+        // Crea un nuevo pedido
         [HttpPost]
         public async Task<ActionResult<Pedido>> PostPedido(Pedido pedido)
         {
@@ -99,7 +106,7 @@ namespace Evently.API.Controllers
             return CreatedAtAction("GetPedido", new { id = pedido.IdPedido }, pedido);
         }
 
-        // DELETE: api/Pedidos/5
+        // Elimina un pedido
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedido(int id)
         {

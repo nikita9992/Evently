@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DetallePedidosController : ControllerBase
@@ -16,7 +23,7 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/DetallePedidos
+        // Devuelve todos los detalles de pedidos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DetallePedido>>> GetDetallesPedido()
         {
@@ -26,7 +33,7 @@ namespace Evently.API.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/DetallePedidos/5
+        // Devuelve un detalle de pedido concreto
         [HttpGet("{id}")]
         public async Task<ActionResult<DetallePedido>> GetDetallePedido(int id)
         {
@@ -43,7 +50,7 @@ namespace Evently.API.Controllers
             return detallePedido;
         }
 
-        // GET: api/DetallePedidos/pedido/5
+        // Devuelve todas las líneas de un pedido concreto
         [HttpGet("pedido/{idPedido}")]
         public async Task<ActionResult<IEnumerable<DetallePedido>>> GetDetallesPorPedido(int idPedido)
         {
@@ -53,7 +60,7 @@ namespace Evently.API.Controllers
                 .ToListAsync();
         }
 
-        // POST: api/DetallePedidos
+        // Añade una línea a un pedido
         [HttpPost]
         public async Task<ActionResult<DetallePedido>> PostDetallePedido(DetallePedido detallePedido)
         {
@@ -77,7 +84,7 @@ namespace Evently.API.Controllers
             return CreatedAtAction("GetDetallePedido", new { id = detallePedido.IdPedido }, detallePedido);
         }
 
-        // PUT: api/DetallePedidos/5
+        // Actualiza una línea de pedido
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDetallePedido(int id, DetallePedido detallePedido)
         {
@@ -107,7 +114,7 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/DetallePedidos/5
+        // Elimina una línea de pedido
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDetallePedido(int id)
         {

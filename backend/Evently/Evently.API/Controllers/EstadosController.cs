@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
 using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EstadosController : ControllerBase
@@ -16,7 +23,7 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/Estados
+        // Devuelve todos los estados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Estado>>> GetEstados()
         {
@@ -25,7 +32,7 @@ namespace Evently.API.Controllers
                 .ToListAsync();
         }
 
-        // GET: api/Estados/5
+        // Devuelve un estado concreto
         [HttpGet("{id}")]
         public async Task<ActionResult<Estado>> GetEstado(int id)
         {
@@ -41,7 +48,7 @@ namespace Evently.API.Controllers
             return estado;
         }
 
-        // PUT: api/Estados/5
+        // Actualiza un estado
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEstado(int id, Estado estado)
         {
@@ -71,7 +78,7 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Estados
+        // Crea un nuevo estado
         [HttpPost]
         public async Task<ActionResult<Estado>> PostEstado(Estado estado)
         {
@@ -80,7 +87,7 @@ namespace Evently.API.Controllers
             return CreatedAtAction("GetEstado", new { id = estado.IdEstado }, estado);
         }
 
-        // DELETE: api/Estados/5
+        // Elimina un estado
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEstado(int id)
         {
