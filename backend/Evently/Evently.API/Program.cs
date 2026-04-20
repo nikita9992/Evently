@@ -37,6 +37,7 @@ builder.Services.AddAuthorization();
 
 //Servicios de la aplicación
 builder.Services.AddScoped<IAutenticacionService, AutenticacionService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 
 //Controladores
 builder.Services.AddControllers();
