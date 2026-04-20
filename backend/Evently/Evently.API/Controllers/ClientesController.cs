@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
@@ -10,6 +11,7 @@ using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientesController : ControllerBase
@@ -21,18 +23,25 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/Clientes
+        // Devuelve todos los clientes con sus datos relacionados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
-            return await _context.Clientes.ToListAsync();
+            return await _context.Clientes
+                .Include(c => c.Usuario)
+                .Include(c => c.Pedidos)
+                .ToListAsync();
         }
 
-        // GET: api/Clientes/5
+        // Devuelve un cliente concreto con sus pedidos
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Clientes
+                .Include(c => c.Usuario)
+                .Include(c => c.Pedidos)
+                    .ThenInclude(p => p.Estado)
+                .FirstOrDefaultAsync(c => c.IdCliente == id);
 
             if (cliente == null)
             {
@@ -42,8 +51,24 @@ namespace Evently.API.Controllers
             return cliente;
         }
 
-        // PUT: api/Clientes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Devuelve el cliente asociado a un usuario concreto
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<Cliente>> GetClientePorUsuario(int idUsuario)
+        {
+            var cliente = await _context.Clientes
+                .Include(c => c.Pedidos)
+                    .ThenInclude(p => p.Estado)
+                .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario);
+
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            return cliente;
+        }
+
+        // Actualiza los datos de un cliente
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
@@ -73,22 +98,21 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Clientes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Crea un nuevo cliente
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetCliente", new { id = cliente.IdCliente }, cliente);
         }
 
-        // DELETE: api/Clientes/5
+        // Elimina un cliente
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
+
             if (cliente == null)
             {
                 return NotFound();

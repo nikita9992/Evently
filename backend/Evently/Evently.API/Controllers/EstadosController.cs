@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
@@ -10,6 +11,7 @@ using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EstadosController : ControllerBase
@@ -21,18 +23,22 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/Estados
+        // Devuelve todos los estados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Estado>>> GetEstados()
         {
-            return await _context.Estados.ToListAsync();
+            return await _context.Estados
+                .Include(e => e.Pedidos)
+                .ToListAsync();
         }
 
-        // GET: api/Estados/5
+        // Devuelve un estado concreto
         [HttpGet("{id}")]
         public async Task<ActionResult<Estado>> GetEstado(int id)
         {
-            var estado = await _context.Estados.FindAsync(id);
+            var estado = await _context.Estados
+                .Include(e => e.Pedidos)
+                .FirstOrDefaultAsync(e => e.IdEstado == id);
 
             if (estado == null)
             {
@@ -42,8 +48,7 @@ namespace Evently.API.Controllers
             return estado;
         }
 
-        // PUT: api/Estados/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Actualiza un estado
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEstado(int id, Estado estado)
         {
@@ -73,22 +78,21 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Estados
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Crea un nuevo estado
         [HttpPost]
         public async Task<ActionResult<Estado>> PostEstado(Estado estado)
         {
             _context.Estados.Add(estado);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetEstado", new { id = estado.IdEstado }, estado);
         }
 
-        // DELETE: api/Estados/5
+        // Elimina un estado
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEstado(int id)
         {
             var estado = await _context.Estados.FindAsync(id);
+
             if (estado == null)
             {
                 return NotFound();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Evently.API.Data;
@@ -10,6 +11,7 @@ using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PedidosController : ControllerBase
@@ -21,18 +23,28 @@ namespace Evently.API.Controllers
             _context = context;
         }
 
-        // GET: api/Pedidos
+        // Devuelve todos los pedidos con sus datos relacionados
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
         {
-            return await _context.Pedidos.ToListAsync();
+            return await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .ToListAsync();
         }
 
-        // GET: api/Pedidos/5
+        // Devuelve un pedido concreto con todos sus datos
         [HttpGet("{id}")]
         public async Task<ActionResult<Pedido>> GetPedido(int id)
         {
-            var pedido = await _context.Pedidos.FindAsync(id);
+            var pedido = await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .FirstOrDefaultAsync(p => p.IdPedido == id);
 
             if (pedido == null)
             {
@@ -42,8 +54,19 @@ namespace Evently.API.Controllers
             return pedido;
         }
 
-        // PUT: api/Pedidos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Devuelve todos los pedidos de un cliente concreto
+        [HttpGet("cliente/{idCliente}")]
+        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorCliente(int idCliente)
+        {
+            return await _context.Pedidos
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .Where(p => p.IdCliente == idCliente)
+                .ToListAsync();
+        }
+
+        // Actualiza un pedido existente
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPedido(int id, Pedido pedido)
         {
@@ -73,22 +96,22 @@ namespace Evently.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Pedidos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // Crea un nuevo pedido
         [HttpPost]
         public async Task<ActionResult<Pedido>> PostPedido(Pedido pedido)
         {
+            pedido.FechaCreacion = DateTime.UtcNow;
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetPedido", new { id = pedido.IdPedido }, pedido);
         }
 
-        // DELETE: api/Pedidos/5
+        // Elimina un pedido
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedido(int id)
         {
             var pedido = await _context.Pedidos.FindAsync(id);
+
             if (pedido == null)
             {
                 return NotFound();
