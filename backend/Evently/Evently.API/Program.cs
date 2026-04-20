@@ -1,4 +1,5 @@
 using Evently.API.Data;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -33,6 +34,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+//Servicios de la aplicación
+builder.Services.AddScoped<IAutenticacionService, AutenticacionService>();
 
 //Controladores
 builder.Services.AddControllers();
