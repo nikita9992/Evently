@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Evently.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e85afddd6c55f9be6d9250bd20fd4c9e0be95012")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bfda3e6701e7327c5f91a1292a1f385aada55f50")]
 [assembly: System.Reflection.AssemblyProductAttribute("Evently.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Evently.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

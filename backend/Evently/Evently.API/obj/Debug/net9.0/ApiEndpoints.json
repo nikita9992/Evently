@@ -1,5 +1,95 @@
 [
   {
+    "ContainingType": "Evently.API.Controllers.ActividadesController",
+    "Method": "ObtenerTodas",
+    "RelativePath": "api/Actividades",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idCategoria",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "titulo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ActividadesController",
+    "Method": "Crear",
+    "RelativePath": "api/Actividades",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "crearActividadDto",
+        "Type": "Evently.API.DTOs.Actividad.CrearActividadDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ActividadesController",
+    "Method": "ObtenerPorId",
+    "RelativePath": "api/Actividades/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ActividadesController",
+    "Method": "Editar",
+    "RelativePath": "api/Actividades/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "crearActividadDto",
+        "Type": "Evently.API.DTOs.Actividad.CrearActividadDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ActividadesController",
+    "Method": "Eliminar",
+    "RelativePath": "api/Actividades/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Evently.API.Controllers.AutenticacionController",
     "Method": "Login",
     "RelativePath": "api/Autenticacion/login",
