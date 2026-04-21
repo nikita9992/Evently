@@ -25,7 +25,7 @@ namespace Evently.API.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Precio { get; set; }
 
-        public DateTime? FechaActiv { get; set; }
+        public DateTime? FechaActiv { get; set; } = null;
 
         public int? CupoMaximo { get; set; }
 
