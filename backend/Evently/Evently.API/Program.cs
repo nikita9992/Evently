@@ -47,9 +47,12 @@ builder.Services.AddCors(opciones =>
 {
     opciones.AddPolicy("PolicyEvently", politica =>
         politica.AllowAnyOrigin()
-                .AllowAnyMethod()
+                .AllowAnyMethod()               
                 .AllowAnyHeader());
 });
+
+builder.Services.AddScoped<IEstadoService, EstadoService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
 
 //Swagger con soporte JWT
 builder.Services.AddEndpointsApiExplorer();
