@@ -1,165 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Evently.API.DTOs.Pedido;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Evently.API.Data;
-using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class PedidosController : ControllerBase
     {
-        private readonly EventlyDbContext _context;
+        private readonly IPedidoService _pedidoService;
 
-        public PedidosController(EventlyDbContext context)
+        public PedidosController(IPedidoService pedidoService)
         {
-            _context = context;
+            _pedidoService = pedidoService;
         }
 
         // Devuelve todos los pedidos con sus datos relacionados
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> GetPedidos()
         {
-            return await _context.Pedidos
-                .Include(p => p.Cliente)
-                .Include(p => p.Estado)
-                .Include(p => p.DetallesPedido)
-                    .ThenInclude(d => d.Actividad)
-                .ToListAsync();
+            var pedidos = await _pedidoService.ObtenerTodosAsync();
+            return Ok(pedidos);
         }
 
         // Devuelve un pedido concreto con todos sus datos
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pedido>> GetPedido(int id)
+        public async Task<IActionResult> GetPedido(int id)
         {
-            var pedido = await _context.Pedidos
-                .Include(p => p.Cliente)
-                .Include(p => p.Estado)
-                .Include(p => p.DetallesPedido)
-                    .ThenInclude(d => d.Actividad)
-                .FirstOrDefaultAsync(p => p.IdPedido == id);
+            var pedido = await _pedidoService.ObtenerPorIdAsync(id);
 
             if (pedido == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { mensaje = "Pedido no encontrado" });
 
-            return pedido;
+            return Ok(pedido);
         }
 
         // Devuelve todos los pedidos de un cliente concreto
         [HttpGet("cliente/{idCliente}")]
-        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidosPorCliente(int idCliente)
+        public async Task<IActionResult> GetPedidosPorCliente(int idCliente)
         {
-            return await _context.Pedidos
-                .Include(p => p.Estado)
-                .Include(p => p.DetallesPedido)
-                    .ThenInclude(d => d.Actividad)
-                .Where(p => p.IdCliente == idCliente)
-                .ToListAsync();
-        }
-
-        // Actualiza un pedido existente
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPedido(int id, Pedido pedido)
-        {
-            if (id != pedido.IdPedido)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(pedido).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PedidoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            var pedidos = await _pedidoService.ObtenerPorClienteAsync(idCliente);
+            return Ok(pedidos);
         }
 
         // Crea un nuevo pedido
         [HttpPost]
-        public async Task<ActionResult<Pedido>> PostPedido(Pedido pedido)
+        public async Task<IActionResult> PostPedido([FromBody] CrearPedidoDto crearPedidoDto)
         {
-            pedido.FechaCreacion = DateTime.UtcNow;
-            _context.Pedidos.Add(pedido);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetPedido", new { id = pedido.IdPedido }, pedido);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var pedido = await _pedidoService.CrearAsync(crearPedidoDto);
+            return CreatedAtAction(nameof(GetPedido),
+                new { id = pedido.IdPedido }, pedido);
+        }
+
+        // Actualiza un pedido existente
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPedido(int id, [FromBody] CrearPedidoDto crearPedidoDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var pedido = await _pedidoService.EditarAsync(id, crearPedidoDto);
+
+            if (pedido == null)
+                return NotFound(new { mensaje = "Pedido no encontrado" });
+
+            return Ok(pedido);
         }
 
         // Elimina un pedido
         [HttpDelete("{id}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> DeletePedido(int id)
         {
-            var pedido = await _context.Pedidos.FindAsync(id);
+            var resultado = await _pedidoService.EliminarAsync(id);
 
-            if (pedido == null)
-            {
-                return NotFound();
-            }
+            if (!resultado)
+                return NotFound(new { mensaje = "Pedido no encontrado" });
 
-            _context.Pedidos.Remove(pedido);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PedidoExists(int id)
-        {
-            return _context.Pedidos.Any(e => e.IdPedido == id);
+            return Ok(new { mensaje = "Pedido eliminado correctamente" });
         }
 
         // Confirma el pedido: comprueba que el cliente tiene datos y crea el pedido
         [HttpPost("confirmar")]
-        public async Task<ActionResult<Pedido>> ConfirmarPedido(int idCliente, int idEstado)
+        public async Task<IActionResult> ConfirmarPedido(int idCliente, int idEstado)
         {
-            var cliente = await _context.Clientes
-                .FirstOrDefaultAsync(c => c.IdCliente == idCliente);
+            var pedido = await _pedidoService.ConfirmarAsync(idCliente, idEstado);
 
-            if (cliente == null)
-            {
-                return BadRequest("El cliente no existe o no tiene datos personales.");
-            }
+            if (pedido == null)
+                return BadRequest(new { mensaje = "El cliente o el estado indicado no existe" });
 
-            var estado = await _context.Estados
-                .FirstOrDefaultAsync(e => e.IdEstado == idEstado);
-
-            if (estado == null)
-            {
-                return BadRequest("El estado indicado no existe.");
-            }
-
-            var pedido = new Pedido
-            {
-                IdCliente = idCliente,
-                IdEstado = idEstado,
-                FechaCreacion = DateTime.UtcNow,
-                FechaConfirm = DateTime.UtcNow
-            };
-
-            _context.Pedidos.Add(pedido);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPedido", new { id = pedido.IdPedido }, pedido);
+            return CreatedAtAction(nameof(GetPedido),
+                new { id = pedido.IdPedido }, pedido);
         }
     }
 }
