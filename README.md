@@ -6,10 +6,10 @@
 
 ## Equipo de desarrollo
 
-| Nombre                 | Rol principal                                    |
-| ---------------------- | ------------------------------------------------ |
-| Mykyta Vavulin         | Backend — Autenticación, Actividades, Categorías |
-| Raquel Blázquez Corral | Backend — Carrito, Pedidos, Clientes, Estados    |
+| Nombre                 | Backend                                | Frontend                                      |
+| ---------------------- | -------------------------------------- | --------------------------------------------- |
+| Mykyta Vavulin         | Autenticación, Actividades, Categorías | Actividades, Detalle, Panel Admin             |
+| Raquel Blázquez Corral | Carrito, Pedidos, Clientes, Estados    | Login, Registro, Perfil, Carrito, Mis Pedidos |
 
 ---
 
@@ -38,7 +38,25 @@ evently/
 │       ├── DTOs/          # Objetos de transferencia de datos
 │       ├── Models/        # Modelos de la base de datos
 │       └── Services/      # Lógica de negocio
-└── frontend/         # Interfaz de usuario con Blazor (próximamente)
+└── frontend/         # Interfaz de usuario con Blazor WebAssembly
+    └── Evently.Web/
+        ├── Layout/        # Layout principal con navbar y drawer
+        ├── Pages/         # Páginas de la aplicación
+        │   ├── Home.razor
+        │   ├── Actividades.razor
+        │   ├── DetalleActividad.razor
+        │   ├── Carrito.razor
+        │   ├── Login.razor
+        │   ├── Registro.razor
+        │   ├── Perfil.razor
+        │   ├── MisPedidos.razor
+        │   └── Admin/
+        │       ├── AdminActividades.razor
+        │       ├── AdminCategorias.razor
+        │       ├── AdminPedidos.razor
+        │       └── AdminClientes.razor
+        ├── Services/      # Servicios para llamadas a la API
+        └── Models/        # Modelos del frontend
 ```
 
 ---
@@ -65,18 +83,18 @@ evently/
 
 ### Frontend
 
-| Tecnología             | ¿Por qué la usamos?                                                                                                                                   |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Blazor WebAssembly** | Framework de Microsoft que permite crear interfaces web con C# en lugar de JavaScript. Elegido por su integración natural con el backend ASP.NET Core |
-| **MudBlazor**          | Librería de componentes UI para Blazor. Proporciona componentes listos y con buen diseño visual                                                       |
+| Tecnología             | Versión | ¿Por qué la usamos?                                                                                                                                                                             |
+| ---------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Blazor WebAssembly** | .NET 9  | Framework de Microsoft que permite crear interfaces web con C# en lugar de JavaScript. Elegido por su integración natural con el backend ASP.NET Core y porque todo el equipo ya trabaja con C# |
+| **MudBlazor**          | 7.x     | Librería de componentes UI para Blazor. Proporciona componentes listos y con buen diseño visual como botones, tablas, formularios, navegación y mucho más, sin necesidad de CSS personalizado   |
 
 ### Herramientas
 
-| Herramienta            | Uso                                             |
-| ---------------------- | ----------------------------------------------- |
-| **Visual Studio 2022** | Entorno de desarrollo principal para el backend |
-| **VS Code**            | Editor auxiliar y gestión de Git                |
-| **Git + GitHub**       | Control de versiones y colaboración en equipo   |
+| Herramienta            | Uso                                                        |
+| ---------------------- | ---------------------------------------------------------- |
+| **Visual Studio 2022** | Entorno de desarrollo principal para el backend y frontend |
+| **VS Code**            | Editor auxiliar y gestión de Git                           |
+| **Git + GitHub**       | Control de versiones y colaboración en equipo              |
 
 ---
 
@@ -93,8 +111,6 @@ El sistema cuenta con **7 tablas** principales:
 | `Estados`        | Estados posibles de un pedido (Confirmado, Cancelado)                 |
 | `Pedidos`        | Reservas confirmadas por los usuarios                                 |
 | `DetallesPedido` | Líneas de actividades dentro de cada pedido (relación N:M)            |
-
-> **Nota importante:** El carrito **no se guarda en la base de datos**. Se almacena en el `localStorage` del navegador. Solo se crea un `Pedido` en la base de datos cuando el usuario confirma la compra.
 
 ---
 
@@ -122,3 +138,35 @@ Usamos **JWT (JSON Web Tokens)**:
 Los tokens expiran en **8 horas**.
 
 ---
+
+## Mapa de navegación
+
+```
+HOME
+├── ACTIVIDADES
+│   ├── Filtrar por categoría
+│   └── DETALLE DE ACTIVIDAD → Añadir al carrito
+├── CARRITO
+│   └── CONFIRMAR PEDIDO
+└── CUENTA
+    ├── Login / Registro
+    ├── PERFIL (mis datos)
+    └── MIS PEDIDOS (historial)
+
+ADMIN (solo administrador)
+├── Gestión de Actividades
+├── Gestión de Categorías
+├── Gestión de Pedidos
+└── Gestión de Clientes
+```
+
+---
+
+## Ramas:
+
+- `main` → código estable y revisado
+- `develop` → integración de ambas partes
+- `M` → rama de trabajo de Mykyta
+- `R` → rama de trabajo de Raquel
+
+_Proyecto Final — DAW-M | Mare Nostrum Alicante | 2026_
