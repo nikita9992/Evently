@@ -1,4 +1,5 @@
 using Evently.API.Data;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -34,6 +35,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+//Servicios de la aplicación
+builder.Services.AddScoped<IAutenticacionService, AutenticacionService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IActividadService, ActividadService>();
+builder.Services.AddScoped<IEstadoService, EstadoService>();
+
 //Controladores
 builder.Services.AddControllers();
 
@@ -41,9 +48,14 @@ builder.Services.AddCors(opciones =>
 {
     opciones.AddPolicy("PolicyEvently", politica =>
         politica.AllowAnyOrigin()
-                .AllowAnyMethod()
+                .AllowAnyMethod()               
                 .AllowAnyHeader());
 });
+
+builder.Services.AddScoped<IEstadoService, EstadoService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IPedidoService, PedidoService>();
+builder.Services.AddScoped<IDetallePedidoService, DetallePedidoService>();
 
 //Swagger con soporte JWT
 builder.Services.AddEndpointsApiExplorer();
@@ -107,5 +119,12 @@ app.UseCors("PolicyEvently");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// Inicializamos la base de datos con datos de prueba
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<EventlyDbContext>();
+    DbInicializador.Inicializar(context);
+}
 
 app.Run();
