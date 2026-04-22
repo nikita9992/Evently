@@ -7,24 +7,28 @@
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\controllers\\detallepedidoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\controllers\\detallepedidoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\services\\detallepedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\detallepedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\services\\idetallepedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\idetallepedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\dtos\\detallepedido\\creardetallepedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\detallepedido\\creardetallepedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\dtos\\detallepedido\\detallepedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\detallepedido\\detallepedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\controllers\\pedidoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\controllers\\pedidoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\services\\ipedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\ipedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\dtos\\pedido\\crearpedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\pedido\\crearpedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\dtos\\pedido\\pedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\pedido\\pedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\services\\iestadoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -57,10 +61,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\dtos\\actividad\\actividaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\actividad\\actividaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\raquel\\onedrive - conselleria d\u0027educaci\u00F3\\evently\\backend\\evently\\evently.api\\controllers\\detallepedidoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\controllers\\detallepedidoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -69,7 +69,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 90,
+          "DockedWidth": 201,
           "SelectedChildIndex": 2,
           "Children": [
             {
@@ -83,53 +83,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PedidoService.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Services\\PedidoService.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs*",
-              "RelativeToolTip": "Evently.API\\Services\\PedidoService.cs*",
-              "ViewState": "AgIAAM8AAAAAAAAAAAAswOIAAAABAAAAAAAAAA==",
+              "Title": "DetallePedidoService.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\DetallePedidoService.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Services\\DetallePedidoService.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\DetallePedidoService.cs",
+              "RelativeToolTip": "Evently.API\\Services\\DetallePedidoService.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAYwI8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T08:04:36.911Z",
+              "WhenOpened": "2026-04-22T08:56:03.301Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "IPedidoService.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\IPedidoService.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Services\\IPedidoService.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\IPedidoService.cs*",
-              "RelativeToolTip": "Evently.API\\Services\\IPedidoService.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Title": "IDetallePedidoService.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\IDetallePedidoService.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Services\\IDetallePedidoService.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\IDetallePedidoService.cs",
+              "RelativeToolTip": "Evently.API\\Services\\IDetallePedidoService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T08:04:09.224Z",
+              "WhenOpened": "2026-04-22T08:55:43.832Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "CrearPedidoDto.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Pedido\\CrearPedidoDto.cs",
-              "RelativeDocumentMoniker": "Evently.API\\DTOs\\Pedido\\CrearPedidoDto.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Pedido\\CrearPedidoDto.cs*",
-              "RelativeToolTip": "Evently.API\\DTOs\\Pedido\\CrearPedidoDto.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Title": "CrearDetallePedidoDto.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\DetallePedido\\CrearDetallePedidoDto.cs",
+              "RelativeDocumentMoniker": "Evently.API\\DTOs\\DetallePedido\\CrearDetallePedidoDto.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\DetallePedido\\CrearDetallePedidoDto.cs",
+              "RelativeToolTip": "Evently.API\\DTOs\\DetallePedido\\CrearDetallePedidoDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T08:03:36.791Z",
+              "WhenOpened": "2026-04-22T08:55:13.751Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "PedidoDto.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Pedido\\PedidoDto.cs",
-              "RelativeDocumentMoniker": "Evently.API\\DTOs\\Pedido\\PedidoDto.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Pedido\\PedidoDto.cs*",
-              "RelativeToolTip": "Evently.API\\DTOs\\Pedido\\PedidoDto.cs*",
-              "ViewState": "AgIAAAUAAAAAAAAAAAA9wBgAAAABAAAAAAAAAA==",
+              "Title": "DetallePedidoDto.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\DetallePedido\\DetallePedidoDto.cs",
+              "RelativeDocumentMoniker": "Evently.API\\DTOs\\DetallePedido\\DetallePedidoDto.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\DetallePedido\\DetallePedidoDto.cs",
+              "RelativeToolTip": "Evently.API\\DTOs\\DetallePedido\\DetallePedidoDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T08:03:09.636Z",
+              "WhenOpened": "2026-04-22T08:54:46.823Z",
               "EditorCaption": ""
             },
             {
@@ -139,8 +139,8 @@
           ]
         },
         {
-          "DockedWidth": 118,
-          "SelectedChildIndex": 4,
+          "DockedWidth": 7,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -152,7 +152,46 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Program.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Program.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Program.cs",
+              "RelativeToolTip": "Evently.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAIiBwDgAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T07:16:58.146Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 6,
+              "Title": "PedidosController.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\PedidosController.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Controllers\\PedidosController.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\PedidosController.cs",
+              "RelativeToolTip": "Evently.API\\Controllers\\PedidosController.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAswGUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T07:33:50.759Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DetallePedidosController.cs",
+              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\DetallePedidosController.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Controllers\\DetallePedidosController.cs",
+              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\DetallePedidosController.cs",
+              "RelativeToolTip": "Evently.API\\Controllers\\DetallePedidosController.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAYwFcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-20T07:40:30.022Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "IEstadoService.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\IEstadoService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\IEstadoService.cs",
@@ -165,33 +204,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PedidosController.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\PedidosController.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Controllers\\PedidosController.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\PedidosController.cs*",
-              "RelativeToolTip": "Evently.API\\Controllers\\PedidosController.cs*",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAswGUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-20T07:33:50.759Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Program.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Program.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Program.cs*",
-              "RelativeToolTip": "Evently.API\\Program.cs*",
-              "ViewState": "AgIAADAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-20T07:16:58.146Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "ClientesController.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\ClientesController.cs",
               "RelativeDocumentMoniker": "Evently.API\\Controllers\\ClientesController.cs",
@@ -204,7 +217,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "EstadoService.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Services\\EstadoService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\EstadoService.cs",
@@ -217,7 +230,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "ActividadesController.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\ActividadesController.cs",
               "RelativeDocumentMoniker": "Evently.API\\Controllers\\ActividadesController.cs",
@@ -230,7 +243,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "EstadosController.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\EstadosController.cs",
               "RelativeDocumentMoniker": "Evently.API\\Controllers\\EstadosController.cs",
@@ -243,7 +256,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "FiltroActividadDto.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Actividad\\FiltroActividadDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Actividad\\FiltroActividadDto.cs",
@@ -256,7 +269,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "CrearActividadDto.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Actividad\\CrearActividadDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Actividad\\CrearActividadDto.cs",
@@ -269,7 +282,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "ActividadDto.cs",
               "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Actividad\\ActividadDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Actividad\\ActividadDto.cs",
@@ -278,19 +291,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-21T14:46:41.277Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "DetallePedidosController.cs",
-              "DocumentMoniker": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\DetallePedidosController.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Controllers\\DetallePedidosController.cs",
-              "ToolTip": "C:\\Users\\Raquel\\OneDrive - Conselleria d\u0027Educaci\u00F3\\Evently\\backend\\Evently\\Evently.API\\Controllers\\DetallePedidosController.cs",
-              "RelativeToolTip": "Evently.API\\Controllers\\DetallePedidosController.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-20T07:40:30.022Z",
               "EditorCaption": ""
             }
           ]

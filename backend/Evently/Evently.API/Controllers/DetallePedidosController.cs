@@ -1,139 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Evently.API.DTOs.DetallePedido;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Evently.API.Data;
-using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class DetallePedidosController : ControllerBase
     {
-        private readonly EventlyDbContext _context;
+        private readonly IDetallePedidoService _detallePedidoService;
 
-        public DetallePedidosController(EventlyDbContext context)
+        public DetallePedidosController(IDetallePedidoService detallePedidoService)
         {
-            _context = context;
+            _detallePedidoService = detallePedidoService;
         }
 
         // Devuelve todos los detalles de pedidos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DetallePedido>>> GetDetallesPedido()
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> GetDetallesPedido()
         {
-            return await _context.DetallesPedido
-                .Include(d => d.Pedido)
-                .Include(d => d.Actividad)
-                .ToListAsync();
+            var detalles = await _detallePedidoService.ObtenerTodosAsync();
+            return Ok(detalles);
         }
 
         // Devuelve un detalle de pedido concreto
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DetallePedido>> GetDetallePedido(int id)
+        [HttpGet("{idPedido}/{idActividad}")]
+        public async Task<IActionResult> GetDetallePedido(int idPedido, int idActividad)
         {
-            var detallePedido = await _context.DetallesPedido
-                .Include(d => d.Pedido)
-                .Include(d => d.Actividad)
-                .FirstOrDefaultAsync(d => d.IdPedido == id);
+            var detalle = await _detallePedidoService.ObtenerPorIdAsync(idPedido, idActividad);
 
-            if (detallePedido == null)
-            {
-                return NotFound();
-            }
+            if (detalle == null)
+                return NotFound(new { mensaje = "Detalle de pedido no encontrado" });
 
-            return detallePedido;
+            return Ok(detalle);
         }
 
         // Devuelve todas las líneas de un pedido concreto
         [HttpGet("pedido/{idPedido}")]
-        public async Task<ActionResult<IEnumerable<DetallePedido>>> GetDetallesPorPedido(int idPedido)
+        public async Task<IActionResult> GetDetallesPorPedido(int idPedido)
         {
-            return await _context.DetallesPedido
-                .Include(d => d.Actividad)
-                .Where(d => d.IdPedido == idPedido)
-                .ToListAsync();
+            var detalles = await _detallePedidoService.ObtenerPorPedidoAsync(idPedido);
+            return Ok(detalles);
         }
 
         // Añade una línea a un pedido
         [HttpPost]
-        public async Task<ActionResult<DetallePedido>> PostDetallePedido(DetallePedido detallePedido)
+        public async Task<IActionResult> PostDetallePedido([FromBody] CrearDetallePedidoDto crearDetallePedidoDto)
         {
-            _context.DetallesPedido.Add(detallePedido);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (DetallePedidoExists(detallePedido.IdPedido))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetDetallePedido", new { id = detallePedido.IdPedido }, detallePedido);
+            var detalle = await _detallePedidoService.CrearAsync(crearDetallePedidoDto);
+            return CreatedAtAction(nameof(GetDetallePedido),
+                new { idPedido = detalle.IdPedido, idActividad = detalle.IdActividad }, detalle);
         }
 
         // Actualiza una línea de pedido
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDetallePedido(int id, DetallePedido detallePedido)
+        [HttpPut("{idPedido}/{idActividad}")]
+        public async Task<IActionResult> PutDetallePedido(int idPedido, int idActividad, [FromBody] CrearDetallePedidoDto crearDetallePedidoDto)
         {
-            if (id != detallePedido.IdPedido)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(detallePedido).State = EntityState.Modified;
+            var detalle = await _detallePedidoService.EditarAsync(idPedido, idActividad, crearDetallePedidoDto);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DetallePedidoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (detalle == null)
+                return NotFound(new { mensaje = "Detalle de pedido no encontrado" });
 
-            return NoContent();
+            return Ok(detalle);
         }
 
         // Elimina una línea de pedido
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDetallePedido(int id)
+        [HttpDelete("{idPedido}/{idActividad}")]
+        public async Task<IActionResult> DeleteDetallePedido(int idPedido, int idActividad)
         {
-            var detallePedido = await _context.DetallesPedido.FindAsync(id);
+            var resultado = await _detallePedidoService.EliminarAsync(idPedido, idActividad);
 
-            if (detallePedido == null)
-            {
-                return NotFound();
-            }
+            if (!resultado)
+                return NotFound(new { mensaje = "Detalle de pedido no encontrado" });
 
-            _context.DetallesPedido.Remove(detallePedido);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool DetallePedidoExists(int id)
-        {
-            return _context.DetallesPedido.Any(e => e.IdPedido == id);
+            return Ok(new { mensaje = "Línea de pedido eliminada correctamente" });
         }
     }
 }
