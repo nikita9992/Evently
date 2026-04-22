@@ -39,6 +39,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAutenticacionService, AutenticacionService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IActividadService, ActividadService>();
+builder.Services.AddScoped<IEstadoService, EstadoService>();
 
 //Controladores
 builder.Services.AddControllers();
