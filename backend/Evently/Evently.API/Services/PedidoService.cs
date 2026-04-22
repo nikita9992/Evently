@@ -187,29 +187,51 @@ namespace Evently.API.Services
             return true;
         }
 
-        // Confirma el pedido: comprueba que el cliente existe y crea el pedido confirmado
-        public async Task<PedidoDto?> ConfirmarAsync(int idCliente, int idEstado)
+        // Confirma el pedido con las actividades del carrito (localStorage)
+        public async Task<PedidoDto?> ConfirmarAsync(ConfirmarPedidoDto confirmarDto)
         {
             var cliente = await _contexto.Clientes
-                .FirstOrDefaultAsync(c => c.IdCliente == idCliente);
+                .FirstOrDefaultAsync(c => c.IdCliente == confirmarDto.IdCliente);
 
             if (cliente == null) return null;
 
+            if (confirmarDto.Actividades == null || !confirmarDto.Actividades.Any())
+                return null;
+
             var estado = await _contexto.Estados
-                .FirstOrDefaultAsync(e => e.IdEstado == idEstado);
+                .FirstOrDefaultAsync(e => e.NombreEstado == "Confirmado");
 
             if (estado == null) return null;
 
             var pedido = new Pedido
             {
-                IdCliente = idCliente,
-                IdEstado = idEstado,
+                IdCliente = confirmarDto.IdCliente,
+                IdEstado = estado.IdEstado,
                 FechaCreacion = DateTime.UtcNow,
                 FechaConfirm = DateTime.UtcNow
             };
 
             _contexto.Pedidos.Add(pedido);
             await _contexto.SaveChangesAsync();
+
+            foreach (var item in confirmarDto.Actividades)
+            {
+                var detalle = new DetallePedido
+                {
+                    IdPedido = pedido.IdPedido,
+                    IdActividad = item.IdActividad,
+                    Cantidad = item.Cantidad,
+                    PrecioUnitario = item.PrecioUnitario
+                };
+                _contexto.DetallesPedido.Add(detalle);
+            }
+
+            await _contexto.SaveChangesAsync();
+
+            var detalles = await _contexto.DetallesPedido
+                .Include(d => d.Actividad)
+                .Where(d => d.IdPedido == pedido.IdPedido)
+                .ToListAsync();
 
             return new PedidoDto
             {
@@ -220,7 +242,14 @@ namespace Evently.API.Services
                 NombreEstado = estado.NombreEstado,
                 FechaCreacion = pedido.FechaCreacion,
                 FechaConfirm = pedido.FechaConfirm,
-                Detalles = new List<DetallePedidoResumenDto>()
+                Detalles = detalles.Select(d => new DetallePedidoResumenDto
+                {
+                    IdActividad = d.IdActividad,
+                    TituloActividad = d.Actividad.Titulo,
+                    Cantidad = d.Cantidad,
+                    PrecioUnitario = d.PrecioUnitario,
+                    ImporteLinea = d.Cantidad * d.PrecioUnitario
+                }).ToList()
             };
         }
     }

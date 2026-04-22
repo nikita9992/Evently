@@ -342,33 +342,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Cliente"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Cliente"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Cliente"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -380,41 +354,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Cliente"
+                "$ref": "#/components/schemas/CrearClienteDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Cliente"
+                "$ref": "#/components/schemas/CrearClienteDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Cliente"
+                "$ref": "#/components/schemas/CrearClienteDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -437,24 +394,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -477,17 +417,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Cliente"
+                "$ref": "#/components/schemas/CrearClienteDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Cliente"
+                "$ref": "#/components/schemas/CrearClienteDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Cliente"
+                "$ref": "#/components/schemas/CrearClienteDto"
               }
             }
           }
@@ -538,24 +478,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Cliente"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -567,33 +490,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DetallePedido"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DetallePedido"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DetallePedido"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -605,53 +502,45 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DetallePedido"
+                "$ref": "#/components/schemas/CrearDetallePedidoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/DetallePedido"
+                "$ref": "#/components/schemas/CrearDetallePedidoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/DetallePedido"
+                "$ref": "#/components/schemas/CrearDetallePedidoDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetallePedido"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetallePedido"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetallePedido"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
     },
-    "/api/DetallePedidos/{id}": {
+    "/api/DetallePedidos/{idPedido}/{idActividad}": {
       "get": {
         "tags": [
           "DetallePedidos"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "idPedido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idActividad",
             "in": "path",
             "required": true,
             "schema": {
@@ -662,24 +551,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetallePedido"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetallePedido"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetallePedido"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -689,7 +561,16 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "idPedido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idActividad",
             "in": "path",
             "required": true,
             "schema": {
@@ -702,17 +583,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DetallePedido"
+                "$ref": "#/components/schemas/CrearDetallePedidoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/DetallePedido"
+                "$ref": "#/components/schemas/CrearDetallePedidoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/DetallePedido"
+                "$ref": "#/components/schemas/CrearDetallePedidoDto"
               }
             }
           }
@@ -729,7 +610,16 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "idPedido",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idActividad",
             "in": "path",
             "required": true,
             "schema": {
@@ -763,33 +653,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DetallePedido"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DetallePedido"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DetallePedido"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -801,33 +665,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Estado"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Estado"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Estado"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -839,41 +677,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Estado"
+                "$ref": "#/components/schemas/CrearEstadoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Estado"
+                "$ref": "#/components/schemas/CrearEstadoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Estado"
+                "$ref": "#/components/schemas/CrearEstadoDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estado"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estado"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estado"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -896,24 +717,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estado"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estado"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Estado"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -936,17 +740,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Estado"
+                "$ref": "#/components/schemas/CrearEstadoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Estado"
+                "$ref": "#/components/schemas/CrearEstadoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Estado"
+                "$ref": "#/components/schemas/CrearEstadoDto"
               }
             }
           }
@@ -986,33 +790,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pedido"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pedido"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pedido"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -1024,41 +802,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pedido"
+                "$ref": "#/components/schemas/CrearPedidoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pedido"
+                "$ref": "#/components/schemas/CrearPedidoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Pedido"
+                "$ref": "#/components/schemas/CrearPedidoDto"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -1081,24 +842,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -1121,17 +865,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pedido"
+                "$ref": "#/components/schemas/CrearPedidoDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Pedido"
+                "$ref": "#/components/schemas/CrearPedidoDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Pedido"
+                "$ref": "#/components/schemas/CrearPedidoDto"
               }
             }
           }
@@ -1182,33 +926,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pedido"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pedido"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pedido"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -1218,44 +936,28 @@
         "tags": [
           "Pedidos"
         ],
-        "parameters": [
-          {
-            "name": "idCliente",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "idEstado",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pedido"
-                }
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmarPedidoDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmarPedidoDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmarPedidoDto"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1263,94 +965,10 @@
   },
   "components": {
     "schemas": {
-      "Actividad": {
+      "ConfirmarPedidoDto": {
         "required": [
-          "idCategoria",
-          "precio",
-          "titulo"
-        ],
-        "type": "object",
-        "properties": {
-          "idActividad": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "idCategoria": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "titulo": {
-            "maxLength": 150,
-            "minLength": 1,
-            "type": "string"
-          },
-          "descripcion": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          },
-          "precio": {
-            "type": "number",
-            "format": "double"
-          },
-          "fechaActiv": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "cupoMaximo": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "categoria": {
-            "$ref": "#/components/schemas/Categoria"
-          },
-          "detallesPedido": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DetallePedido"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Categoria": {
-        "required": [
-          "nombreCatego"
-        ],
-        "type": "object",
-        "properties": {
-          "idCategoria": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nombreCatego": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "descripcion": {
-            "maxLength": 255,
-            "type": "string",
-            "nullable": true
-          },
-          "actividades": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Actividad"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Cliente": {
-        "required": [
-          "apellidos",
-          "idUsuario",
-          "nombre"
+          "actividades",
+          "idCliente"
         ],
         "type": "object",
         "properties": {
@@ -1358,54 +976,11 @@
             "type": "integer",
             "format": "int32"
           },
-          "idUsuario": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "nombre": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "apellidos": {
-            "maxLength": 150,
-            "minLength": 1,
-            "type": "string"
-          },
-          "telefono": {
-            "maxLength": 30,
-            "type": "string",
-            "nullable": true
-          },
-          "codPostal": {
-            "maxLength": 15,
-            "type": "string",
-            "nullable": true
-          },
-          "ciudad": {
-            "maxLength": 100,
-            "type": "string",
-            "nullable": true
-          },
-          "direccion": {
-            "maxLength": 200,
-            "type": "string",
-            "nullable": true
-          },
-          "infoAdicional": {
-            "maxLength": 100,
-            "type": "string",
-            "nullable": true
-          },
-          "usuario": {
-            "$ref": "#/components/schemas/Usuario"
-          },
-          "pedidos": {
+          "actividades": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Pedido"
-            },
-            "nullable": true
+              "$ref": "#/components/schemas/ItemCarritoDto"
+            }
           }
         },
         "additionalProperties": false
@@ -1471,7 +1046,57 @@
         },
         "additionalProperties": false
       },
-      "DetallePedido": {
+      "CrearClienteDto": {
+        "required": [
+          "apellidos",
+          "idUsuario",
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "idUsuario": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "apellidos": {
+            "maxLength": 150,
+            "minLength": 1,
+            "type": "string"
+          },
+          "telefono": {
+            "maxLength": 30,
+            "type": "string",
+            "nullable": true
+          },
+          "codPostal": {
+            "maxLength": 15,
+            "type": "string",
+            "nullable": true
+          },
+          "ciudad": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          },
+          "direccion": {
+            "maxLength": 200,
+            "type": "string",
+            "nullable": true
+          },
+          "infoAdicional": {
+            "maxLength": 100,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CrearDetallePedidoDto": {
         "required": [
           "cantidad",
           "idActividad",
@@ -1489,37 +1114,25 @@
             "format": "int32"
           },
           "cantidad": {
+            "maximum": 2147483647,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
           "precioUnitario": {
+            "minimum": 0,
             "type": "number",
             "format": "double"
-          },
-          "importeLinea": {
-            "type": "number",
-            "format": "double",
-            "readOnly": true
-          },
-          "pedido": {
-            "$ref": "#/components/schemas/Pedido"
-          },
-          "actividad": {
-            "$ref": "#/components/schemas/Actividad"
           }
         },
         "additionalProperties": false
       },
-      "Estado": {
+      "CrearEstadoDto": {
         "required": [
           "nombreEstado"
         ],
         "type": "object",
         "properties": {
-          "idEstado": {
-            "type": "integer",
-            "format": "int32"
-          },
           "nombreEstado": {
             "maxLength": 80,
             "minLength": 1,
@@ -1529,13 +1142,50 @@
             "maxLength": 255,
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CrearPedidoDto": {
+        "required": [
+          "idCliente",
+          "idEstado"
+        ],
+        "type": "object",
+        "properties": {
+          "idCliente": {
+            "type": "integer",
+            "format": "int32"
           },
-          "pedidos": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Pedido"
-            },
-            "nullable": true
+          "idEstado": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ItemCarritoDto": {
+        "required": [
+          "cantidad",
+          "idActividad",
+          "precioUnitario"
+        ],
+        "type": "object",
+        "properties": {
+          "idActividad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cantidad": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "precioUnitario": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false
@@ -1559,49 +1209,6 @@
         },
         "additionalProperties": false
       },
-      "Pedido": {
-        "required": [
-          "idCliente",
-          "idEstado"
-        ],
-        "type": "object",
-        "properties": {
-          "idPedido": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "idCliente": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "idEstado": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "fechaCreacion": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "fechaConfirm": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "cliente": {
-            "$ref": "#/components/schemas/Cliente"
-          },
-          "estado": {
-            "$ref": "#/components/schemas/Estado"
-          },
-          "detallesPedido": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DetallePedido"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "RegistroDto": {
         "required": [
           "email",
@@ -1617,39 +1224,6 @@
           "password": {
             "minLength": 6,
             "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Usuario": {
-        "required": [
-          "email",
-          "password",
-          "rol"
-        ],
-        "type": "object",
-        "properties": {
-          "idUsuario": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "email": {
-            "maxLength": 255,
-            "minLength": 1,
-            "type": "string"
-          },
-          "password": {
-            "maxLength": 255,
-            "minLength": 1,
-            "type": "string"
-          },
-          "rol": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "cliente": {
-            "$ref": "#/components/schemas/Cliente"
           }
         },
         "additionalProperties": false

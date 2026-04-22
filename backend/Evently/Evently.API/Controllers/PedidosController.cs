@@ -86,14 +86,17 @@ namespace Evently.API.Controllers
             return Ok(new { mensaje = "Pedido eliminado correctamente" });
         }
 
-        // Confirma el pedido: comprueba que el cliente tiene datos y crea el pedido
+        // Confirma el pedido con las actividades del carrito
         [HttpPost("confirmar")]
-        public async Task<IActionResult> ConfirmarPedido(int idCliente, int idEstado)
+        public async Task<IActionResult> ConfirmarPedido([FromBody] ConfirmarPedidoDto confirmarDto)
         {
-            var pedido = await _pedidoService.ConfirmarAsync(idCliente, idEstado);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var pedido = await _pedidoService.ConfirmarAsync(confirmarDto);
 
             if (pedido == null)
-                return BadRequest(new { mensaje = "El cliente o el estado indicado no existe" });
+                return BadRequest(new { mensaje = "El cliente no existe o el carrito está vacío" });
 
             return CreatedAtAction(nameof(GetPedido),
                 new { id = pedido.IdPedido }, pedido);
