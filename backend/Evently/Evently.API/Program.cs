@@ -54,6 +54,7 @@ builder.Services.AddCors(opciones =>
 
 builder.Services.AddScoped<IEstadoService, EstadoService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IPedidoService, PedidoService>();
 
 //Swagger con soporte JWT
 builder.Services.AddEndpointsApiExplorer();
