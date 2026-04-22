@@ -1,132 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Evently.API.DTOs.Cliente;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Evently.API.Data;
-using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ClientesController : ControllerBase
     {
-        private readonly EventlyDbContext _context;
+        private readonly IClienteService _clienteService;
 
-        public ClientesController(EventlyDbContext context)
+        public ClientesController(IClienteService clienteService)
         {
-            _context = context;
+            _clienteService = clienteService;
         }
 
         // Devuelve todos los clientes con sus datos relacionados
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> GetClientes()
         {
-            return await _context.Clientes
-                .Include(c => c.Usuario)
-                .Include(c => c.Pedidos)
-                .ToListAsync();
+            var clientes = await _clienteService.ObtenerTodosAsync();
+            return Ok(clientes);
         }
 
         // Devuelve un cliente concreto con sus pedidos
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        public async Task<IActionResult> GetCliente(int id)
         {
-            var cliente = await _context.Clientes
-                .Include(c => c.Usuario)
-                .Include(c => c.Pedidos)
-                    .ThenInclude(p => p.Estado)
-                .FirstOrDefaultAsync(c => c.IdCliente == id);
+            var cliente = await _clienteService.ObtenerPorIdAsync(id);
 
             if (cliente == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { mensaje = "Cliente no encontrado" });
 
-            return cliente;
+            return Ok(cliente);
         }
 
         // Devuelve el cliente asociado a un usuario concreto
         [HttpGet("usuario/{idUsuario}")]
-        public async Task<ActionResult<Cliente>> GetClientePorUsuario(int idUsuario)
+        public async Task<IActionResult> GetClientePorUsuario(int idUsuario)
         {
-            var cliente = await _context.Clientes
-                .Include(c => c.Pedidos)
-                    .ThenInclude(p => p.Estado)
-                .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario);
+            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
 
             if (cliente == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { mensaje = "Cliente no encontrado para ese usuario" });
 
-            return cliente;
-        }
-
-        // Actualiza los datos de un cliente
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(int id, Cliente cliente)
-        {
-            if (id != cliente.IdCliente)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(cliente).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClienteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(cliente);
         }
 
         // Crea un nuevo cliente
         [HttpPost]
-        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        public async Task<IActionResult> PostCliente([FromBody] CrearClienteDto crearClienteDto)
         {
-            _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetCliente", new { id = cliente.IdCliente }, cliente);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var cliente = await _clienteService.CrearAsync(crearClienteDto);
+            return CreatedAtAction(nameof(GetCliente),
+                new { id = cliente.IdCliente }, cliente);
+        }
+
+        // Actualiza los datos de un cliente
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCliente(int id, [FromBody] CrearClienteDto crearClienteDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var cliente = await _clienteService.EditarAsync(id, crearClienteDto);
+
+            if (cliente == null)
+                return NotFound(new { mensaje = "Cliente no encontrado" });
+
+            return Ok(cliente);
         }
 
         // Elimina un cliente
         [HttpDelete("{id}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            var resultado = await _clienteService.EliminarAsync(id);
 
-            if (cliente == null)
-            {
-                return NotFound();
-            }
+            if (!resultado)
+                return NotFound(new { mensaje = "Cliente no encontrado" });
 
-            _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ClienteExists(int id)
-        {
-            return _context.Clientes.Any(e => e.IdCliente == id);
+            return Ok(new { mensaje = "Cliente eliminado correctamente" });
         }
     }
 }

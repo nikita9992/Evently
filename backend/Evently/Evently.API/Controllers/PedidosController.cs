@@ -127,5 +127,39 @@ namespace Evently.API.Controllers
         {
             return _context.Pedidos.Any(e => e.IdPedido == id);
         }
+
+        // Confirma el pedido: comprueba que el cliente tiene datos y crea el pedido
+        [HttpPost("confirmar")]
+        public async Task<ActionResult<Pedido>> ConfirmarPedido(int idCliente, int idEstado)
+        {
+            var cliente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.IdCliente == idCliente);
+
+            if (cliente == null)
+            {
+                return BadRequest("El cliente no existe o no tiene datos personales.");
+            }
+
+            var estado = await _context.Estados
+                .FirstOrDefaultAsync(e => e.IdEstado == idEstado);
+
+            if (estado == null)
+            {
+                return BadRequest("El estado indicado no existe.");
+            }
+
+            var pedido = new Pedido
+            {
+                IdCliente = idCliente,
+                IdEstado = idEstado,
+                FechaCreacion = DateTime.UtcNow,
+                FechaConfirm = DateTime.UtcNow
+            };
+
+            _context.Pedidos.Add(pedido);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPedido", new { id = pedido.IdPedido }, pedido);
+        }
     }
 }

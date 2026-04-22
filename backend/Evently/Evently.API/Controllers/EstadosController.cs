@@ -1,112 +1,81 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Evently.API.DTOs.Estado;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Evently.API.Data;
-using Evently.API.Models;
 
 namespace Evently.API.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class EstadosController : ControllerBase
     {
-        private readonly EventlyDbContext _context;
+        private readonly IEstadoService _estadoService;
 
-        public EstadosController(EventlyDbContext context)
+        public EstadosController(IEstadoService estadoService)
         {
-            _context = context;
+            _estadoService = estadoService;
         }
 
-        // Devuelve todos los estados
+        // GET api/estados
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Estado>>> GetEstados()
+        public async Task<IActionResult> ObtenerTodos()
         {
-            return await _context.Estados
-                .Include(e => e.Pedidos)
-                .ToListAsync();
+            var estados = await _estadoService.ObtenerTodosAsync();
+            return Ok(estados);
         }
 
-        // Devuelve un estado concreto
+        // GET api/estados/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<Estado>> GetEstado(int id)
+        public async Task<IActionResult> ObtenerPorId(int id)
         {
-            var estado = await _context.Estados
-                .Include(e => e.Pedidos)
-                .FirstOrDefaultAsync(e => e.IdEstado == id);
+            var estado = await _estadoService.ObtenerPorIdAsync(id);
 
             if (estado == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { mensaje = "Estado no encontrado" });
 
-            return estado;
+            return Ok(estado);
         }
 
-        // Actualiza un estado
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEstado(int id, Estado estado)
-        {
-            if (id != estado.IdEstado)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(estado).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EstadoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // Crea un nuevo estado
+        // POST api/estados
         [HttpPost]
-        public async Task<ActionResult<Estado>> PostEstado(Estado estado)
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> Crear([FromBody] CrearEstadoDto crearEstadoDto)
         {
-            _context.Estados.Add(estado);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetEstado", new { id = estado.IdEstado }, estado);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var estado = await _estadoService.CrearAsync(crearEstadoDto);
+            return CreatedAtAction(nameof(ObtenerPorId),
+                new { id = estado.IdEstado }, estado);
         }
 
-        // Elimina un estado
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEstado(int id)
+        // PUT api/estados/1
+        [HttpPut("{id}")]
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> Editar(int id, [FromBody] CrearEstadoDto crearEstadoDto)
         {
-            var estado = await _context.Estados.FindAsync(id);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var estado = await _estadoService.EditarAsync(id, crearEstadoDto);
 
             if (estado == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { mensaje = "Estado no encontrado" });
 
-            _context.Estados.Remove(estado);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(estado);
         }
 
-        private bool EstadoExists(int id)
+        // DELETE api/estados/1
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> Eliminar(int id)
         {
-            return _context.Estados.Any(e => e.IdEstado == id);
+            var resultado = await _estadoService.EliminarAsync(id);
+
+            if (!resultado)
+                return NotFound(new { mensaje = "Estado no encontrado" });
+
+            return Ok(new { mensaje = "Estado eliminado correctamente" });
         }
     }
 }
