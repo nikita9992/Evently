@@ -1,0 +1,192 @@
+﻿@page "/actividades/{Id:int}"
+@inject ActividadService ActividadService
+@inject NavigationManager Navegacion
+@inject ISnackbar Snackbar
+@inject IJSRuntime JS
+
+<PageTitle>Detalle — Evently</PageTitle>
+
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (actividad == null)
+{
+    <MudAlert Severity="Severity.Error">
+        Actividad no encontrada.
+    </MudAlert>
+    <MudButton Variant="Variant.Outlined"
+               Color="Color.Primary"
+               Class="mt-4"
+               OnClick="@(() => Navegacion.NavigateTo("/actividades"))">
+        Volver al catálogo
+    </MudButton>
+}
+else
+{
+    <MudBreadcrumbs Items="migasDePan" Class="mb-4" />
+
+    <MudGrid>
+        <!-- Información principal -->
+        <MudItem xs="12" md="8">
+            <MudText Typo="Typo.h4" GutterBottom="true">
+                @actividad.Titulo
+            </MudText>
+
+            <MudChip T="string" Color="Color.Primary" Class="mb-3">
+                @actividad.NombreCatego
+            </MudChip>
+
+            <MudText Typo="Typo.body1" Class="mb-4">
+                @actividad.Descripcion
+            </MudText>
+
+            <MudDivider Class="mb-4" />
+
+            <!-- Detalles -->
+            <MudGrid>
+                @if (actividad.FechaActiv.HasValue)
+                {
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-3" Elevation="1">
+                            <MudText Typo="Typo.caption">Fecha</MudText>
+                            <MudText Typo="Typo.body1">
+                                <MudIcon Icon="@Icons.Material.Filled.Event"
+                                         Size="Size.Small" />
+                                @actividad.FechaActiv.Value.ToString("dd/MM/yyyy HH:mm")
+                            </MudText>
+                        </MudPaper>
+                    </MudItem>
+                }
+                @if (actividad.CupoMaximo.HasValue)
+                {
+                    <MudItem xs="12" sm="6">
+                        <MudPaper Class="pa-3" Elevation="1">
+                            <MudText Typo="Typo.caption">Plazas disponibles</MudText>
+                            <MudText Typo="Typo.body1">
+                                <MudIcon Icon="@Icons.Material.Filled.People"
+                                         Size="Size.Small" />
+                                @actividad.CupoMaximo plazas
+                            </MudText>
+                        </MudPaper>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>
+
+        <!-- Panel de compra -->
+        <MudItem xs="12" md="4">
+            <MudPaper Class="pa-4" Elevation="3">
+                <MudText Typo="Typo.h4" Color="Color.Primary" GutterBottom="true">
+                    @actividad.Precio.ToString("C")
+                </MudText>
+                <MudText Typo="Typo.caption" Class="mb-4">por persona</MudText>
+
+                <MudDivider Class="mb-4" />
+
+                <!-- Selector de cantidad -->
+                <MudText Typo="Typo.subtitle2" Class="mb-2">Cantidad</MudText>
+                <MudNumericField @bind-Value="cantidad"
+                                 Label="Cantidad"
+                                 Variant="Variant.Outlined"
+                                 Min="1"
+                                 Max="@(actividad.CupoMaximo ?? 10)"
+                                 Class="mb-4" />
+
+                <!-- Total -->
+                <MudText Typo="Typo.subtitle1" Class="mb-4">
+                    Total: <strong>@((actividad.Precio * cantidad).ToString("C"))</strong>
+                </MudText>
+
+                <!-- Botón añadir al carrito -->
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           FullWidth="true"
+                           Size="Size.Large"
+                           StartIcon="@Icons.Material.Filled.ShoppingCart"
+                           OnClick="AnadirAlCarrito">
+                    Añadir al carrito
+                </MudButton>
+
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Secondary"
+                           FullWidth="true"
+                           Class="mt-2"
+                           OnClick="@(() => Navegacion.NavigateTo("/actividades"))">
+                    Volver al catálogo
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private ActividadDto? actividad;
+    private int cantidad = 1;
+    private bool cargando = true;
+
+    private List<BreadcrumbItem> migasDePan = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        actividad = await ActividadService.ObtenerPorIdAsync(Id);
+
+        migasDePan = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem("Inicio", href: "/"),
+            new BreadcrumbItem("Actividades", href: "/actividades"),
+            new BreadcrumbItem(actividad?.Titulo ?? "Detalle", href: null, disabled: true)
+        };
+
+        cargando = false;
+    }
+
+    //Añadir actividad al carrito
+    private async Task AnadirAlCarrito()
+    {
+        if (actividad == null) return;
+
+        var carritoJson = await ObtenerCarritoLocal();
+        var carrito = string.IsNullOrEmpty(carritoJson) || carritoJson == "[]"
+            ? new List<ItemCarrito>()
+            : System.Text.Json.JsonSerializer.Deserialize<List<ItemCarrito>>(carritoJson)
+              ?? new List<ItemCarrito>();
+
+        var itemExistente = carrito.FirstOrDefault(i => i.IdActividad == actividad.IdActividad);
+
+        if (itemExistente != null)
+        {
+            itemExistente.Cantidad += cantidad;
+        }
+        else
+        {
+            carrito.Add(new ItemCarrito
+            {
+                IdActividad = actividad.IdActividad,
+                Titulo = actividad.Titulo,
+                Precio = actividad.Precio,
+                Cantidad = cantidad
+            });
+        }
+
+        // Guardar en localStorage
+        await GuardarCarritoLocal(System.Text.Json.JsonSerializer.Serialize(carrito));
+
+        // Mostrar mensaje de éxito
+        Snackbar.Add($"¡{actividad.Titulo} añadido al carrito!", Severity.Success);
+    }
+
+    //Obtener carrito del localStorage
+    private async Task<string> ObtenerCarritoLocal()
+    {
+        return await JS.InvokeAsync<string>("obtenerCarrito");
+    }
+
+    //Guardar carrito en localStorage
+    private async Task GuardarCarritoLocal(string json)
+    {
+        await JS.InvokeVoidAsync("guardarCarrito", json);
+    }
+}

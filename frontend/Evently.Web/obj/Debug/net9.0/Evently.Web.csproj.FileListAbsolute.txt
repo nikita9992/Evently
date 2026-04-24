@@ -828,7 +828,6 @@ C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\0wz98yz2xy-cf158k2j5i.gz
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\o7k4cxtn0u-jsf39xodda.gz
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\fhapp5vk1l-81sotqnb8s.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\muafaqhg57-zo59jp0a0p.gz
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\9hguopsvjb-md9yvkcqlf.gz
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\9k77j17ypb-z6jo10m0rd.gz
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\xg5doz2azx-65wbz7t8mt.gz
@@ -1043,10 +1042,12 @@ C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\refint\Evently.Web.dll
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\Evently.Web.pdb
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\ref\Evently.Web.dll
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.4h030klhjh.wasm
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.yawpgqrlb5.pdb
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.4h030klhjh.wasm.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.yawpgqrlb5.pdb.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hru5mn5sfw-4h030klhjh.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\ljl52lojxc-yawpgqrlb5.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hhf8626aeu-1lxw48fr3v.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.7wipzts9on.wasm
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.ls3wm9l510.pdb
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.7wipzts9on.wasm.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.ls3wm9l510.pdb.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\r2ckebel2z-acgqe0yfty.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\muafaqhg57-ifdsyiyswq.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hru5mn5sfw-7wipzts9on.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\ljl52lojxc-ls3wm9l510.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hhf8626aeu-5ng371egis.gz
