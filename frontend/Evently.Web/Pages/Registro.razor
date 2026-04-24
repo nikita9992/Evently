@@ -1,0 +1,85 @@
+﻿@page "/registro"
+@using Evently.Web.Models
+@using Evently.Web.Services
+@inject AutenticacionService AutenticacionService
+@inject NavigationManager NavManager
+
+<PageTitle>Registro — Evently</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
+    <MudPaper Elevation="3" Class="pa-6">
+
+        <MudText Typo="Typo.h5" GutterBottom="true">Crear cuenta</MudText>
+
+        @if (!string.IsNullOrEmpty(mensajeError))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">@mensajeError</MudAlert>
+        }
+
+        @if (registroExitoso)
+        {
+            <MudAlert Severity="Severity.Success" Class="mb-4">
+                Cuenta creada correctamente. Ahora puedes iniciar sesión.
+            </MudAlert>
+        }
+
+        <MudTextField @bind-Value="datosRegistro.Email"
+                      Label="Email"
+                      InputType="InputType.Email"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosRegistro.Password"
+                      Label="Contraseña"
+                      InputType="InputType.Password"
+                      Variant="Variant.Outlined"
+                      Class="mb-4" />
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   FullWidth="true"
+                   OnClick="Registrarse"
+                   Disabled="cargando">
+            @if (cargando)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+            }
+            Registrarse
+        </MudButton>
+
+        <MudText Class="mt-4 text-center">
+            ¿Ya tienes cuenta?
+            <MudLink Href="/login">Inicia sesión aquí</MudLink>
+        </MudText>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private RegistroDto datosRegistro = new();
+    private string mensajeError = string.Empty;
+    private bool cargando = false;
+    private bool registroExitoso = false;
+
+    private async Task Registrarse()
+    {
+        cargando = true;
+        mensajeError = string.Empty;
+        registroExitoso = false;
+
+        var respuesta = await AutenticacionService.RegistrarAsync(datosRegistro);
+
+        if (respuesta == null)
+        {
+            mensajeError = "El email ya está registrado";
+        }
+        else
+        {
+            registroExitoso = true;
+            await Task.Delay(2000);
+            NavManager.NavigateTo("/login");
+        }
+
+        cargando = false;
+    }
+}

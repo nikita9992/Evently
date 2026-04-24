@@ -1,0 +1,64 @@
+﻿@page "/mis-pedidos"
+@using Evently.Web.Models
+@using Evently.Web.Services
+@inject PedidoService PedidoService
+
+<PageTitle>Mis pedidos — Evently</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-8">
+    <MudText Typo="Typo.h5" GutterBottom="true">Mis pedidos</MudText>
+
+    @if (estaCargando)
+    {
+        <MudProgressLinear Indeterminate="true" Class="mb-4" />
+    }
+    else if (!string.IsNullOrEmpty(errorMensaje))
+    {
+        <MudAlert Severity="Severity.Error">@errorMensaje</MudAlert>
+    }
+    else if (listaPedidos.Count == 0)
+    {
+        <MudText Class="mt-4">No tienes pedidos realizados todavía.</MudText>
+        <MudButton Variant="Variant.Outlined"
+                   Color="Color.Primary"
+                   Href="/actividades"
+                   Class="mt-3">
+            Ver actividades
+        </MudButton>
+    }
+    else
+    {
+        @foreach (var pedido in listaPedidos)
+        {
+            <MudPaper Elevation="2" Class="pa-4 mb-4">
+                <MudText Typo="Typo.subtitle1">
+                    Pedido #@pedido.IdPedido — @pedido.NombreEstado
+                </MudText>
+                <MudText Typo="Typo.body2" Class="mb-2">
+                    Fecha: @pedido.FechaConfirm.ToString("dd/MM/yyyy")
+                </MudText>
+
+                @foreach (var detalle in pedido.Detalles)
+                {
+                    <MudText Typo="Typo.body2">
+                        • @detalle.TituloActividad — @detalle.Cantidad ud. x @detalle.PrecioUnitario.ToString("C") = @detalle.ImporteLinea.ToString("C")
+                    </MudText>
+                }
+            </MudPaper>
+        }
+    }
+</MudContainer>
+
+@code {
+    // Lista de pedidos del usuario
+    private List<PedidoDto> listaPedidos = new();
+    private string errorMensaje = string.Empty;
+    private bool estaCargando = true;
+
+    // Al cargar la página obtenemos los pedidos del usuario
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: obtener idCliente del token JWT cuando implementemos autenticación
+        estaCargando = false;
+    }
+}

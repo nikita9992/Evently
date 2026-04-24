@@ -1,0 +1,74 @@
+﻿@page "/login"
+@using Evently.Web.Models
+@using Evently.Web.Services
+@inject AutenticacionService AutenticacionService
+@inject NavigationManager NavManager
+
+<PageTitle>Iniciar sesión — Evently</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
+    <MudPaper Elevation="3" Class="pa-6">
+
+        <MudText Typo="Typo.h5" GutterBottom="true">Iniciar sesión</MudText>
+
+        @if (!string.IsNullOrEmpty(mensajeError))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">@mensajeError</MudAlert>
+        }
+
+        <MudTextField @bind-Value="datosLogin.Email"
+                      Label="Email"
+                      InputType="InputType.Email"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosLogin.Password"
+                      Label="Contraseña"
+                      InputType="InputType.Password"
+                      Variant="Variant.Outlined"
+                      Class="mb-4" />
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   FullWidth="true"
+                   OnClick="IniciarSesion"
+                   Disabled="cargando">
+            @if (cargando)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+            }
+            Entrar
+        </MudButton>
+
+        <MudText Class="mt-4 text-center">
+            ¿No tienes cuenta?
+            <MudLink Href="/registro">Regístrate aquí</MudLink>
+        </MudText>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private LoginDto datosLogin = new();
+    private string mensajeError = string.Empty;
+    private bool cargando = false;
+
+    private async Task IniciarSesion()
+    {
+        cargando = true;
+        mensajeError = string.Empty;
+
+        var respuesta = await AutenticacionService.LoginAsync(datosLogin);
+
+        if (respuesta == null)
+        {
+            mensajeError = "Email o contraseña incorrectos";
+        }
+        else
+        {
+            NavManager.NavigateTo("/");
+        }
+
+        cargando = false;
+    }
+}
