@@ -2,8 +2,9 @@
 @using Evently.Web.Models
 @using Evently.Web.Services
 @inject ClienteService ClienteService
-@inject NavigationManager NavManager
+@inject NavigationManager Navegacion
 @inject EstadoAuthService EstadoAuth
+
 
 <PageTitle>Mi perfil — Evently</PageTitle>
 
@@ -84,10 +85,48 @@
     private int idCliente = 0;
 
     // Al cargar la página obtenemos los datos del cliente
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Obtener el idUsuario del token JWT cuando implementemos autenticación
-        estaCargando = false;
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                Navegacion.NavigateTo("/login");
+                return;
+            }
+
+            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
+                EstadoAuth.IdUsuario, EstadoAuth.Token);
+
+            if (cliente != null)
+            {
+                idCliente = cliente.IdCliente;
+                datosCliente = new CrearClienteDto
+                {
+                    IdUsuario = cliente.IdUsuario,
+                    Nombre = cliente.Nombre,
+                    Apellidos = cliente.Apellidos,
+                    Telefono = cliente.Telefono,
+                    CodPostal = cliente.CodPostal,
+                    Ciudad = cliente.Ciudad,
+                    Direccion = cliente.Direccion,
+                    InfoAdicional = cliente.InfoAdicional
+                };
+            }
+            else
+            {
+                datosCliente.IdUsuario = EstadoAuth.IdUsuario;
+            }
+
+            estaCargando = false;
+            StateHasChanged();
+        }
     }
 
     // Guarda los datos del perfil del cliente

@@ -1,16 +1,22 @@
-﻿@page "/mis-pedidos"
+﻿@page "/mispedidos"
 @using Evently.Web.Models
 @using Evently.Web.Services
 @inject PedidoService PedidoService
+@inject ClienteService ClienteService
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
 
 <PageTitle>Mis pedidos — Evently</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="mt-8">
-    <MudText Typo="Typo.h5" GutterBottom="true">Mis pedidos</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true">
+        <MudIcon Icon="@Icons.Material.Filled.Receipt" Class="mr-2" />
+        Mis pedidos
+    </MudText>
 
     @if (estaCargando)
     {
-        <MudProgressLinear Indeterminate="true" Class="mb-4" />
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
     }
     else if (!string.IsNullOrEmpty(errorMensaje))
     {
@@ -18,11 +24,14 @@
     }
     else if (listaPedidos.Count == 0)
     {
-        <MudText Class="mt-4">No tienes pedidos realizados todavía.</MudText>
+        <MudAlert Severity="Severity.Info" Class="mt-4">
+            No tienes pedidos realizados todavía.
+        </MudAlert>
         <MudButton Variant="Variant.Outlined"
                    Color="Color.Primary"
                    Href="/actividades"
-                   Class="mt-3">
+                   Class="mt-3"
+                   StartIcon="@Icons.Material.Filled.EventNote">
             Ver actividades
         </MudButton>
     }
@@ -30,35 +39,92 @@
     {
         @foreach (var pedido in listaPedidos)
         {
-            <MudPaper Elevation="2" Class="pa-4 mb-4">
-                <MudText Typo="Typo.subtitle1">
-                    Pedido #@pedido.IdPedido — @pedido.NombreEstado
-                </MudText>
-                <MudText Typo="Typo.body2" Class="mb-2">
-                    Fecha: @pedido.FechaConfirm.ToString("dd/MM/yyyy")
-                </MudText>
+            <MudPaper Elevation="3" Class="pa-4 mb-4">
+                <MudGrid>
+                    <MudItem xs="12" sm="8">
+                        <MudText Typo="Typo.h6">
+                            Pedido #@pedido.IdPedido
+                        </MudText>
+                        <MudText Typo="Typo.body2" Class="mb-2">
+                            <MudIcon Icon="@Icons.Material.Filled.CalendarToday"
+                                     Size="Size.Small" Class="mr-1" />
+                            @pedido.FechaConfirm.ToString("dd/MM/yyyy HH:mm")
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="4" Class="d-flex justify-end align-center">
+                        <MudChip T="string"
+                                 Color="@(pedido.NombreEstado == "Confirmado"
+                                                                      ? Color.Success : Color.Error)">
+                    @pedido.NombreEstado
+                </MudChip>
+            </MudItem>
+        </MudGrid>
 
-                @foreach (var detalle in pedido.Detalles)
+                <MudDivider Class="my-2" />
+
+        @foreach (var detalle in pedido.Detalles)
                 {
-                    <MudText Typo="Typo.body2">
-                        • @detalle.TituloActividad — @detalle.Cantidad ud. x @detalle.PrecioUnitario.ToString("C") = @detalle.ImporteLinea.ToString("C")
+                    <MudText Typo="Typo.body2" Class="mb-1">
+                        • @detalle.TituloActividad —
+                        @detalle.Cantidad ud. x @detalle.PrecioUnitario.ToString("C")
+                        = <strong>@detalle.ImporteLinea.ToString("C")</strong>
                     </MudText>
                 }
+
+                <MudDivider Class="my-2" />
+
+                <MudText Typo="Typo.subtitle1" Align="Align.Right">
+                    Total: <strong>
+                        @(pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
+                    </strong>
+                </MudText>
             </MudPaper>
         }
     }
 </MudContainer>
 
 @code {
-    // Lista de pedidos del usuario
     private List<PedidoDto> listaPedidos = new();
     private string errorMensaje = string.Empty;
     private bool estaCargando = true;
 
-    // Al cargar la página obtenemos los pedidos del usuario
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // TODO: obtener idCliente del token JWT cuando implementemos autenticación
-        estaCargando = false;
+        if (firstRender)
+        {
+            // Cargar token si no está cargado
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            // Redirigir si no está autenticado
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                Navegacion.NavigateTo("/login");
+                return;
+            }
+
+            // Obtener el cliente del usuario
+            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
+                EstadoAuth.IdUsuario, EstadoAuth.Token);
+
+            if (cliente == null)
+            {
+                errorMensaje = "No tienes datos personales registrados. " +
+                               "Completa tu perfil primero.";
+                estaCargando = false;
+                StateHasChanged();
+                return;
+            }
+
+            // Cargar pedidos del cliente
+            listaPedidos = await PedidoService.ObtenerPorClienteAsync(
+                cliente.IdCliente, EstadoAuth.Token);
+
+            estaCargando = false;
+            StateHasChanged();
+        }
     }
 }

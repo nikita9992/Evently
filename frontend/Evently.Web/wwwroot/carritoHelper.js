@@ -1,19 +1,52 @@
-﻿//Funciones para gestionar el carrito en localStorage
+﻿// ── Carrito por usuario con expiración de 12 horas ────────────
 
-//Obtener carrito del localStorage
-window.obtenerCarrito = () => {
-    return localStorage.getItem("evently_carrito") || "[]";
+// Obtener clave del carrito para un usuario específico
+function obtenerClaveCarrito(idUsuario) {
+    return idUsuario && idUsuario > 0
+        ? `evently_carrito_${idUsuario}`
+        : "evently_carrito_anonimo";
+}
+
+// Guardar carrito con timestamp de expiración
+window.guardarCarrito = (carritoJson, idUsuario) => {
+    const clave = obtenerClaveCarrito(idUsuario);
+    const datos = {
+        items: JSON.parse(carritoJson),
+        expiracion: Date.now() + (12 * 60 * 60 * 1000) 
+    };
+    localStorage.setItem(clave, JSON.stringify(datos));
 };
 
-//Guardar carrito en localStorage
-window.guardarCarrito = (carritoJson) => {
-    localStorage.setItem("evently_carrito", carritoJson);
+// Obtener carrito verificando expiración
+window.obtenerCarrito = (idUsuario) => {
+    const clave = obtenerClaveCarrito(idUsuario);
+    const raw = localStorage.getItem(clave);
+
+    if (!raw) return "[]";
+
+    try {
+        const datos = JSON.parse(raw);
+
+        // Verificar si ha expirado
+        if (Date.now() > datos.expiracion) {
+            localStorage.removeItem(clave);
+            return "[]";
+        }
+
+        return JSON.stringify(datos.items);
+    } catch {
+        localStorage.removeItem(clave);
+        return "[]";
+    }
 };
 
-//Limpiar carrito del localStorage
-window.limpiarCarrito = () => {
-    localStorage.removeItem("evently_carrito");
+// Limpiar carrito del usuario
+window.limpiarCarrito = (idUsuario) => {
+    const clave = obtenerClaveCarrito(idUsuario);
+    localStorage.removeItem(clave);
 };
+
+// ── Token y datos del usuario ──────────────────────────────────
 
 // Guardar token de autenticación
 window.guardarToken = (token) => {

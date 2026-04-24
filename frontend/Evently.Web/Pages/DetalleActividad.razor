@@ -3,6 +3,7 @@
 @inject NavigationManager Navegacion
 @inject ISnackbar Snackbar
 @inject IJSRuntime JS
+@inject EstadoAuthService EstadoAuth
 
 <PageTitle>Detalle — Evently</PageTitle>
 
@@ -181,12 +182,12 @@ else
     //Obtener carrito del localStorage
     private async Task<string> ObtenerCarritoLocal()
     {
-        return await JS.InvokeAsync<string>("obtenerCarrito");
+        return await JS.InvokeAsync<string>("obtenerCarrito", EstadoAuth.IdUsuario);
     }
 
     //Guardar carrito en localStorage
     private async Task GuardarCarritoLocal(string json)
     {
-        await JS.InvokeVoidAsync("guardarCarrito", json);
+        await JS.InvokeVoidAsync("guardarCarrito", json, EstadoAuth.IdUsuario);
     }
 }

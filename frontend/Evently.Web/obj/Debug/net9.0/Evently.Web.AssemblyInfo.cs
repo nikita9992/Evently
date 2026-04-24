@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Evently.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3085e02b9e69aee09e31312a6757fb0bec2c2d7b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+59b260fbcdabb0f87762590a9ad28c07c36fdf91")]
 [assembly: System.Reflection.AssemblyProductAttribute("Evently.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Evently.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
