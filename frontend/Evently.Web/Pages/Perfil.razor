@@ -1,0 +1,124 @@
+﻿@page "/perfil"
+@using Evently.Web.Models
+@using Evently.Web.Services
+@inject ClienteService ClienteService
+@inject NavigationManager NavManager
+
+<PageTitle>Mi perfil — Evently</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
+    <MudPaper Elevation="3" Class="pa-6">
+
+        <MudText Typo="Typo.h5" GutterBottom="true">Mis datos personales</MudText>
+
+        @if (estaCargando)
+        {
+            <MudProgressLinear Indeterminate="true" Class="mb-4" />
+        }
+        else
+        {
+            @if (!string.IsNullOrEmpty(errorMensaje))
+            {
+                <MudAlert Severity="Severity.Error" Class="mb-4">@errorMensaje</MudAlert>
+            }
+
+            @if (guardadoCorrectamente)
+            {
+                <MudAlert Severity="Severity.Success" Class="mb-4">Datos guardados correctamente</MudAlert>
+            }
+
+            <MudTextField @bind-Value="datosCliente.Nombre"
+                          Label="Nombre"
+                          Variant="Variant.Outlined"
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value="datosCliente.Apellidos"
+                          Label="Apellidos"
+                          Variant="Variant.Outlined"
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value="datosCliente.Telefono"
+                          Label="Teléfono"
+                          Variant="Variant.Outlined"
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value="datosCliente.Direccion"
+                          Label="Dirección"
+                          Variant="Variant.Outlined"
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value="datosCliente.Ciudad"
+                          Label="Ciudad"
+                          Variant="Variant.Outlined"
+                          Class="mb-3" />
+
+            <MudTextField @bind-Value="datosCliente.CodPostal"
+                          Label="Código postal"
+                          Variant="Variant.Outlined"
+                          Class="mb-4" />
+
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       FullWidth="true"
+                       OnClick="GuardarDatos"
+                       Disabled="estGuardando">
+                @if (estGuardando)
+                {
+                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                }
+                Guardar cambios
+            </MudButton>
+        }
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    // Datos del formulario de perfil
+    private CrearClienteDto datosCliente = new();
+    private string errorMensaje = string.Empty;
+    private bool estaCargando = true;
+    private bool estGuardando = false;
+    private bool guardadoCorrectamente = false;
+    private int idCliente = 0;
+
+    // Al cargar la página obtenemos los datos del cliente
+    protected override async Task OnInitializedAsync()
+    {
+        // Obtener el idUsuario del token JWT cuando implementemos autenticación
+        estaCargando = false;
+    }
+
+    // Guarda los datos del perfil del cliente
+    private async Task GuardarDatos()
+    {
+        estGuardando = true;
+        errorMensaje = string.Empty;
+        guardadoCorrectamente = false;
+
+        ClienteDto? resultado;
+
+        if (idCliente == 0)
+        {
+            // Si no tiene cliente creado lo creamos
+            resultado = await ClienteService.CrearAsync(datosCliente, string.Empty);
+        }
+        else
+        {
+            // Si ya tiene cliente lo editamos
+            resultado = await ClienteService.EditarAsync(idCliente, datosCliente, string.Empty);
+        }
+
+        if (resultado == null)
+        {
+            errorMensaje = "No se han podido guardar los datos";
+        }
+        else
+        {
+            idCliente = resultado.IdCliente;
+            guardadoCorrectamente = true;
+        }
+
+        estGuardando = false;
+    }
+}
