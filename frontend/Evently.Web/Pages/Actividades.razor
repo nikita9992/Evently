@@ -1,0 +1,161 @@
+﻿@page "/actividades"
+@inject ActividadService ActividadService
+@inject CategoriaService CategoriaService
+@inject NavigationManager Navegacion
+
+<PageTitle>Actividades — Evently</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">Actividades</MudText>
+<MudText Typo="Typo.subtitle1" Class="mb-4">
+    Descubre todas nuestras actividades de ocio
+</MudText>
+
+<!-- Filtros -->
+<MudPaper Class="pa-4 mb-4" Elevation="2">
+    <MudGrid>
+        <MudItem xs="12" sm="6">
+            <MudTextField @bind-Value="filtroPorTitulo"
+                         Label="Buscar por nombre"
+                         Variant="Variant.Outlined"
+                         Adornment="Adornment.Start"
+                         AdornmentIcon="@Icons.Material.Filled.Search"
+                         Immediate="true"
+                         OnKeyUp="FiltrarActividades" />
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudSelect T="int?" @bind-Value="filtroPorCategoria"
+                      Label="Filtrar por categoría"
+                      Variant="Variant.Outlined"
+                      AnchorOrigin="Origin.BottomCenter">
+                <MudSelectItem T="int?" Value="null">Todas las categorías</MudSelectItem>
+                @foreach (var categoria in categorias)
+                {
+                    <MudSelectItem T="int?" Value="categoria.IdCategoria">
+                        @categoria.NombreCatego
+                    </MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled"
+                      Color="Color.Primary"
+                      OnClick="FiltrarActividades"
+                      StartIcon="@Icons.Material.Filled.FilterList">
+                Aplicar filtros
+            </MudButton>
+            <MudButton Variant="Variant.Outlined"
+                      Color="Color.Secondary"
+                      OnClick="LimpiarFiltros"
+                      Class="ml-2"
+                      StartIcon="@Icons.Material.Filled.Clear">
+                Limpiar
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+<!-- Lista de actividades -->
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (!actividades.Any())
+{
+    <MudAlert Severity="Severity.Info">
+        No se encontraron actividades con los filtros seleccionados.
+    </MudAlert>
+}
+else
+{
+    <MudGrid>
+        @foreach (var actividad in actividades)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Elevation="3" Class="h-100">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@actividad.Titulo</MudText>
+                            <MudChip T="string" Color="Color.Primary" Size="Size.Small">
+                                @actividad.NombreCatego
+                            </MudChip>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2" Class="mb-2">
+                            @actividad.Descripcion
+                        </MudText>
+                        @if (actividad.FechaActiv.HasValue)
+                        {
+                            <MudText Typo="Typo.caption">
+                                <MudIcon Icon="@Icons.Material.Filled.Event"
+                                        Size="Size.Small" />
+                                @actividad.FechaActiv.Value.ToString("dd/MM/yyyy")
+                            </MudText>
+                        }
+                        @if (actividad.CupoMaximo.HasValue)
+                        {
+                            <MudText Typo="Typo.caption" Class="ml-2">
+                                <MudIcon Icon="@Icons.Material.Filled.People"
+                                        Size="Size.Small" />
+                                @actividad.CupoMaximo plazas
+                            </MudText>
+                        }
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudText Typo="Typo.h6" Color="Color.Primary">
+                            @actividad.Precio.ToString("C")
+                        </MudText>
+                        <MudSpacer />
+                        <MudButton Variant="Variant.Filled"
+                                  Color="Color.Primary"
+                                  Size="Size.Small"
+                                  OnClick="@(() => VerDetalle(actividad.IdActividad))">
+                            Ver detalle
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@code {
+    private List<ActividadDto> actividades = new();
+    private List<CategoriaDto> categorias = new();
+    private string? filtroPorTitulo;
+    private int? filtroPorCategoria;
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categorias = await CategoriaService.ObtenerTodasAsync();
+
+        actividades = await ActividadService.ObtenerTodasAsync();
+
+        cargando = false;
+    }
+
+    // Aplicar filtros
+    private async Task FiltrarActividades()
+    {
+        cargando = true;
+        actividades = await ActividadService.ObtenerTodasAsync(
+            filtroPorCategoria,
+            filtroPorTitulo);
+        cargando = false;
+    }
+
+    // Limpiar filtros
+    private async Task LimpiarFiltros()
+    {
+        filtroPorTitulo = null;
+        filtroPorCategoria = null;
+        await FiltrarActividades();
+    }
+
+    // Ir al detalle de la actividad
+    private void VerDetalle(int id)
+    {
+        Navegacion.NavigateTo($"/actividades/{id}");
+    }
+}

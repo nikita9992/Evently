@@ -25,7 +25,8 @@ namespace Evently.API.Services
                 consulta = consulta.Where(a => a.IdCategoria == filtro.IdCategoria.Value);
 
             if (!string.IsNullOrEmpty(filtro.Titulo))
-                consulta = consulta.Where(a => a.Titulo.Contains(filtro.Titulo));
+                consulta = consulta.Where(a =>
+                    a.Titulo.ToLower().Contains(filtro.Titulo.ToLower()));
 
             return await consulta
                 .Select(a => new ActividadDto
