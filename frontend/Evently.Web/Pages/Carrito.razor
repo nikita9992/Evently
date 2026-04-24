@@ -1,0 +1,154 @@
+﻿@page "/carrito"
+@using Evently.Web.Models
+@using Evently.Web.Services
+@inject PedidoService PedidoService
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
+
+<PageTitle>Mi carrito — Evently</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-8">
+    <MudText Typo="Typo.h5" GutterBottom="true">Mi carrito</MudText>
+
+    @if (!string.IsNullOrEmpty(errorMensaje))
+    {
+        <MudAlert Severity="Severity.Error" Class="mb-4">@errorMensaje</MudAlert>
+    }
+
+    @if (pedidoConfirmado)
+    {
+        <MudAlert Severity="Severity.Success" Class="mb-4">
+            Pedido confirmado correctamente. ¡Gracias por tu reserva!
+        </MudAlert>
+    }
+
+    @if (elementosCarrito.Count == 0)
+    {
+        <MudText Class="mt-4">No tienes actividades en el carrito.</MudText>
+        <MudButton Variant="Variant.Outlined"
+                   Color="Color.Primary"
+                   Href="/actividades"
+                   Class="mt-3">
+            Ver actividades
+        </MudButton>
+    }
+    else
+    {
+        <MudTable Items="elementosCarrito" Hover="true" Class="mb-4">
+            <HeaderContent>
+                <MudTh>Actividad</MudTh>
+                <MudTh>Precio</MudTh>
+                <MudTh>Cantidad</MudTh>
+                <MudTh>Importe</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.Titulo</MudTd>
+                <MudTd>@context.Precio.ToString("C")</MudTd>
+                <MudTd>@context.Cantidad</MudTd>
+                <MudTd>@context.ImporteLinea.ToString("C")</MudTd>
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   OnClick="() => EliminarDelCarrito(context)" />
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+
+        <MudText Typo="Typo.h6" Class="mb-4">
+            Total: @elementosCarrito.Sum(e => e.ImporteLinea).ToString("C")
+        </MudText>
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="ConfirmarPedido"
+                   Disabled="estaConfirmando">
+            @if (estaConfirmando)
+            {
+                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+            }
+            Confirmar pedido
+        </MudButton>
+    }
+</MudContainer>
+
+@code {
+    // Lista de actividades en el carrito
+    private List<ItemCarrito> elementosCarrito = new();
+    private string errorMensaje = string.Empty;
+    private bool estaConfirmando = false;
+    private bool pedidoConfirmado = false;
+
+    // Al cargar la página leemos el carrito del localStorage
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarCarrito();
+    }
+
+    // Carga los elementos del carrito desde el localStorage del navegador
+    private async Task CargarCarrito()
+    {
+        try
+        {
+            var json = await JS.InvokeAsync<string>("localStorage.getItem", "carrito");
+            if (!string.IsNullOrEmpty(json))
+            {
+                elementosCarrito = System.Text.Json.JsonSerializer.Deserialize<List<ItemCarrito>>(json)
+                                   ?? new List<ItemCarrito>();
+            }
+        }
+        catch
+        {
+            elementosCarrito = new List<ItemCarrito>();
+        }
+    }
+
+    // Elimina una actividad del carrito
+    private async Task EliminarDelCarrito(ItemCarrito elemento)
+    {
+        elementosCarrito.Remove(elemento);
+        await GuardarCarrito();
+    }
+
+    // Guarda el carrito actualizado en el localStorage
+    private async Task GuardarCarrito()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(elementosCarrito);
+        await JS.InvokeVoidAsync("localStorage.setItem", "carrito", json);
+    }
+
+    // Confirma el pedido enviándolo al backend
+    private async Task ConfirmarPedido()
+    {
+        estaConfirmando = true;
+        errorMensaje = string.Empty;
+
+        // TODO: obtener idCliente del token JWT cuando implementemos autenticación
+        var dto = new ConfirmarPedidoDto
+        {
+            IdCliente = 0,
+            Actividades = elementosCarrito.Select(e => new ItemCarritoDto
+            {
+                IdActividad = e.IdActividad,
+                Cantidad = e.Cantidad,
+                PrecioUnitario = e.Precio
+            }).ToList()
+        };
+
+        var resultado = await PedidoService.ConfirmarPedidoAsync(dto, string.Empty);
+
+        if (resultado == null)
+        {
+            errorMensaje = "No se ha podido confirmar el pedido";
+        }
+        else
+        {
+            // Vaciamos el carrito tras confirmar
+            elementosCarrito.Clear();
+            await GuardarCarrito();
+            pedidoConfirmado = true;
+        }
+
+        estaConfirmando = false;
+    }
+}
