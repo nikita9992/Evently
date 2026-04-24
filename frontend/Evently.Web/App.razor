@@ -1,12 +1,26 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@inject EstadoAuthService EstadoAuth
+
+<Router AppAssembly="typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+        <PageTitle>No encontrado</PageTitle>
+        <LayoutView Layout="typeof(Layout.MainLayout)">
+            <MudText Typo="Typo.h5">Lo sentimos, esta página no existe.</MudText>
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Cargar token del localStorage al iniciar la app
+            await EstadoAuth.CargarDesdeLocalStorageAsync();
+            StateHasChanged();
+        }
+    }
+}

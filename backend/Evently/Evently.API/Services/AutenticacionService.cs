@@ -86,7 +86,8 @@ namespace Evently.API.Services
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Email = usuario.Email,
                 Rol = usuario.Rol,
-                Expiracion = expiracion
+                Expiracion = expiracion,
+                IdUsuario = usuario.IdUsuario 
             };
         }
     }

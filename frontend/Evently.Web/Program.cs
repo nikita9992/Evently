@@ -23,5 +23,6 @@ builder.Services.AddScoped<ActividadService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<ClienteService>();
+builder.Services.AddSingleton<EstadoAuthService>();
 
 await builder.Build().RunAsync();

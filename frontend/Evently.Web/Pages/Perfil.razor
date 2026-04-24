@@ -3,6 +3,7 @@
 @using Evently.Web.Services
 @inject ClienteService ClienteService
 @inject NavigationManager NavManager
+@inject EstadoAuthService EstadoAuth
 
 <PageTitle>Mi perfil — Evently</PageTitle>
 
@@ -96,23 +97,17 @@
         errorMensaje = string.Empty;
         guardadoCorrectamente = false;
 
+        datosCliente.IdUsuario = EstadoAuth.IdUsuario;
+
         ClienteDto? resultado;
 
         if (idCliente == 0)
-        {
-            // Si no tiene cliente creado lo creamos
-            resultado = await ClienteService.CrearAsync(datosCliente, string.Empty);
-        }
+            resultado = await ClienteService.CrearAsync(datosCliente, EstadoAuth.Token);
         else
-        {
-            // Si ya tiene cliente lo editamos
-            resultado = await ClienteService.EditarAsync(idCliente, datosCliente, string.Empty);
-        }
+            resultado = await ClienteService.EditarAsync(idCliente, datosCliente, EstadoAuth.Token);
 
         if (resultado == null)
-        {
             errorMensaje = "No se han podido guardar los datos";
-        }
         else
         {
             idCliente = resultado.IdCliente;

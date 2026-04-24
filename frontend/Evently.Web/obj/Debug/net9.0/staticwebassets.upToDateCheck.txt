@@ -1,7 +1,7 @@
+wwwroot\carritoHelper.js
 wwwroot\css\app.css
 wwwroot\icon-192.png
-wwwroot\carritoHelper.js
 wwwroot\index.html
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\css\app.css
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\carritoHelper.js
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\css\app.css
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\index.html

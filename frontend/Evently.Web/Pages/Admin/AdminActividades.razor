@@ -1,0 +1,284 @@
+﻿@page "/admin/actividades"
+@inject ActividadService ActividadService
+@inject CategoriaService CategoriaService
+@inject ISnackbar Snackbar
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
+
+<PageTitle>Admin — Actividades</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" Class="mr-2" />
+    Gestión de Actividades
+</MudText>
+
+<!-- Botón crear nueva actividad -->
+<MudButton Variant="Variant.Filled"
+           Color="Color.Primary"
+           StartIcon="@Icons.Material.Filled.Add"
+           OnClick="AbrirFormularioCrear"
+           Class="mb-4">
+    Nueva actividad
+</MudButton>
+
+<!-- Tabla de actividades -->
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Items="actividades" Hover="true" Striped="true" Elevation="3">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Título</MudTh>
+            <MudTh>Categoría</MudTh>
+            <MudTh>Precio</MudTh>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Plazas</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdActividad</MudTd>
+            <MudTd>@context.Titulo</MudTd>
+            <MudTd>
+                <MudChip T="string" Color="Color.Primary" Size="Size.Small">
+                    @context.NombreCatego
+                </MudChip>
+            </MudTd>
+            <MudTd>@context.Precio.ToString("C")</MudTd>
+            <MudTd>
+                @(context.FechaActiv.HasValue
+                            ? context.FechaActiv.Value.ToString("dd/MM/yyyy")
+                            : "—")
+        </MudTd>
+        <MudTd>@(context.CupoMaximo?.ToString() ?? "—")</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                           Color="Color.Warning"
+                           Size="Size.Small"
+                           OnClick="@(() => AbrirFormularioEditar(context))" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                           Color="Color.Error"
+                           Size="Size.Small"
+                           OnClick="@(() => ConfirmarEliminar(context))" />
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+}
+
+<!-- Crear/editar actividad -->
+<MudDialog @bind-Visible="dialogoAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @(modoEdicion ? "Editar actividad" : "Nueva actividad")
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="formulario.Titulo"
+                      Label="Título"
+                      Variant="Variant.Outlined"
+                      Class="mb-3"
+                      Required="true" />
+
+        <MudSelect T="int" @bind-Value="formulario.IdCategoria"
+                   Label="Categoría"
+                   Variant="Variant.Outlined"
+                   Class="mb-3">
+            @foreach (var categoria in categorias)
+            {
+                <MudSelectItem T="int" Value="categoria.IdCategoria">
+                    @categoria.NombreCatego
+                </MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudTextField @bind-Value="formulario.Descripcion"
+                      Label="Descripción"
+                      Variant="Variant.Outlined"
+                      Lines="3"
+                      Class="mb-3" />
+
+        <MudNumericField @bind-Value="formulario.Precio"
+                         Label="Precio (€)"
+                         Variant="Variant.Outlined"
+                         Min="0"
+                         Class="mb-3" />
+
+        <MudDatePicker @bind-Date="fechaSeleccionada"
+                       Label="Fecha de la actividad"
+                       Variant="Variant.Outlined"
+                       Class="mb-3" />
+
+        <MudNumericField @bind-Value="formulario.CupoMaximo"
+                         Label="Cupo máximo"
+                         Variant="Variant.Outlined"
+                         Min="1" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CerrarDialogo">Cancelar</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="GuardarActividad">
+            @(modoEdicion ? "Guardar cambios" : "Crear")
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+<!-- Confirmar eliminación -->
+<MudDialog @bind-Visible="dialogoEliminarAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Color="Color.Error">
+            ¿Eliminar actividad?
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>
+            ¿Estás seguro de que quieres eliminar
+            <strong>@actividadAEliminar?.Titulo</strong>?
+            Esta acción no se puede deshacer.
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => dialogoEliminarAbierto = false)">
+            Cancelar
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Error"
+                   OnClick="EliminarActividad">
+            Eliminar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private List<ActividadDto> actividades = new();
+    private List<CategoriaDto> categorias = new();
+    private bool cargando = true;
+    private bool dialogoAbierto = false;
+    private bool dialogoEliminarAbierto = false;
+    private bool modoEdicion = false;
+    private CrearActividadDto formulario = new();
+    private DateTime? fechaSeleccionada;
+    private int actividadEditandoId;
+    private ActividadDto? actividadAEliminar;
+
+    // Token del admin 
+    private string tokenAdmin => EstadoAuth.Token;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
+
+            await CargarDatos();
+            StateHasChanged();
+        }
+    }
+
+    //Cargar actividades y categorías
+    private async Task CargarDatos()
+    {
+        cargando = true;
+        actividades = await ActividadService.ObtenerTodasAsync();
+        categorias = await CategoriaService.ObtenerTodasAsync();
+        cargando = false;
+    }
+
+    //Abrir formulario para crear
+    private void AbrirFormularioCrear()
+    {
+        formulario = new CrearActividadDto();
+        fechaSeleccionada = null;
+        modoEdicion = false;
+        dialogoAbierto = true;
+    }
+
+    // Abrir formulario para editar
+    private void AbrirFormularioEditar(ActividadDto actividad)
+    {
+        formulario = new CrearActividadDto
+        {
+            IdCategoria = actividad.IdCategoria,
+            Titulo = actividad.Titulo,
+            Descripcion = actividad.Descripcion,
+            Precio = actividad.Precio,
+            CupoMaximo = actividad.CupoMaximo
+        };
+        fechaSeleccionada = actividad.FechaActiv;
+        actividadEditandoId = actividad.IdActividad;
+        modoEdicion = true;
+        dialogoAbierto = true;
+    }
+
+    //Guardar actividad
+    private async Task GuardarActividad()
+    {
+        formulario.FechaActiv = fechaSeleccionada.HasValue
+            ? DateTime.SpecifyKind(fechaSeleccionada.Value, DateTimeKind.Utc)
+            : null;
+
+        if (modoEdicion)
+        {
+            var resultado = await ActividadService.EditarAsync(
+                actividadEditandoId, formulario, tokenAdmin);
+
+            if (resultado != null)
+                Snackbar.Add("Actividad actualizada correctamente", Severity.Success);
+            else
+                Snackbar.Add("Error al actualizar la actividad", Severity.Error);
+        }
+        else
+        {
+            var resultado = await ActividadService.CrearAsync(formulario, tokenAdmin);
+
+            if (resultado != null)
+                Snackbar.Add("Actividad creada correctamente", Severity.Success);
+            else
+                Snackbar.Add("Error al crear la actividad", Severity.Error);
+        }
+
+        dialogoAbierto = false;
+        await CargarDatos();
+    }
+
+    // Confirmar eliminación
+    private void ConfirmarEliminar(ActividadDto actividad)
+    {
+        actividadAEliminar = actividad;
+        dialogoEliminarAbierto = true;
+    }
+
+    // Eliminar actividad
+    private async Task EliminarActividad()
+    {
+        if (actividadAEliminar == null) return;
+
+        var resultado = await ActividadService.EliminarAsync(
+            actividadAEliminar.IdActividad, tokenAdmin);
+
+        if (resultado)
+            Snackbar.Add("Actividad eliminada correctamente", Severity.Success);
+        else
+            Snackbar.Add("Error al eliminar la actividad", Severity.Error);
+
+        dialogoEliminarAbierto = false;
+        await CargarDatos();
+    }
+
+    private void CerrarDialogo()
+    {
+        dialogoAbierto = false;
+    }
+}
