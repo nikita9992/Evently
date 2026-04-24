@@ -1,0 +1,98 @@
+﻿@page "/admin/clientes"
+@inject ClienteService ClienteService
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
+
+<PageTitle>Admin — Clientes</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="@Icons.Material.Filled.People" Class="mr-2" />
+    Gestión de Clientes
+</MudText>
+
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (!clientes.Any())
+{
+    <MudAlert Severity="Severity.Info">No hay clientes registrados.</MudAlert>
+}
+else
+{
+    <MudTable Items="clientes" Hover="true" Striped="true" Elevation="3"
+              Filter="FiltrarCliente">
+        <ToolBarContent>
+            <MudTextField @bind-Value="textoBusqueda"
+                          Placeholder="Buscar cliente..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium"
+                          Class="mt-0" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Email</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Ciudad</MudTh>
+            <MudTh>Dirección</MudTh>
+            <MudTh>Cód. Postal</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdCliente</MudTd>
+            <MudTd>@context.Nombre @context.Apellidos</MudTd>
+            <MudTd>@context.EmailUsuario</MudTd>
+            <MudTd>@(context.Telefono ?? "—")</MudTd>
+            <MudTd>@(context.Ciudad ?? "—")</MudTd>
+            <MudTd>@(context.Direccion ?? "—")</MudTd>
+            <MudTd>@(context.CodPostal ?? "—")</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    private List<ClienteDto> clientes = new();
+    private bool cargando = true;
+    private string textoBusqueda = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
+
+            await CargarDatos();
+            StateHasChanged();
+        }
+    }
+
+    private async Task CargarDatos()
+    {
+        cargando = true;
+        clientes = await ClienteService.ObtenerTodosAsync(EstadoAuth.Token);
+        cargando = false;
+    }
+
+    // Filtro de búsqueda
+    private bool FiltrarCliente(ClienteDto cliente)
+    {
+        if (string.IsNullOrEmpty(textoBusqueda)) return true;
+
+        var busqueda = textoBusqueda.ToLower();
+        return cliente.Nombre.ToLower().Contains(busqueda)
+            || cliente.Apellidos.ToLower().Contains(busqueda)
+            || cliente.EmailUsuario.ToLower().Contains(busqueda)
+            || (cliente.Ciudad?.ToLower().Contains(busqueda) ?? false);
+    }
+}

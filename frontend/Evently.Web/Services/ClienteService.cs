@@ -44,5 +44,14 @@ namespace Evently.Web.Services
             if (!respuesta.IsSuccessStatusCode) return null;
             return await respuesta.Content.ReadFromJsonAsync<ClienteDto>();
         }
+        // Obtener todos los clientes 
+        public async Task<List<ClienteDto>> ObtenerTodosAsync(string token)
+        {
+            _http.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var resultado = await _http.GetFromJsonAsync<List<ClienteDto>>("api/clientes");
+            return resultado ?? new List<ClienteDto>();
+        }
     }
 }

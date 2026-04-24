@@ -1,0 +1,215 @@
+﻿@page "/admin/pedidos"
+@inject PedidoService PedidoService
+@inject EstadoService EstadoService
+@inject ISnackbar Snackbar
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
+@inject HttpClient Http
+
+<PageTitle>Admin — Pedidos</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="@Icons.Material.Filled.Receipt" Class="mr-2" />
+    Gestión de Pedidos
+</MudText>
+
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (!pedidos.Any())
+{
+    <MudAlert Severity="Severity.Info">No hay pedidos registrados.</MudAlert>
+}
+else
+{
+    <MudTable Items="pedidos" Hover="true" Striped="true" Elevation="3">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Cliente</MudTh>
+            <MudTh>Estado</MudTh>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Total</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdPedido</MudTd>
+            <MudTd>@context.NombreCliente</MudTd>
+            <MudTd>
+                <MudChip T="string"
+                         Color="@(context.NombreEstado == "Confirmado"
+                                                      ? Color.Success : Color.Error)"
+                     Size="Size.Small">
+                @context.NombreEstado
+            </MudChip>
+        </MudTd>
+        <MudTd>@context.FechaConfirm.ToString("dd/MM/yyyy HH:mm")</MudTd>
+        <MudTd>
+            @(context.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
+        </MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           OnClick="@(() => VerDetalle(context))" />
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+}
+
+<MudDialog @bind-Visible="dialogoAbierto" Options="opcionesDialogo">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            Pedido #@pedidoSeleccionado?.IdPedido —
+            @pedidoSeleccionado?.NombreCliente
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (pedidoSeleccionado != null)
+        {
+            <MudText Class="mb-2">
+                <strong>Estado actual:</strong>
+                <MudChip T="string"
+                         Color="@(pedidoSeleccionado.NombreEstado == "Confirmado"
+                                                      ? Color.Success : Color.Error)"
+                     Size="Size.Small">
+                @pedidoSeleccionado.NombreEstado
+            </MudChip>
+        </MudText>
+
+            <MudText Class="mb-4">
+                <strong>Fecha:</strong>
+                @pedidoSeleccionado.FechaConfirm.ToString("dd/MM/yyyy HH:mm")
+            </MudText>
+
+            <MudSelect T="int" @bind-Value="nuevoIdEstado"
+                       Label="Cambiar estado"
+                       Variant="Variant.Outlined"
+                       Class="mb-2">
+            @foreach (var estado in estados)
+                {
+                    <MudSelectItem T="int" Value="estado.IdEstado">
+                        @estado.NombreEstado
+                    </MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Warning"
+                       StartIcon="@Icons.Material.Filled.Update"
+                       OnClick="CambiarEstado"
+                       Class="mb-4">
+                Actualizar estado
+            </MudButton>
+
+            <MudDivider Class="mb-3" />
+
+            <MudTable Items="pedidoSeleccionado.Detalles"
+                      Elevation="0" Dense="true">
+                <HeaderContent>
+                    <MudTh>Actividad</MudTh>
+                    <MudTh>Cantidad</MudTh>
+                    <MudTh>Precio</MudTh>
+                    <MudTh>Importe</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.TituloActividad</MudTd>
+                    <MudTd>@context.Cantidad</MudTd>
+                    <MudTd>@context.PrecioUnitario.ToString("C")</MudTd>
+                    <MudTd>@context.ImporteLinea.ToString("C")</MudTd>
+                </RowTemplate>
+            </MudTable>
+
+            <MudDivider Class="my-3" />
+
+            <MudText Typo="Typo.h6" Align="Align.Right">
+                Total: @(pedidoSeleccionado.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
+            </MudText>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => dialogoAbierto = false)">
+            Cerrar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private List<PedidoDto> pedidos = new();
+    private List<EstadoDto> estados = new();
+    private bool cargando = true;
+    private bool dialogoAbierto = false;
+    private PedidoDto? pedidoSeleccionado;
+    private int nuevoIdEstado;
+
+    private DialogOptions opcionesDialogo = new()
+    {
+        MaxWidth = MaxWidth.Medium,
+        FullWidth = true
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
+
+            await CargarDatos();
+            StateHasChanged();
+        }
+    }
+
+    private async Task CargarDatos()
+    {
+        cargando = true;
+        pedidos = await PedidoService.ObtenerTodosAsync(EstadoAuth.Token);
+        estados = await EstadoService.ObtenerTodosAsync(EstadoAuth.Token);
+        cargando = false;
+    }
+
+    private void VerDetalle(PedidoDto pedido)
+    {
+        pedidoSeleccionado = pedido;
+        nuevoIdEstado = pedido.IdEstado;
+        dialogoAbierto = true;
+    }
+
+    private async Task CambiarEstado()
+    {
+        if (pedidoSeleccionado == null) return;
+
+        Http.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue(
+                "Bearer", EstadoAuth.Token);
+
+        var dto = new
+        {
+            IdCliente = pedidoSeleccionado.IdCliente,
+            IdEstado = nuevoIdEstado
+        };
+
+        var respuesta = await Http.PutAsJsonAsync(
+            $"api/pedidos/{pedidoSeleccionado.IdPedido}", dto);
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            Snackbar.Add("Estado actualizado correctamente", Severity.Success);
+            await CargarDatos();
+            dialogoAbierto = false;
+        }
+        else
+        {
+            Snackbar.Add("Error al actualizar el estado", Severity.Error);
+        }
+    }
+}

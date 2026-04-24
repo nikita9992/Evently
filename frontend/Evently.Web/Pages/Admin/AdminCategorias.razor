@@ -1,0 +1,219 @@
+﻿@page "/admin/categorias"
+@inject CategoriaService CategoriaService
+@inject ISnackbar Snackbar
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
+
+<PageTitle>Admin — Categorías</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="@Icons.Material.Filled.Category" Class="mr-2" />
+    Gestión de Categorías
+</MudText>
+
+<MudButton Variant="Variant.Filled"
+           Color="Color.Primary"
+           StartIcon="@Icons.Material.Filled.Add"
+           OnClick="AbrirFormularioCrear"
+           Class="mb-4">
+    Nueva categoría
+</MudButton>
+
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Items="categorias" Hover="true" Striped="true" Elevation="3">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Descripción</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdCategoria</MudTd>
+            <MudTd>@context.NombreCatego</MudTd>
+            <MudTd>@(context.Descripcion ?? "—")</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                               Color="Color.Warning"
+                               Size="Size.Small"
+                               OnClick="@(() => AbrirFormularioEditar(context))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="@(() => ConfirmarEliminar(context))" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+<!-- Diálogo crear/editar -->
+<MudDialog @bind-Visible="dialogoAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @(modoEdicion ? "Editar categoría" : "Nueva categoría")
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="formulario.NombreCatego"
+                      Label="Nombre"
+                      Variant="Variant.Outlined"
+                      Class="mb-3"
+                      Required="true" />
+        <MudTextField @bind-Value="formulario.Descripcion"
+                      Label="Descripción"
+                      Variant="Variant.Outlined"
+                      Lines="3" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CerrarDialogo">Cancelar</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="GuardarCategoria">
+            @(modoEdicion ? "Guardar cambios" : "Crear")
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+<!-- Diálogo confirmar eliminación -->
+<MudDialog @bind-Visible="dialogoEliminarAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6" Color="Color.Error">
+            ¿Eliminar categoría?
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>
+            ¿Estás seguro de que quieres eliminar
+            <strong>@categoriaAEliminar?.NombreCatego</strong>?
+            Esta acción no se puede deshacer.
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => dialogoEliminarAbierto = false)">
+            Cancelar
+        </MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Error"
+                   OnClick="EliminarCategoria">
+            Eliminar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private List<CategoriaDto> categorias = new();
+    private bool cargando = true;
+    private bool dialogoAbierto = false;
+    private bool dialogoEliminarAbierto = false;
+    private bool modoEdicion = false;
+    private CrearCategoriaDto formulario = new();
+    private int categoriaEditandoId;
+    private CategoriaDto? categoriaAEliminar;
+    private string tokenAdmin => EstadoAuth.Token;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
+
+            await CargarDatos();
+            StateHasChanged();
+        }
+    }
+
+    private async Task CargarDatos()
+    {
+        cargando = true;
+        categorias = await CategoriaService.ObtenerTodasAsync();
+        cargando = false;
+    }
+
+    private void AbrirFormularioCrear()
+    {
+        formulario = new CrearCategoriaDto();
+        modoEdicion = false;
+        dialogoAbierto = true;
+    }
+
+    private void AbrirFormularioEditar(CategoriaDto categoria)
+    {
+        formulario = new CrearCategoriaDto
+        {
+            NombreCatego = categoria.NombreCatego,
+            Descripcion = categoria.Descripcion
+        };
+        categoriaEditandoId = categoria.IdCategoria;
+        modoEdicion = true;
+        dialogoAbierto = true;
+    }
+
+    private async Task GuardarCategoria()
+    {
+        if (modoEdicion)
+        {
+            var resultado = await CategoriaService.EditarAsync(
+                categoriaEditandoId, formulario, tokenAdmin);
+
+            if (resultado != null)
+                Snackbar.Add("Categoría actualizada correctamente", Severity.Success);
+            else
+                Snackbar.Add("Error al actualizar la categoría", Severity.Error);
+        }
+        else
+        {
+            var resultado = await CategoriaService.CrearAsync(formulario, tokenAdmin);
+
+            if (resultado != null)
+                Snackbar.Add("Categoría creada correctamente", Severity.Success);
+            else
+                Snackbar.Add("Error al crear la categoría", Severity.Error);
+        }
+
+        dialogoAbierto = false;
+        await CargarDatos();
+        StateHasChanged();
+    }
+
+    private void ConfirmarEliminar(CategoriaDto categoria)
+    {
+        categoriaAEliminar = categoria;
+        dialogoEliminarAbierto = true;
+    }
+
+    private async Task EliminarCategoria()
+    {
+        if (categoriaAEliminar == null) return;
+
+        var resultado = await CategoriaService.EliminarAsync(
+            categoriaAEliminar.IdCategoria, tokenAdmin);
+
+        if (resultado)
+            Snackbar.Add("Categoría eliminada correctamente", Severity.Success);
+        else
+            Snackbar.Add("Error al eliminar la categoría", Severity.Error);
+
+        dialogoEliminarAbierto = false;
+        await CargarDatos();
+        StateHasChanged();
+    }
+
+    private void CerrarDialogo()
+    {
+        dialogoAbierto = false;
+    }
+}

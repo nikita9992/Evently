@@ -153,6 +153,9 @@ namespace Evently.API.Services
 
             await _contexto.SaveChangesAsync();
 
+            await _contexto.Entry(pedido).Reference(p => p.Estado).LoadAsync();
+            await _contexto.Entry(pedido).Reference(p => p.Cliente).LoadAsync();
+
             return new PedidoDto
             {
                 IdPedido = pedido.IdPedido,

@@ -3,6 +3,31 @@
   "WorkspaceRootPath": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\admin\\adminclientes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\services\\clienteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\admin\\adminpedidos.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\models\\modelsestado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\services\\estadoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\admin\\admincategorias.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
@@ -10,9 +35,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\admin\\adminactividades.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\services\\estadoauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -57,9 +79,6 @@
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\actividades.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\services\\clienteservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -95,10 +114,6 @@
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\ipedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\dtos\\pedido\\confirmarpedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\pedido\\confirmarpedidodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -130,11 +145,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 162,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "AdminClientes.razor",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminClientes.razor",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminClientes.razor",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminClientes.razor",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminClientes.razor",
+              "ViewState": "AgIAABUAAAAAAAAAAAAiwDEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-24T13:20:56.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "App.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\App.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\App.razor",
@@ -142,12 +170,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\App.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-24T12:08:20.255Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T12:08:20.255Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 13,
               "Title": "Perfil.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Perfil.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Perfil.razor",
@@ -155,12 +182,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Perfil.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-24T11:53:42.804Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T11:53:42.804Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 18,
               "Title": "Carrito.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Carrito.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Carrito.razor",
@@ -168,17 +194,16 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Carrito.razor",
               "ViewState": "AgIAAH0AAAAAAAAAAAAQwIcAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-24T11:52:04.168Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T11:52:04.168Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 8,
               "Title": "Login.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Login.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Login.razor",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Login.razor*",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Login.razor*",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Login.razor",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Login.razor",
               "ViewState": "AgIAADIAAAAAAAAAAAAIwEYAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-24T11:51:06.102Z",
@@ -186,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
               "Title": "EstadoAuthService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\EstadoAuthService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\EstadoAuthService.cs",
@@ -194,25 +219,114 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\EstadoAuthService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-24T11:15:09.244Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T11:15:09.244Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AdminActividades.razor",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
-              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor*",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor*",
-              "ViewState": "AgIAAKAAAAAAAAAAAAAQwLEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-24T11:07:13.125Z",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Program.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Program.cs",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T14:10:11.967Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "AdminCategorias.razor",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminCategorias.razor",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminCategorias.razor",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminCategorias.razor",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminCategorias.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAANoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-24T12:40:30.146Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ClienteService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ClienteService.cs",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ClienteService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ClienteService.cs",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ClienteService.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAcwC4AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T14:38:57.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdminPedidos.razor",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminPedidos.razor",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminPedidos.razor",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminPedidos.razor",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminPedidos.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-24T12:43:42.821Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PedidoService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Services\\PedidoService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
+              "RelativeToolTip": "Evently.API\\Services\\PedidoService.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAcwJsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T13:48:05.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EstadoService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\EstadoService.cs",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\EstadoService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\EstadoService.cs",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\EstadoService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-24T12:48:41.247Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ModelsEstado.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsEstado.cs",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsEstado.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsEstado.cs",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Models\\ModelsEstado.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-24T12:49:29.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AdminActividades.razor",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
+              "ViewState": "AgIAAKAAAAAAAAAAAAAQwLEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-04-24T11:07:13.125Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\_Imports.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\_Imports.razor",
@@ -220,12 +334,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\_Imports.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-22T14:10:52.43Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-22T14:10:52.43Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 12,
               "Title": "carritoHelper.js",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\wwwroot\\carritoHelper.js",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\wwwroot\\carritoHelper.js",
@@ -233,25 +346,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\wwwroot\\carritoHelper.js",
               "ViewState": "AgIAABcAAAAAAAAAAAAIwDAAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-04-24T10:35:10.261Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T10:35:10.261Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Program.cs",
-              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Program.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Program.cs",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T14:10:11.967Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 16,
               "Title": "AutenticacionService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\AutenticacionService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\AutenticacionService.cs",
@@ -259,12 +358,11 @@
               "RelativeToolTip": "Evently.API\\Services\\AutenticacionService.cs",
               "ViewState": "AgIAAEIAAAAAAAAAAAAmwFkAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-24T11:56:16.774Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T11:56:16.774Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 15,
               "Title": "RespuestaAuthDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Auth\\RespuestaAuthDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Auth\\RespuestaAuthDto.cs",
@@ -272,12 +370,11 @@
               "RelativeToolTip": "Evently.API\\DTOs\\Auth\\RespuestaAuthDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-24T11:57:47.029Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T11:57:47.029Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 23,
               "Title": "Actividades.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Actividades.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Actividades.razor",
@@ -289,7 +386,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 24,
               "Title": "PedidoService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\PedidoService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\PedidoService.cs",
@@ -301,7 +398,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "ModelsAuth.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsAuth.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsAuth.cs",
@@ -309,12 +406,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Models\\ModelsAuth.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAA1wBcAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T14:30:10.934Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-22T14:30:10.934Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 20,
               "Title": "DetalleActividad.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\DetalleActividad.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\DetalleActividad.razor",
@@ -326,7 +422,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 26,
               "Title": "CategoriaService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\CategoriaService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\CategoriaService.cs",
@@ -338,7 +434,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 25,
               "Title": "ActividadService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ActividadService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ActividadService.cs",
@@ -350,7 +446,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 27,
               "Title": "AutenticacionService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\AutenticacionService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\AutenticacionService.cs",
@@ -362,7 +458,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 21,
               "Title": "index.html",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\wwwroot\\index.html",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\wwwroot\\index.html",
@@ -374,7 +470,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 19,
               "Title": "ModelsCliente.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsCliente.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsCliente.cs",
@@ -386,7 +482,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 22,
               "Title": "ActividadService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ActividadService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\ActividadService.cs",
@@ -398,7 +494,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 28,
               "Title": "ModelsPedido.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsPedido.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsPedido.cs",
@@ -410,19 +506,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "ClienteService.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ClienteService.cs",
-              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ClienteService.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ClienteService.cs",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ClienteService.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAYwA8AAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T14:38:57.215Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 29,
               "Title": "ModelsCategoria.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsCategoria.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsCategoria.cs",
@@ -434,7 +518,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 30,
               "Title": "ModelsActividad.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsActividad.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsActividad.cs",
@@ -446,7 +530,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 32,
               "Title": "Home.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Home.razor",
@@ -458,7 +542,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 31,
               "Title": "MainLayout.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Layout\\MainLayout.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Layout\\MainLayout.razor",
@@ -470,7 +554,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 34,
               "Title": "IPedidoService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\IPedidoService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\IPedidoService.cs",
@@ -482,19 +566,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "PedidoService.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Services\\PedidoService.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
-              "RelativeToolTip": "Evently.API\\Services\\PedidoService.cs",
-              "ViewState": "AgIAALoAAAAAAAAAAAAQwMAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T13:48:05.172Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 35,
               "Title": "ConfirmarPedidoDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Pedido\\ConfirmarPedidoDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Pedido\\ConfirmarPedidoDto.cs",
@@ -506,7 +578,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 37,
               "Title": "DetallePedidoService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\DetallePedidoService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\DetallePedidoService.cs",
@@ -518,7 +590,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 38,
               "Title": "IDetallePedidoService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\IDetallePedidoService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\IDetallePedidoService.cs",
@@ -530,7 +602,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 39,
               "Title": "CrearDetallePedidoDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\DetallePedido\\CrearDetallePedidoDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\DetallePedido\\CrearDetallePedidoDto.cs",
@@ -542,7 +614,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 33,
               "Title": "PedidosController.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Controllers\\PedidosController.cs",
               "RelativeDocumentMoniker": "Evently.API\\Controllers\\PedidosController.cs",
@@ -554,7 +626,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 36,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Program.cs",
               "RelativeDocumentMoniker": "Evently.API\\Program.cs",
@@ -566,7 +638,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 40,
               "Title": "DetallePedidoDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\DetallePedido\\DetallePedidoDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\DetallePedido\\DetallePedidoDto.cs",
