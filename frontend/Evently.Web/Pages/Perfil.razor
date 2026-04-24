@@ -2,7 +2,9 @@
 @using Evently.Web.Models
 @using Evently.Web.Services
 @inject ClienteService ClienteService
-@inject NavigationManager NavManager
+@inject NavigationManager Navegacion
+@inject EstadoAuthService EstadoAuth
+
 
 <PageTitle>Mi perfil — Evently</PageTitle>
 
@@ -83,10 +85,48 @@
     private int idCliente = 0;
 
     // Al cargar la página obtenemos los datos del cliente
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Obtener el idUsuario del token JWT cuando implementemos autenticación
-        estaCargando = false;
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                Navegacion.NavigateTo("/login");
+                return;
+            }
+
+            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
+                EstadoAuth.IdUsuario, EstadoAuth.Token);
+
+            if (cliente != null)
+            {
+                idCliente = cliente.IdCliente;
+                datosCliente = new CrearClienteDto
+                {
+                    IdUsuario = cliente.IdUsuario,
+                    Nombre = cliente.Nombre,
+                    Apellidos = cliente.Apellidos,
+                    Telefono = cliente.Telefono,
+                    CodPostal = cliente.CodPostal,
+                    Ciudad = cliente.Ciudad,
+                    Direccion = cliente.Direccion,
+                    InfoAdicional = cliente.InfoAdicional
+                };
+            }
+            else
+            {
+                datosCliente.IdUsuario = EstadoAuth.IdUsuario;
+            }
+
+            estaCargando = false;
+            StateHasChanged();
+        }
     }
 
     // Guarda los datos del perfil del cliente
@@ -96,23 +136,17 @@
         errorMensaje = string.Empty;
         guardadoCorrectamente = false;
 
+        datosCliente.IdUsuario = EstadoAuth.IdUsuario;
+
         ClienteDto? resultado;
 
         if (idCliente == 0)
-        {
-            // Si no tiene cliente creado lo creamos
-            resultado = await ClienteService.CrearAsync(datosCliente, string.Empty);
-        }
+            resultado = await ClienteService.CrearAsync(datosCliente, EstadoAuth.Token);
         else
-        {
-            // Si ya tiene cliente lo editamos
-            resultado = await ClienteService.EditarAsync(idCliente, datosCliente, string.Empty);
-        }
+            resultado = await ClienteService.EditarAsync(idCliente, datosCliente, EstadoAuth.Token);
 
         if (resultado == null)
-        {
             errorMensaje = "No se han podido guardar los datos";
-        }
         else
         {
             idCliente = resultado.IdCliente;

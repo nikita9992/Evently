@@ -1,4 +1,7 @@
 ﻿@inherits LayoutComponentBase
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
+@inject ISnackbar Snackbar
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -7,23 +10,89 @@
 
 <MudLayout>
     <MudAppBar Elevation="1" Color="Color.Primary">
+
+        <!-- Botón menú lateral -->
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
                        Color="Color.Inherit"
                        Edge="Edge.Start"
-                       OnClick="@ToogleDrawer" />
-        <MudText Typo="Typo.h6" Class="ml-3">Evently</MudText>
+                       OnClick="ToogleDrawer" />
+
+        <!-- Logo -->
+        <MudText Typo="Typo.h6" Class="ml-2 cursor-pointer"
+                 @onclick="@(() => Navegacion.NavigateTo("/"))">
+            🎯 Evently
+        </MudText>
+
         <MudSpacer />
+
+        <!-- Botón carrito -->
         <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart"
                        Color="Color.Inherit"
-                       Href="/carrito" />
-        <MudIconButton Icon="@Icons.Material.Filled.Person"
+                       Href="/carrito"
+                       Title="Mi carrito" />
+
+        <!-- Menú usuario -->
+        @if (EstadoAuth.EstaAutenticado)
+        {
+            <!-- Menú desplegable usuario autenticado -->
+            <MudMenu Icon="@Icons.Material.Filled.AccountCircle"
+                     Color="Color.Inherit"
+                     AnchorOrigin="Origin.BottomRight"
+                     TransformOrigin="Origin.TopRight">
+                <ChildContent>
+                    <MudMenuItem>
+                        <MudText Typo="Typo.caption" Color="Color.Secondary">
+                            @EstadoAuth.Email
+                        </MudText>
+                    </MudMenuItem>
+                    <MudDivider />
+                    @if (EstadoAuth.EsAdministrador)
+                    {
+                        <MudMenuItem Icon="@Icons.Material.Filled.AdminPanelSettings"
+                                     Href="/admin/actividades">
+                            Panel Admin
+                        </MudMenuItem>
+                        <MudDivider />
+                    }
+                    <MudMenuItem Icon="@Icons.Material.Filled.Person"
+                                 Href="/perfil">
+                        Mi perfil
+                    </MudMenuItem>
+                    <MudMenuItem Icon="@Icons.Material.Filled.Receipt"
+                                 Href="/mispedidos">
+                        Mis pedidos
+                    </MudMenuItem>
+                    <MudDivider />
+                    <MudMenuItem Icon="@Icons.Material.Filled.Logout"
+                                 OnClick="CerrarSesion">
+                        Cerrar sesión
+                    </MudMenuItem>
+                </ChildContent>
+            </MudMenu>
+        }
+        else
+        {
+            <!-- Botones login/registro -->
+            <MudButton Variant="Variant.Text"
                        Color="Color.Inherit"
-                       Href="/cuenta" />
+                       Href="/login"
+                       StartIcon="@Icons.Material.Filled.Login">
+                Entrar
+            </MudButton>
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Inherit"
+                       Href="/registro"
+                       Class="ml-2">
+                Registrarse
+            </MudButton>
+        }
+
     </MudAppBar>
 
+    <!-- Menú lateral -->
     <MudDrawer @bind-Open="@drawerAbierto" Elevation="2">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Menú</MudText>
+            <MudText Typo="Typo.h6">🎯 Evently</MudText>
         </MudDrawerHeader>
         <MudNavMenu>
             <MudNavLink Href="/"
@@ -39,13 +108,66 @@
                         Icon="@Icons.Material.Filled.ShoppingCart">
                 Carrito
             </MudNavLink>
-            <MudNavLink Href="/cuenta"
-                        Icon="@Icons.Material.Filled.Person">
-                Mi cuenta
-            </MudNavLink>
+
+            @if (EstadoAuth.EstaAutenticado)
+            {
+                <MudDivider Class="my-2" />
+                <MudNavLink Href="/perfil"
+                            Icon="@Icons.Material.Filled.Person">
+                    Mi perfil
+                </MudNavLink>
+                <MudNavLink Href="/mispedidos"
+                            Icon="@Icons.Material.Filled.Receipt">
+                    Mis pedidos
+                </MudNavLink>
+
+                @if (EstadoAuth.EsAdministrador)
+                {
+                    <MudDivider Class="my-2" />
+                    <MudText Typo="Typo.caption"
+                             Class="px-4 py-1 mud-text-secondary">
+                        ADMINISTRACIÓN
+                    </MudText>
+                    <MudNavLink Href="/admin/actividades"
+                                Icon="@Icons.Material.Filled.EventNote">
+                        Gestión Actividades
+                    </MudNavLink>
+                    <MudNavLink Href="/admin/categorias"
+                                Icon="@Icons.Material.Filled.Category">
+                        Gestión Categorías
+                    </MudNavLink>
+                    <MudNavLink Href="/admin/pedidos"
+                                Icon="@Icons.Material.Filled.Receipt">
+                        Gestión Pedidos
+                    </MudNavLink>
+                    <MudNavLink Href="/admin/clientes"
+                                Icon="@Icons.Material.Filled.People">
+                        Gestión Clientes
+                    </MudNavLink>
+                }
+
+                <MudDivider Class="my-2" />
+                <MudNavLink Icon="@Icons.Material.Filled.Logout"
+                            OnClick="CerrarSesion">
+                    Cerrar sesión
+                </MudNavLink>
+            }
+            else
+            {
+                <MudDivider Class="my-2" />
+                <MudNavLink Href="/login"
+                            Icon="@Icons.Material.Filled.Login">
+                    Iniciar sesión
+                </MudNavLink>
+                <MudNavLink Href="/registro"
+                            Icon="@Icons.Material.Filled.PersonAdd">
+                    Registrarse
+                </MudNavLink>
+            }
         </MudNavMenu>
     </MudDrawer>
 
+    <!-- Contenido principal -->
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
             @Body
@@ -56,8 +178,28 @@
 @code {
     private bool drawerAbierto = false;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await EstadoAuth.CargarDesdeLocalStorageAsync();
+
+            EstadoAuth.OnCambio += StateHasChanged;
+
+            StateHasChanged();
+        }
+    }
+
     private void ToogleDrawer()
     {
         drawerAbierto = !drawerAbierto;
+    }
+
+    private async Task CerrarSesion()
+    {
+        await EstadoAuth.CerrarSesionAsync();
+        Snackbar.Add("Sesión cerrada correctamente", Severity.Info);
+        Navegacion.NavigateTo("/");
+        drawerAbierto = false;
     }
 }

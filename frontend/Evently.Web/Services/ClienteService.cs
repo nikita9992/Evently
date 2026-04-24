@@ -13,14 +13,24 @@ namespace Evently.Web.Services
             _http = http;
         }
 
-        //Obtener datos del cliente por id
+        // Obtener datos del cliente por idUsuario
         public async Task<ClienteDto?> ObtenerPorUsuarioAsync(int idUsuario, string token)
         {
-            _http.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            try
+            {
+                _http.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-            return await _http.GetFromJsonAsync<ClienteDto>(
-                $"api/clientes/usuario/{idUsuario}");
+                var respuesta = await _http.GetAsync($"api/clientes/usuario/{idUsuario}");
+
+                if (!respuesta.IsSuccessStatusCode) return null;
+
+                return await respuesta.Content.ReadFromJsonAsync<ClienteDto>();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         //Crear datos personales
@@ -43,6 +53,15 @@ namespace Evently.Web.Services
             var respuesta = await _http.PutAsJsonAsync($"api/clientes/{id}", dto);
             if (!respuesta.IsSuccessStatusCode) return null;
             return await respuesta.Content.ReadFromJsonAsync<ClienteDto>();
+        }
+        // Obtener todos los clientes 
+        public async Task<List<ClienteDto>> ObtenerTodosAsync(string token)
+        {
+            _http.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var resultado = await _http.GetFromJsonAsync<List<ClienteDto>>("api/clientes");
+            return resultado ?? new List<ClienteDto>();
         }
     }
 }
