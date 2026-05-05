@@ -11,5 +11,9 @@
         public decimal Precio { get; set; }
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }
+        public List<string> Imagenes { get; set; } = new();
+
+        // Primera imagen
+        public string? ImagenPrincipal => Imagenes.FirstOrDefault();
     }
 }

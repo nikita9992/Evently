@@ -11,48 +11,53 @@
 </MudText>
 
 <!-- Filtros -->
-<MudPaper Class="pa-4 mb-4" Elevation="2">
-    <MudGrid>
-        <MudItem xs="12" sm="6">
-            <MudTextField @bind-Value="filtroPorTitulo"
-                         Label="Buscar por nombre"
-                         Variant="Variant.Outlined"
-                         Adornment="Adornment.Start"
-                         AdornmentIcon="@Icons.Material.Filled.Search"
-                         Immediate="true"
-                         OnKeyUp="FiltrarActividades" />
-        </MudItem>
-        <MudItem xs="12" sm="6">
-            <MudSelect T="int?" @bind-Value="filtroPorCategoria"
-                      Label="Filtrar por categoría"
-                      Variant="Variant.Outlined"
-                      AnchorOrigin="Origin.BottomCenter">
-                <MudSelectItem T="int?" Value="null">Todas las categorías</MudSelectItem>
-                @foreach (var categoria in categorias)
-                {
-                    <MudSelectItem T="int?" Value="categoria.IdCategoria">
-                        @categoria.NombreCatego
+<MudExpansionPanels Class="mb-4">
+    <MudExpansionPanel Text="Filtros de búsqueda"
+                       Icon="@Icons.Material.Filled.FilterList">
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudTextField @bind-Value="filtroPorTitulo"
+                              Label="Buscar por nombre"
+                              Variant="Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Immediate="true"
+                              OnKeyUp="FiltrarActividades" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudSelect T="int?" @bind-Value="filtroPorCategoria"
+                           Label="Filtrar por categoría"
+                           Variant="Variant.Outlined"
+                           AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem T="int?" Value="null">
+                        Todas las categorías
                     </MudSelectItem>
-                }
-            </MudSelect>
-        </MudItem>
-        <MudItem xs="12">
-            <MudButton Variant="Variant.Filled"
-                      Color="Color.Primary"
-                      OnClick="FiltrarActividades"
-                      StartIcon="@Icons.Material.Filled.FilterList">
-                Aplicar filtros
-            </MudButton>
-            <MudButton Variant="Variant.Outlined"
-                      Color="Color.Secondary"
-                      OnClick="LimpiarFiltros"
-                      Class="ml-2"
-                      StartIcon="@Icons.Material.Filled.Clear">
-                Limpiar
-            </MudButton>
-        </MudItem>
-    </MudGrid>
-</MudPaper>
+                    @foreach (var categoria in categorias)
+                    {
+                        <MudSelectItem T="int?" Value="categoria.IdCategoria">
+                            @categoria.NombreCatego
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="FiltrarActividades"
+                           StartIcon="@Icons.Material.Filled.FilterList">
+                    Aplicar filtros
+                </MudButton>
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Secondary"
+                           OnClick="LimpiarFiltros"
+                           Class="ml-2"
+                           StartIcon="@Icons.Material.Filled.Clear">
+                    Limpiar
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </MudExpansionPanel>
+</MudExpansionPanels>
 
 <!-- Lista de actividades -->
 @if (cargando)
@@ -72,6 +77,20 @@ else
         {
             <MudItem xs="12" sm="6" md="4">
                 <MudCard Elevation="3" Class="h-100">
+                    <!-- Imagen -->
+                    @if (!string.IsNullOrEmpty(actividad.ImagenPrincipal))
+                    {
+                        <MudCardMedia Image="@actividad.ImagenPrincipal"
+                                      Height="200" />
+                    }
+                    else
+                    {
+                        <div style="height:200px; background:linear-gradient(135deg,#667eea,#764ba2);
+                                    display:flex; align-items:center; justify-content:center;">
+                            <MudIcon Icon="@Icons.Material.Filled.EventNote"
+                                     Style="font-size:4rem; color:white; opacity:0.7" />
+                        </div>
+                    }
                     <MudCardHeader>
                         <CardHeaderContent>
                             <MudText Typo="Typo.h6">@actividad.Titulo</MudText>
@@ -87,16 +106,14 @@ else
                         @if (actividad.FechaActiv.HasValue)
                         {
                             <MudText Typo="Typo.caption">
-                                <MudIcon Icon="@Icons.Material.Filled.Event"
-                                        Size="Size.Small" />
+                                <MudIcon Icon="@Icons.Material.Filled.Event" Size="Size.Small" />
                                 @actividad.FechaActiv.Value.ToString("dd/MM/yyyy")
                             </MudText>
                         }
                         @if (actividad.CupoMaximo.HasValue)
                         {
                             <MudText Typo="Typo.caption" Class="ml-2">
-                                <MudIcon Icon="@Icons.Material.Filled.People"
-                                        Size="Size.Small" />
+                                <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
                                 @actividad.CupoMaximo plazas
                             </MudText>
                         }
@@ -107,9 +124,9 @@ else
                         </MudText>
                         <MudSpacer />
                         <MudButton Variant="Variant.Filled"
-                                  Color="Color.Primary"
-                                  Size="Size.Small"
-                                  OnClick="@(() => VerDetalle(actividad.IdActividad))">
+                                   Color="Color.Primary"
+                                   Size="Size.Small"
+                                   OnClick="@(() => VerDetalle(actividad.IdActividad))">
                             Ver detalle
                         </MudButton>
                     </MudCardActions>

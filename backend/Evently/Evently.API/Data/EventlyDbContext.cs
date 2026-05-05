@@ -16,6 +16,7 @@ namespace Evently.API.Data
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallePedido> DetallesPedido { get; set; }
+        public DbSet<ImagenActividad> ImagenesActividad { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,6 +83,12 @@ namespace Evently.API.Data
                     DescripEstado = "Pedido cancelado"
                 }
             );
+            // Relación Actividad (1) → ImagenesActividad (N)
+            modelBuilder.Entity<ImagenActividad>()
+                .HasOne(i => i.Actividad)
+                .WithMany(a => a.Imagenes)
+                .HasForeignKey(i => i.IdActividad)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

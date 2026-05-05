@@ -34,5 +34,8 @@ namespace Evently.API.Models
 
         //Una actividad puede estar en muchos pedidos
         public ICollection<DetallePedido> DetallesPedido { get; set; } = new List<DetallePedido>();
+
+        // Una actividad puede tener hasta 8 imágenes
+        public ICollection<ImagenActividad> Imagenes { get; set; } = new List<ImagenActividad>();
     }
 }

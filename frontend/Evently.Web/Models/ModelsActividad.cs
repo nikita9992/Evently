@@ -1,6 +1,5 @@
 ﻿namespace Evently.Web.Models
 {
-    //Modelo de actividad para mostrar
     public class ActividadDto
     {
         public int IdActividad { get; set; }
@@ -11,9 +10,11 @@
         public decimal Precio { get; set; }
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }
+        public List<string> Imagenes { get; set; } = new();
+
+        public string? ImagenPrincipal => Imagenes.FirstOrDefault();
     }
 
-    //Modelo para crear o editar una actividad
     public class CrearActividadDto
     {
         public int IdCategoria { get; set; }
@@ -22,5 +23,6 @@
         public decimal Precio { get; set; }
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }
+        public List<string> Imagenes { get; set; } = new();
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Evently.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Evently.API.Migrations
 {
     [DbContext(typeof(EventlyDbContext))]
-    partial class EventlyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260505102624_AnadirImagenActividad")]
+    partial class AnadirImagenActividad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +45,10 @@ namespace Evently.API.Migrations
 
                     b.Property<int>("IdCategoria")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ImagenUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(10,2)");
@@ -186,32 +193,6 @@ namespace Evently.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Evently.API.Models.ImagenActividad", b =>
-                {
-                    b.Property<int>("IdImagen")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdImagen"));
-
-                    b.Property<int>("IdActividad")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Orden")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.HasKey("IdImagen");
-
-                    b.HasIndex("IdActividad");
-
-                    b.ToTable("ImagenesActividad");
-                });
-
             modelBuilder.Entity("Evently.API.Models.Pedido", b =>
                 {
                     b.Property<int>("IdPedido")
@@ -310,17 +291,6 @@ namespace Evently.API.Migrations
                     b.Navigation("Pedido");
                 });
 
-            modelBuilder.Entity("Evently.API.Models.ImagenActividad", b =>
-                {
-                    b.HasOne("Evently.API.Models.Actividad", "Actividad")
-                        .WithMany("Imagenes")
-                        .HasForeignKey("IdActividad")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Actividad");
-                });
-
             modelBuilder.Entity("Evently.API.Models.Pedido", b =>
                 {
                     b.HasOne("Evently.API.Models.Cliente", "Cliente")
@@ -343,8 +313,6 @@ namespace Evently.API.Migrations
             modelBuilder.Entity("Evently.API.Models.Actividad", b =>
                 {
                     b.Navigation("DetallesPedido");
-
-                    b.Navigation("Imagenes");
                 });
 
             modelBuilder.Entity("Evently.API.Models.Categoria", b =>

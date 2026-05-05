@@ -12,7 +12,6 @@
     Gestión de Actividades
 </MudText>
 
-<!-- Botón crear nueva actividad -->
 <MudButton Variant="Variant.Filled"
            Color="Color.Primary"
            StartIcon="@Icons.Material.Filled.Add"
@@ -21,7 +20,6 @@
     Nueva actividad
 </MudButton>
 
-<!-- Tabla de actividades -->
 @if (cargando)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
@@ -31,6 +29,7 @@ else
     <MudTable Items="actividades" Hover="true" Striped="true" Elevation="3">
         <HeaderContent>
             <MudTh>ID</MudTh>
+            <MudTh>Imagen</MudTh>
             <MudTh>Título</MudTh>
             <MudTh>Categoría</MudTh>
             <MudTh>Precio</MudTh>
@@ -40,17 +39,30 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd>@context.IdActividad</MudTd>
-            <MudTd>@context.Titulo</MudTd>
             <MudTd>
-                <MudChip T="string" Color="Color.Primary" Size="Size.Small">
-                    @context.NombreCatego
-                </MudChip>
-            </MudTd>
-            <MudTd>@context.Precio.ToString("C")</MudTd>
-            <MudTd>
-                @(context.FechaActiv.HasValue
-                            ? context.FechaActiv.Value.ToString("dd/MM/yyyy")
-                            : "—")
+                @if (context.Imagenes.Any())
+                {
+                    <img src="@context.Imagenes[0]"
+                         alt="@context.Titulo"
+                         style="width:60px; height:45px; object-fit:cover; border-radius:4px;" />
+                }
+                else
+                {
+                    <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported"
+                             Color="Color.Default" />
+                }
+        </MudTd>
+        <MudTd>@context.Titulo</MudTd>
+        <MudTd>
+            <MudChip T="string" Color="Color.Primary" Size="Size.Small">
+                @context.NombreCatego
+            </MudChip>
+        </MudTd>
+        <MudTd>@context.Precio.ToString("C")</MudTd>
+        <MudTd>
+            @(context.FechaActiv.HasValue
+                        ? context.FechaActiv.Value.ToString("dd/MM/yyyy")
+                        : "—")
         </MudTd>
         <MudTd>@(context.CupoMaximo?.ToString() ?? "—")</MudTd>
         <MudTd>
@@ -67,8 +79,8 @@ else
 </MudTable>
 }
 
-<!-- Crear/editar actividad -->
-<MudDialog @bind-Visible="dialogoAbierto">
+<!-- Сrear/editar -->
+<MudDialog @bind-Visible="dialogoAbierto" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">
             @(modoEdicion ? "Editar actividad" : "Nueva actividad")
@@ -113,7 +125,48 @@ else
         <MudNumericField @bind-Value="formulario.CupoMaximo"
                          Label="Cupo máximo"
                          Variant="Variant.Outlined"
-                         Min="1" />
+                         Min="1"
+                         Class="mb-3" />
+
+        <!-- Imágenes -->
+        <MudText Typo="Typo.subtitle2" Class="mt-2 mb-2">
+            Imágenes (máximo 8)
+        </MudText>
+
+        @for (int i = 0; i < listaImagenes.Count; i++)
+        {
+            var indice = i;
+            <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                <MudTextField @bind-Value="listaImagenes[indice]"
+                              Label="@($"URL imagen {indice + 1}")"
+                              Variant="Variant.Outlined"
+                              FullWidth="true"/>
+                @if (!string.IsNullOrEmpty(listaImagenes[indice]))
+                {
+                    <img src="@listaImagenes[indice]"
+                         alt="Preview"
+                         style="width:60px; height:45px; object-fit:cover;
+                                        border-radius:4px; flex-shrink:0;"
+                         onerror="this.style.display='none'" />
+                }
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="@(() => EliminarImagen(indice))" />
+            </div>
+        }
+
+        @if (listaImagenes.Count < 8)
+        {
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add"
+                       OnClick="AnadirCampoImagen"
+                       Size="Size.Small"
+                       Class="mt-1">
+                Añadir imagen
+            </MudButton>
+        }
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="CerrarDialogo">Cancelar</MudButton>
@@ -162,8 +215,8 @@ else
     private DateTime? fechaSeleccionada;
     private int actividadEditandoId;
     private ActividadDto? actividadAEliminar;
+    private List<string> listaImagenes = new() { "" };
 
-    // Token del admin 
     private string tokenAdmin => EstadoAuth.Token;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -187,7 +240,6 @@ else
         }
     }
 
-    //Cargar actividades y categorías
     private async Task CargarDatos()
     {
         cargando = true;
@@ -196,16 +248,15 @@ else
         cargando = false;
     }
 
-    //Abrir formulario para crear
     private void AbrirFormularioCrear()
     {
         formulario = new CrearActividadDto();
         fechaSeleccionada = null;
+        listaImagenes = new List<string> { "" };
         modoEdicion = false;
         dialogoAbierto = true;
     }
 
-    // Abrir formulario para editar
     private void AbrirFormularioEditar(ActividadDto actividad)
     {
         formulario = new CrearActividadDto
@@ -218,13 +269,20 @@ else
         };
         fechaSeleccionada = actividad.FechaActiv;
         actividadEditandoId = actividad.IdActividad;
+        listaImagenes = actividad.Imagenes.Any()
+            ? actividad.Imagenes.ToList()
+            : new List<string> { "" };
         modoEdicion = true;
         dialogoAbierto = true;
     }
 
-    //Guardar actividad
     private async Task GuardarActividad()
     {
+        // Filtrar URLs vacías
+        formulario.Imagenes = listaImagenes
+            .Where(url => !string.IsNullOrWhiteSpace(url))
+            .ToList();
+
         formulario.FechaActiv = fechaSeleccionada.HasValue
             ? DateTime.SpecifyKind(fechaSeleccionada.Value, DateTimeKind.Utc)
             : null;
@@ -253,14 +311,25 @@ else
         await CargarDatos();
     }
 
-    // Confirmar eliminación
+    private void AnadirCampoImagen()
+    {
+        if (listaImagenes.Count < 8)
+            listaImagenes.Add("");
+    }
+
+    private void EliminarImagen(int indice)
+    {
+        listaImagenes.RemoveAt(indice);
+        if (listaImagenes.Count == 0)
+            listaImagenes.Add("");
+    }
+
     private void ConfirmarEliminar(ActividadDto actividad)
     {
         actividadAEliminar = actividad;
         dialogoEliminarAbierto = true;
     }
 
-    // Eliminar actividad
     private async Task EliminarActividad()
     {
         if (actividadAEliminar == null) return;

@@ -17,9 +17,7 @@ namespace Evently.API.Services
         //Obtener todas las actividades con filtros opcionales
         public async Task<List<ActividadDto>> ObtenerTodasAsync(FiltroActividadDto filtro)
         {
-            var consulta = _contexto.Actividades
-                .Include(a => a.Categoria)
-                .AsQueryable();
+            var consulta = _contexto.Actividades.Include(a => a.Categoria).Include(a => a.Imagenes).AsQueryable();
 
             if (filtro.IdCategoria.HasValue)
                 consulta = consulta.Where(a => a.IdCategoria == filtro.IdCategoria.Value);
@@ -38,7 +36,8 @@ namespace Evently.API.Services
                     Descripcion = a.Descripcion,
                     Precio = a.Precio,
                     FechaActiv = a.FechaActiv,
-                    CupoMaximo = a.CupoMaximo
+                    CupoMaximo = a.CupoMaximo,
+                    Imagenes = a.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList()
                 })
                 .ToListAsync();
         }
@@ -46,9 +45,7 @@ namespace Evently.API.Services
         //Obtener una actividad por id
         public async Task<ActividadDto?> ObtenerPorIdAsync(int id)
         {
-            var actividad = await _contexto.Actividades
-                .Include(a => a.Categoria)
-                .FirstOrDefaultAsync(a => a.IdActividad == id);
+            var actividad = await _contexto.Actividades.Include(a => a.Categoria).Include(a => a.Imagenes).FirstOrDefaultAsync(a => a.IdActividad == id);
 
             if (actividad == null) return null;
 
@@ -61,7 +58,8 @@ namespace Evently.API.Services
                 Descripcion = actividad.Descripcion,
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
-                CupoMaximo = actividad.CupoMaximo
+                CupoMaximo = actividad.CupoMaximo,
+                Imagenes = actividad.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList()
             };
         }
 
@@ -83,6 +81,19 @@ namespace Evently.API.Services
             _contexto.Actividades.Add(nuevaActividad);
             await _contexto.SaveChangesAsync();
 
+            if (crearActividadDto.Imagenes.Any())
+            {
+                var imagenes = crearActividadDto.Imagenes.Take(8).Select((url, indice) => new ImagenActividad
+                {
+                    IdActividad = nuevaActividad.IdActividad,
+                    Url = url,
+                    Orden = indice
+                });
+
+                _contexto.ImagenesActividad.AddRange(imagenes);
+                await _contexto.SaveChangesAsync();
+            }
+
             await _contexto.Entry(nuevaActividad)
                 .Reference(a => a.Categoria)
                 .LoadAsync();
@@ -96,7 +107,7 @@ namespace Evently.API.Services
                 Descripcion = nuevaActividad.Descripcion,
                 Precio = nuevaActividad.Precio,
                 FechaActiv = nuevaActividad.FechaActiv,
-                CupoMaximo = nuevaActividad.CupoMaximo
+                CupoMaximo = nuevaActividad.CupoMaximo,
             };
         }
 
@@ -118,7 +129,24 @@ namespace Evently.API.Services
                                 : null;
             actividad.CupoMaximo = crearActividadDto.CupoMaximo;
 
+
             await _contexto.SaveChangesAsync();
+
+            if (crearActividadDto.Imagenes != null)
+            {
+
+                var imagenesAnteriores = await _contexto.ImagenesActividad.Where(i => i.IdActividad == id).ToListAsync();
+                _contexto.ImagenesActividad.RemoveRange(imagenesAnteriores);
+
+                var nuevasImagenes = crearActividadDto.Imagenes.Take(8).Select((url, indice) => new ImagenActividad
+                {
+                    IdActividad = id,
+                    Url = url,
+                    Orden = indice
+                });
+                _contexto.ImagenesActividad.AddRange(nuevasImagenes);
+                await _contexto.SaveChangesAsync();
+            }
 
             return new ActividadDto
             {
@@ -129,15 +157,14 @@ namespace Evently.API.Services
                 Descripcion = actividad.Descripcion,
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
-                CupoMaximo = actividad.CupoMaximo
+                CupoMaximo = actividad.CupoMaximo,
             };
         }
 
         // Eliminar una actividad
         public async Task<bool> EliminarAsync(int id)
         {
-            var actividad = await _contexto.Actividades
-                .FirstOrDefaultAsync(a => a.IdActividad == id);
+            var actividad = await _contexto.Actividades.FirstOrDefaultAsync(a => a.IdActividad == id);
 
             if (actividad == null) return false;
 
