@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Evently.Web",
   "resources": {
-    "hash": "sha256-mneW+J3YvzqvHU8Y9EzUzr+PZeYg5LgdCkLViik23p4=",
+    "hash": "sha256-9AOyE6tZPs7jdE6oik5dfzc6eRs+bPrZM8YVZwXWSN8=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Authorization.z6jo10m0rd.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.65wbz7t8mt.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -204,8 +204,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "Evently.Web.amdzb285jp.wasm": "Evently.Web.wasm",
-      "Evently.Web.4htltsxp68.pdb": "Evently.Web.pdb"
+      "Evently.Web.qcqu1ua04a.wasm": "Evently.Web.wasm",
+      "Evently.Web.94isx8vueh.pdb": "Evently.Web.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.9ih887ebfz.js": "sha256-oS7IRiQoVt9ThQ7Y2UM3XoeY0JqPD02cg9IvRdufn2w="
@@ -418,10 +418,10 @@
       "WindowsBase.vy2l5u79y6.wasm": "sha256-ufB9Mo5joMyUs3DzXWWBFFIZNEVrt6h9N5stYB6Oln4=",
       "mscorlib.xd6mv31d55.wasm": "sha256-1YSLR2eZt3ceALFV//vZUF2AloxVil3VlrW1zZYPSEI=",
       "netstandard.kaml52uspo.wasm": "sha256-HLEwBpLfzKw2/zGSVzHzFJxznCkt/WIjahrziiMrOpA=",
-      "Evently.Web.amdzb285jp.wasm": "sha256-Tt3g5SQ5jMTE+ODPWcaGHp69ZNipg/eVeVZrmSa74gE="
+      "Evently.Web.qcqu1ua04a.wasm": "sha256-FqZOJZ6ujLqpU+qL8c9THRMvU9ufvJ0f5na/Zpwd55k="
     },
     "pdb": {
-      "Evently.Web.4htltsxp68.pdb": "sha256-eAUcTS8LsFIWPHqCF+laE+jj1mNzFtY5vTvSF/vFfVE="
+      "Evently.Web.94isx8vueh.pdb": "sha256-R2Q4vOjy4xe/g27vPgMd9ac11JD5MDhLasidGrLv/Cg="
     }
   },
   "cacheBootResources": true,

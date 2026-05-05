@@ -17,7 +17,10 @@ namespace Evently.API.Services
         //Obtener todas las actividades con filtros opcionales
         public async Task<List<ActividadDto>> ObtenerTodasAsync(FiltroActividadDto filtro)
         {
-            var consulta = _contexto.Actividades.Include(a => a.Categoria).Include(a => a.Imagenes).AsQueryable();
+            var consulta = _contexto.Actividades
+                .Include(a => a.Categoria)
+                .Include(a => a.Imagenes)
+                .AsQueryable();
 
             if (filtro.IdCategoria.HasValue)
                 consulta = consulta.Where(a => a.IdCategoria == filtro.IdCategoria.Value);
@@ -26,8 +29,16 @@ namespace Evently.API.Services
                 consulta = consulta.Where(a =>
                     a.Titulo.ToLower().Contains(filtro.Titulo.ToLower()));
 
-            return await consulta
-                .Select(a => new ActividadDto
+            var actividades = await consulta.ToListAsync();
+            var result = new List<ActividadDto>();
+
+            foreach (var a in actividades)
+            {
+                var valoraciones = await _contexto.Valoraciones
+                    .Where(v => v.IdActividad == a.IdActividad)
+                    .ToListAsync();
+
+                result.Add(new ActividadDto
                 {
                     IdActividad = a.IdActividad,
                     IdCategoria = a.IdCategoria,
@@ -37,9 +48,18 @@ namespace Evently.API.Services
                     Precio = a.Precio,
                     FechaActiv = a.FechaActiv,
                     CupoMaximo = a.CupoMaximo,
-                    Imagenes = a.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList()
-                })
-                .ToListAsync();
+                    Imagenes = a.Imagenes
+                        .OrderBy(i => i.Orden)
+                        .Select(i => i.Url)
+                        .ToList(),
+                    MediaValoracion = valoraciones.Any()
+                        ? Math.Round(valoraciones.Average(v => v.Puntuacion), 1)
+                        : 0,
+                    TotalValoraciones = valoraciones.Count
+                });
+            }
+
+            return result;
         }
 
         //Obtener una actividad por id

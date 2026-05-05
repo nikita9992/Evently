@@ -17,6 +17,8 @@ namespace Evently.API.Data
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallePedido> DetallesPedido { get; set; }
         public DbSet<ImagenActividad> ImagenesActividad { get; set; }
+        public DbSet<Comentario> Comentarios { get; set; }
+        public DbSet<Valoracion> Valoraciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -89,6 +91,39 @@ namespace Evently.API.Data
                 .WithMany(a => a.Imagenes)
                 .HasForeignKey(i => i.IdActividad)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Relación Actividad (1) → Comentarios (N)
+            modelBuilder.Entity<Comentario>()
+                .HasOne(c => c.Actividad)
+                .WithMany()
+                .HasForeignKey(c => c.IdActividad)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relación Usuario (1) → Comentarios (N)
+            modelBuilder.Entity<Comentario>()
+                .HasOne(c => c.Usuario)
+                .WithMany()
+                .HasForeignKey(c => c.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relación Actividad (1) → Valoraciones (N)
+            modelBuilder.Entity<Valoracion>()
+                .HasOne(v => v.Actividad)
+                .WithMany()
+                .HasForeignKey(v => v.IdActividad)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relación Usuario (1) → Valoraciones (N)
+            modelBuilder.Entity<Valoracion>()
+                .HasOne(v => v.Usuario)
+                .WithMany()
+                .HasForeignKey(v => v.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Un usuario solo puede valorar una actividad una vez
+            modelBuilder.Entity<Valoracion>()
+                .HasIndex(v => new { v.IdActividad, v.IdUsuario })
+                .IsUnique();
         }
     }
 }

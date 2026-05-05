@@ -129,6 +129,37 @@ namespace Evently.API.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("Evently.API.Models.Comentario", b =>
+                {
+                    b.Property<int>("IdComentario")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdComentario"));
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IdActividad")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Texto")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.HasKey("IdComentario");
+
+                    b.HasIndex("IdActividad");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("Comentarios");
+                });
+
             modelBuilder.Entity("Evently.API.Models.DetallePedido", b =>
                 {
                     b.Property<int>("IdPedido")
@@ -269,6 +300,36 @@ namespace Evently.API.Migrations
                     b.ToTable("Usuarios");
                 });
 
+            modelBuilder.Entity("Evently.API.Models.Valoracion", b =>
+                {
+                    b.Property<int>("IdValoracion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdValoracion"));
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IdActividad")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Puntuacion")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdValoracion");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.HasIndex("IdActividad", "IdUsuario")
+                        .IsUnique();
+
+                    b.ToTable("Valoraciones");
+                });
+
             modelBuilder.Entity("Evently.API.Models.Actividad", b =>
                 {
                     b.HasOne("Evently.API.Models.Categoria", "Categoria")
@@ -287,6 +348,25 @@ namespace Evently.API.Migrations
                         .HasForeignKey("Evently.API.Models.Cliente", "IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Evently.API.Models.Comentario", b =>
+                {
+                    b.HasOne("Evently.API.Models.Actividad", "Actividad")
+                        .WithMany()
+                        .HasForeignKey("IdActividad")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Evently.API.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Actividad");
 
                     b.Navigation("Usuario");
                 });
@@ -338,6 +418,25 @@ namespace Evently.API.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("Estado");
+                });
+
+            modelBuilder.Entity("Evently.API.Models.Valoracion", b =>
+                {
+                    b.HasOne("Evently.API.Models.Actividad", "Actividad")
+                        .WithMany()
+                        .HasForeignKey("IdActividad")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Evently.API.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Actividad");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Evently.API.Models.Actividad", b =>

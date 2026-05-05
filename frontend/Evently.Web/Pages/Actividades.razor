@@ -100,6 +100,31 @@ else
                         </CardHeaderContent>
                     </MudCardHeader>
                     <MudCardContent>
+                        <!-- Valoración -->
+                        @if (actividad.TotalValoraciones > 0)
+                        {
+                            var mediaCard = (int)Math.Round(actividad.MediaValoracion);
+                            <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px;">
+                                @for (int s = 1; s <= 5; s++)
+                                {
+                                    int estrella = s;
+                                    <span style="font-size:1rem; color:#ED6C02;">
+                                        @(estrella <= mediaCard ? "★" : "☆")
+                                    </span>
+                                }
+                                <MudText Typo="Typo.caption" Class="ml-1">
+                                    @actividad.MediaValoracion.ToString("F1")
+                                    (@actividad.TotalValoraciones)
+                                </MudText>
+                            </div>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">
+                                Sin valoraciones aún
+                            </MudText>
+                        }
+
                         <MudText Typo="Typo.body2" Class="mb-2">
                             @actividad.Descripcion
                         </MudText>

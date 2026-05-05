@@ -13,6 +13,9 @@
         public List<string> Imagenes { get; set; } = new();
 
         public string? ImagenPrincipal => Imagenes.FirstOrDefault();
+
+        public double MediaValoracion { get; set; }
+        public int TotalValoraciones { get; set; }
     }
 
     public class CrearActividadDto

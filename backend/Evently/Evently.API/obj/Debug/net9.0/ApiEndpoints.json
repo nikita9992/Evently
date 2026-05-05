@@ -296,6 +296,59 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Evently.API.Controllers.ComentariosController",
+    "Method": "Eliminar",
+    "RelativePath": "api/Comentarios/{idComentario}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idComentario",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ComentariosController",
+    "Method": "ObtenerPorActividad",
+    "RelativePath": "api/Comentarios/actividad/{idActividad}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idActividad",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ComentariosController",
+    "Method": "Crear",
+    "RelativePath": "api/Comentarios/actividad/{idActividad}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idActividad",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Evently.API.DTOs.Comentario.CrearComentarioDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Evently.API.Controllers.DetallePedidosController",
     "Method": "GetDetallesPedido",
     "RelativePath": "api/DetallePedidos",
@@ -590,6 +643,59 @@
       {
         "Name": "confirmarDto",
         "Type": "Evently.API.DTOs.Pedido.ConfirmarPedidoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ValoracionesController",
+    "Method": "ObtenerResumen",
+    "RelativePath": "api/Valoraciones/actividad/{idActividad}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idActividad",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ValoracionesController",
+    "Method": "CrearOActualizar",
+    "RelativePath": "api/Valoraciones/actividad/{idActividad}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idActividad",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "Evently.API.DTOs.Valoracion.CrearValoracionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Evently.API.Controllers.ValoracionesController",
+    "Method": "PuedeValorar",
+    "RelativePath": "api/Valoraciones/actividad/{idActividad}/puedovalorar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idActividad",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

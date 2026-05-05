@@ -1,9 +1,12 @@
-﻿@page "/actividades/{Id:int}"
+@page "/actividades/{Id:int}"
 @inject ActividadService ActividadService
+@inject ComentarioService ComentarioService
+@inject ValoracionService ValoracionService
 @inject NavigationManager Navegacion
 @inject ISnackbar Snackbar
 @inject IJSRuntime JS
 @inject EstadoAuthService EstadoAuth
+@inject ClienteService ClienteService
 
 <PageTitle>Detalle — Evently</PageTitle>
 
@@ -28,21 +31,19 @@ else
     <MudBreadcrumbs Items="migasDePan" Class="mb-4" />
 
     <MudGrid>
-        <!-- Información principal -->
         <MudItem xs="12" md="8">
             <MudText Typo="Typo.h4" GutterBottom="true">
                 @actividad.Titulo
             </MudText>
-            <!-- Galería de imágenes -->
+
             @if (actividad.Imagenes.Any())
             {
-                <MudPaper Elevation="2" Class="mb-4" Style="overflow:hidden; border-radius:8px;">
-                    <!-- Imagen principal grande -->
+                <MudPaper Elevation="2" Class="mb-4"
+                          Style="overflow:hidden; border-radius:8px;">
                     <img src="@actividad.Imagenes[imagenActual]"
                          alt="@actividad.Titulo"
                          style="width:100%; height:400px; object-fit:cover;" />
 
-                    <!-- Miniaturas si hay más de una imagen -->
                     @if (actividad.Imagenes.Count > 1)
                     {
                         <div style="display:flex; gap:8px; padding:8px; overflow-x:auto;">
@@ -53,8 +54,10 @@ else
                                      alt="Imagen @(indice + 1)"
                                      @onclick="@(() => imagenActual = indice)"
                                      style="width:80px; height:60px; object-fit:cover;
-                                                border-radius:4px; cursor:pointer;
-                                                border: @(imagenActual == indice ? "3px solid #7c3aed" : "3px solid transparent")" />
+                                            border-radius:4px; cursor:pointer;
+                                            border:@(imagenActual == indice
+                                                        ? "3px solid #7c3aed"
+                                                        : "3px solid transparent")" />
                             }
                         </div>
                     }
@@ -63,8 +66,8 @@ else
             else
             {
                 <div style="height:300px; background:linear-gradient(135deg,#667eea,#764ba2);
-                        display:flex; align-items:center; justify-content:center;
-                        border-radius:8px; margin-bottom:16px;">
+                            display:flex; align-items:center; justify-content:center;
+                            border-radius:8px; margin-bottom:16px;">
                     <MudIcon Icon="@Icons.Material.Filled.EventNote"
                              Style="font-size:6rem; color:white; opacity:0.7" />
                 </div>
@@ -80,7 +83,6 @@ else
 
             <MudDivider Class="mb-4" />
 
-            <!-- Detalles -->
             <MudGrid>
                 @if (actividad.FechaActiv.HasValue)
                 {
@@ -114,6 +116,23 @@ else
         <!-- Panel de compra -->
         <MudItem xs="12" md="4">
             <MudPaper Class="pa-4" Elevation="3">
+                @if (resumenValoracion.TotalValoraciones > 0)
+                {
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        @for (int s = 1; s <= 5; s++)
+                        {
+                            int estrella = s;
+                            <span style="font-size:1.2rem; color:#ED6C02; line-height:1;">
+                                @(estrella <= MediaRedondeada ? "★" : "☆")
+                            </span>
+                        }
+                        <MudText Typo="Typo.body2">
+                            @resumenValoracion.Media
+                            (@resumenValoracion.TotalValoraciones)
+                        </MudText>
+                    </div>
+                }
+
                 <MudText Typo="Typo.h4" Color="Color.Primary" GutterBottom="true">
                     @actividad.Precio.ToString("C")
                 </MudText>
@@ -121,7 +140,6 @@ else
 
                 <MudDivider Class="mb-4" />
 
-                <!-- Selector de cantidad -->
                 <MudText Typo="Typo.subtitle2" Class="mb-2">Cantidad</MudText>
                 <MudNumericField @bind-Value="cantidad"
                                  Label="Cantidad"
@@ -130,12 +148,10 @@ else
                                  Max="@(actividad.CupoMaximo ?? 10)"
                                  Class="mb-4" />
 
-                <!-- Total -->
                 <MudText Typo="Typo.subtitle1" Class="mb-4">
                     Total: <strong>@((actividad.Precio * cantidad).ToString("C"))</strong>
                 </MudText>
 
-                <!-- Botón añadir al carrito -->
                 <MudButton Variant="Variant.Filled"
                            Color="Color.Primary"
                            FullWidth="true"
@@ -155,17 +171,191 @@ else
             </MudPaper>
         </MudItem>
     </MudGrid>
+
+    <MudDivider Class="my-6" />
+
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.h5" GutterBottom="true">
+                Valoraciones y comentarios
+            </MudText>
+
+            @if (resumenValoracion.TotalValoraciones > 0)
+            {
+                <div style="display:flex; align-items:center; gap:16px; margin-bottom:16px;">
+                    <MudText Typo="Typo.h3" Color="Color.Warning">
+                        @resumenValoracion.Media
+                    </MudText>
+                    <div>
+                        <div style="display:flex; gap:2px;">
+                            @for (int s = 1; s <= 5; s++)
+                            {
+                                int estrella = s;
+                                <span style="font-size:2rem; color:#ED6C02; line-height:1;">
+                                    @(estrella <= MediaRedondeada ? "★" : "☆")
+                                </span>
+                            }
+                        </div>
+                        <MudText Typo="Typo.body2">
+                            @resumenValoracion.TotalValoraciones valoraciones
+                        </MudText>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <MudAlert Severity="Severity.Info" Class="mb-4">
+                    Esta actividad aún no tiene valoraciones.
+                </MudAlert>
+            }
+        </MudItem>
+
+        @if (puedeValorar)
+        {
+            <MudItem xs="12">
+                <MudPaper Elevation="2" Class="pa-4 mb-4">
+                    <MudText Typo="Typo.subtitle1" GutterBottom="true">
+                        Tu valoración
+                    </MudText>
+                    <div style="display:flex; gap:4px; margin-bottom:12px;">
+                        @for (int s = 1; s <= 5; s++)
+                        {
+                            int numEstrella = s;
+                            bool activa = numEstrella <= (estrellaHover > 0 ? estrellaHover : estrellaSeleccionada);
+                            <span style="font-size:2.2rem; color:#ED6C02; cursor:pointer;
+                                         line-height:1; transition:transform 0.1s;
+                                         transform:@(activa ? "scale(1.15)" : "scale(1)")"
+                                  @onclick="@(() => SeleccionarEstrella(numEstrella))"
+                                  @onmouseenter="@(() => estrellaHover = numEstrella)"
+                                  @onmouseleave="@(() => estrellaHover = 0)">
+                                @(activa ? "★" : "☆")
+                            </span>
+                        }
+                    </div>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Warning"
+                               OnClick="EnviarValoracion"
+                               Disabled="estrellaSeleccionada == 0"
+                               StartIcon="@Icons.Material.Filled.Star">
+                        @(resumenValoracion.ValoracionUsuario.HasValue
+                            ? "Actualizar valoración"
+                            : "Enviar valoración")
+                    </MudButton>
+                </MudPaper>
+            </MudItem>
+        }
+
+        <MudItem xs="12">
+            @if (EstadoAuth.EstaAutenticado)
+            {
+                @if (tienePerfilCompleto)
+                {
+                    <MudPaper Elevation="2" Class="pa-4 mb-4">
+                        <MudText Typo="Typo.subtitle1" GutterBottom="true">
+                            Escribe un comentario
+                        </MudText>
+                        <MudTextField @bind-Value="nuevoComentario"
+                                      Label="Tu comentario (mínimo 10 caracteres)"
+                                      Variant="Variant.Outlined"
+                                      Lines="3"
+                                      MaxLength="1000"
+                                      Counter="1000"
+                                      Immediate="true"
+                                      Class="mb-3" />
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="EnviarComentario"
+                                   Disabled="nuevoComentario.Length < 10"
+                                   StartIcon="@Icons.Material.Filled.Send">
+                            Enviar comentario
+                        </MudButton>
+                    </MudPaper>
+                }
+                else
+                {
+                    <MudAlert Severity="Severity.Warning" Class="mb-4">
+                        Debes completar tu perfil para poder comentar.
+                        <MudLink Href="/perfil"> Ir a mi perfil</MudLink>
+                    </MudAlert>
+                }
+            }
+            else
+            {
+                <MudAlert Severity="Severity.Info" Class="mb-4">
+                    <MudLink Href="/login">Inicia sesión</MudLink>
+                    para dejar un comentario.
+                </MudAlert>
+            }
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6" GutterBottom="true">
+                Comentarios (@comentarios.Count)
+            </MudText>
+
+            @if (!comentarios.Any())
+            {
+                <MudAlert Severity="Severity.Info">
+                    Aún no hay comentarios.
+                </MudAlert>
+            }
+            else
+            {
+                @foreach (var comentario in comentarios)
+                {
+                    <MudPaper Elevation="1" Class="pa-3 mb-3">
+                        <div style="display:flex; justify-content:space-between;">
+                            <MudText Typo="Typo.subtitle2">
+                                <MudIcon Icon="@Icons.Material.Filled.Person"
+                                         Size="Size.Small" Class="mr-1" />
+                                @comentario.NombreUsuario
+                            </MudText>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                    @comentario.FechaCreacion.ToString("dd/MM/yyyy")
+                                </MudText>
+                                @if (EstadoAuth.EstaAutenticado &&
+                                     (comentario.IdUsuario == EstadoAuth.IdUsuario
+                                      || EstadoAuth.EsAdministrador))
+                                {
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                   Color="Color.Error"
+                                                   Size="Size.Small"
+                                                   OnClick="@(() => EliminarComentario(comentario))" />
+                                }
+                            </div>
+                        </div>
+                        <MudText Typo="Typo.body2" Class="mt-2">
+                            @comentario.Texto
+                        </MudText>
+                    </MudPaper>
+                }
+            }
+        </MudItem>
+    </MudGrid>
 }
 
 @code {
     [Parameter]
     public int Id { get; set; }
+
+    private int MediaRedondeada =>
+        resumenValoracion.TotalValoraciones > 0
+            ? (int)Math.Round(resumenValoracion.Media)
+            : 0;
+
     private ActividadDto? actividad;
     private int cantidad = 1;
     private bool cargando = true;
     private int imagenActual = 0;
-
     private List<BreadcrumbItem> migasDePan = new();
+    private List<ComentarioDto> comentarios = new();
+    private ResumenValoracionDto resumenValoracion = new();
+    private bool puedeValorar = false;
+    private string nuevoComentario = string.Empty;
+    private int estrellaSeleccionada = 0;
+    private int estrellaHover = 0;
+    private bool tienePerfilCompleto = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -178,10 +368,114 @@ else
             new BreadcrumbItem(actividad?.Titulo ?? "Detalle", href: null, disabled: true)
         };
 
+        await CargarComentariosYValoraciones();
+
         cargando = false;
     }
 
-    //Añadir actividad al carrito
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !EstadoAuth.EstaAutenticado)
+        {
+            await EstadoAuth.CargarDesdeLocalStorageAsync();
+
+            if (EstadoAuth.EstaAutenticado)
+            {
+                puedeValorar = await ValoracionService.PuedeValorarAsync(
+                    Id, EstadoAuth.Token);
+
+                var cliente = await ClienteService.ObtenerPorUsuarioAsync(
+                    EstadoAuth.IdUsuario, EstadoAuth.Token);
+
+                tienePerfilCompleto = cliente != null
+                    && !string.IsNullOrEmpty(cliente.Nombre)
+                    && !string.IsNullOrEmpty(cliente.Apellidos);
+
+                if (resumenValoracion.ValoracionUsuario.HasValue)
+                    estrellaSeleccionada = resumenValoracion.ValoracionUsuario.Value;
+
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task CargarComentariosYValoraciones()
+    {
+        comentarios = await ComentarioService.ObtenerPorActividadAsync(Id);
+        resumenValoracion = await ValoracionService.ObtenerResumenAsync(Id);
+
+        if (resumenValoracion.ValoracionUsuario.HasValue)
+            estrellaSeleccionada = resumenValoracion.ValoracionUsuario.Value;
+        else
+            estrellaSeleccionada = 0;
+
+        if (EstadoAuth.EstaAutenticado)
+        {
+            puedeValorar = await ValoracionService.PuedeValorarAsync(
+                Id, EstadoAuth.Token);
+
+            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
+                EstadoAuth.IdUsuario, EstadoAuth.Token);
+
+            tienePerfilCompleto = cliente != null
+                && !string.IsNullOrEmpty(cliente.Nombre)
+                && !string.IsNullOrEmpty(cliente.Apellidos);
+        }
+    }
+
+    private void SeleccionarEstrella(int estrella)
+    {
+        estrellaSeleccionada = estrella;
+    }
+
+    private async Task EnviarValoracion()
+    {
+        if (estrellaSeleccionada == 0) return;
+
+        var dto = new CrearValoracionDto { Puntuacion = estrellaSeleccionada };
+        var ok = await ValoracionService.CrearOActualizarAsync(
+            Id, dto, EstadoAuth.Token);
+
+        if (ok)
+        {
+            Snackbar.Add("¡Valoración enviada correctamente!", Severity.Success);
+            resumenValoracion = await ValoracionService.ObtenerResumenAsync(Id);
+        }
+        else
+            Snackbar.Add("Error al enviar la valoración", Severity.Error);
+    }
+
+    private async Task EnviarComentario()
+    {
+        if (nuevoComentario.Length < 10) return;
+
+        var dto = new CrearComentarioDto { Texto = nuevoComentario };
+        var resultado = await ComentarioService.CrearAsync(Id, dto, EstadoAuth.Token);
+
+        if (resultado != null)
+        {
+            comentarios.Insert(0, resultado);
+            nuevoComentario = string.Empty;
+            Snackbar.Add("¡Comentario publicado!", Severity.Success);
+        }
+        else
+            Snackbar.Add(
+                "Debes completar tu perfil antes de comentar",
+                Severity.Warning);
+    }
+
+    private async Task EliminarComentario(ComentarioDto comentario)
+    {
+        var ok = await ComentarioService.EliminarAsync(
+            comentario.IdComentario, EstadoAuth.Token);
+
+        if (ok)
+        {
+            comentarios.Remove(comentario);
+            Snackbar.Add("Comentario eliminado", Severity.Info);
+        }
+    }
+
     private async Task AnadirAlCarrito()
     {
         if (actividad == null) return;
@@ -192,14 +486,12 @@ else
             : System.Text.Json.JsonSerializer.Deserialize<List<ItemCarrito>>(carritoJson)
               ?? new List<ItemCarrito>();
 
-        var itemExistente = carrito.FirstOrDefault(i => i.IdActividad == actividad.IdActividad);
+        var itemExistente = carrito
+            .FirstOrDefault(i => i.IdActividad == actividad.IdActividad);
 
         if (itemExistente != null)
-        {
             itemExistente.Cantidad += cantidad;
-        }
         else
-        {
             carrito.Add(new ItemCarrito
             {
                 IdActividad = actividad.IdActividad,
@@ -207,22 +499,18 @@ else
                 Precio = actividad.Precio,
                 Cantidad = cantidad
             });
-        }
 
-        // Guardar en localStorage
-        await GuardarCarritoLocal(System.Text.Json.JsonSerializer.Serialize(carrito));
+        await GuardarCarritoLocal(
+            System.Text.Json.JsonSerializer.Serialize(carrito));
 
-        // Mostrar mensaje de éxito
         Snackbar.Add($"¡{actividad.Titulo} añadido al carrito!", Severity.Success);
     }
 
-    //Obtener carrito del localStorage
     private async Task<string> ObtenerCarritoLocal()
     {
         return await JS.InvokeAsync<string>("obtenerCarrito", EstadoAuth.IdUsuario);
     }
 
-    //Guardar carrito en localStorage
     private async Task GuardarCarritoLocal(string json)
     {
         await JS.InvokeVoidAsync("guardarCarrito", json, EstadoAuth.IdUsuario);
