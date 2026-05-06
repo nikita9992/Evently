@@ -59,6 +59,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2Fycml0by5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/nikva/Desktop/Proyecto Final/Evently/frontend/Evently.Web/Pages/CompletarPerfil.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tcGxldGFyUGVyZmlsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/nikva/Desktop/Proyecto Final/Evently/frontend/Evently.Web/Pages/DetalleActividad.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGV0YWxsZUFjdGl2aWRhZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
