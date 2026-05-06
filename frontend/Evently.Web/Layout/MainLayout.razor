@@ -49,7 +49,7 @@
                     @if (EstadoAuth.EsAdministrador)
                     {
                         <MudMenuItem Icon="@Icons.Material.Filled.AdminPanelSettings"
-                                     Href="/admin/actividades">
+                                     Href="/admin/dashboard">
                             Panel Admin
                         </MudMenuItem>
                         <MudDivider />
@@ -183,8 +183,13 @@
         if (firstRender)
         {
             await EstadoAuth.CargarDesdeLocalStorageAsync();
-
             EstadoAuth.OnCambio += StateHasChanged;
+
+            if (EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/admin/dashboard");
+                return;
+            }
 
             StateHasChanged();
         }
