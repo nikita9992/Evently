@@ -102,10 +102,11 @@ else
                     <MudItem xs="12" sm="6">
                         <MudPaper Class="pa-3" Elevation="1">
                             <MudText Typo="Typo.caption">Plazas disponibles</MudText>
-                            <MudText Typo="Typo.body1">
+                            <MudText Typo="Typo.body1"
+                                     Style="@(actividad.PlazasDisponibles <= 3 ? "color:red;" : "")">
                                 <MudIcon Icon="@Icons.Material.Filled.People"
                                          Size="Size.Small" />
-                                @actividad.CupoMaximo plazas
+                                @actividad.PlazasDisponibles / @actividad.CupoMaximo plazas
                             </MudText>
                         </MudPaper>
                     </MudItem>
@@ -140,12 +141,25 @@ else
 
                 <MudDivider Class="mb-4" />
 
+                @if (actividad.PlazasDisponibles == 0)
+                {
+                    <MudAlert Severity="Severity.Error" Class="mb-3">
+                        No quedan plazas disponibles
+                    </MudAlert>
+                }
+                else if (actividad.PlazasDisponibles <= 3)
+                {
+                    <MudAlert Severity="Severity.Warning" Class="mb-3">
+                        Solo quedan @actividad.PlazasDisponibles plazas
+                    </MudAlert>
+                }
+
                 <MudText Typo="Typo.subtitle2" Class="mb-2">Cantidad</MudText>
                 <MudNumericField @bind-Value="cantidad"
                                  Label="Cantidad"
                                  Variant="Variant.Outlined"
                                  Min="1"
-                                 Max="@(actividad.CupoMaximo ?? 10)"
+                                 Max="@(actividad.PlazasDisponibles ?? actividad.CupoMaximo ?? 10)"
                                  Class="mb-4" />
 
                 <MudText Typo="Typo.subtitle1" Class="mb-4">
@@ -157,8 +171,9 @@ else
                            FullWidth="true"
                            Size="Size.Large"
                            StartIcon="@Icons.Material.Filled.ShoppingCart"
-                           OnClick="AnadirAlCarrito">
-                    Añadir al carrito
+                           OnClick="AnadirAlCarrito"
+                           Disabled="@(actividad.PlazasDisponibles == 0)">
+                    @(actividad.PlazasDisponibles == 0 ? "Sin plazas disponibles" : "Añadir al carrito")
                 </MudButton>
 
                 <MudButton Variant="Variant.Outlined"

@@ -1044,10 +1044,10 @@ C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\ref\Evently.Web.dll
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\muafaqhg57-ifdsyiyswq.gz
 C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\r2ckebel2z-wfhz88tl58.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.qcqu1ua04a.wasm
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.94isx8vueh.pdb
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.qcqu1ua04a.wasm.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.94isx8vueh.pdb.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hru5mn5sfw-qcqu1ua04a.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\ljl52lojxc-94isx8vueh.gz
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hhf8626aeu-4guifdzcgw.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.uv63ad8x1r.wasm
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.xtagc2v9iz.pdb
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.uv63ad8x1r.wasm.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\bin\Debug\net9.0\wwwroot\_framework\Evently.Web.xtagc2v9iz.pdb.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hru5mn5sfw-uv63ad8x1r.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\ljl52lojxc-xtagc2v9iz.gz
+C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\obj\Debug\net9.0\compressed\hhf8626aeu-0cyzklnp1d.gz

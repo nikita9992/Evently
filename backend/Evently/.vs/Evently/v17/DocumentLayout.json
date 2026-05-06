@@ -3,13 +3,21 @@
   "WorkspaceRootPath": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\detalleactividad.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\actividades.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\detalleactividad.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\models\\modelsactividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Migrations\\20260506095340_AnadirPlazasOcupadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Evently.API\\Migrations\\20260506095340_AnadirPlazasOcupadas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\services\\actividadservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -18,6 +26,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\dtos\\actividad\\actividaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\actividad\\actividaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\models\\actividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\models\\actividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\services\\actividadservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -83,10 +95,6 @@
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\comentario\\comentariodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Migrations\\20260505114401_AnadirComentariosYValoraciones.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Evently.API\\Migrations\\20260505114401_AnadirComentariosYValoraciones.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\data\\eventlydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\data\\eventlydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -104,10 +112,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\dtos\\actividad\\crearactividaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\dtos\\actividad\\crearactividaddto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\models\\actividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\models\\actividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\models\\imagenactividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -140,10 +144,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\pages\\admin\\adminclientes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\services\\pedidoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{805571DA-F26D-491B-BA7E-46F8C4AB56E3}|..\\..\\frontend\\Evently.Web\\Evently.Web.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\frontend\\evently.web\\models\\modelsestado.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -223,6 +223,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\migrations\\20260505102624_anadirimagenactividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\migrations\\20260505102624_anadirimagenactividad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|c:\\users\\nikva\\desktop\\proyecto final\\evently\\backend\\evently\\evently.api\\migrations\\20260505114401_anadircomentariosyvaloraciones.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A25382FA-04EA-4DB1-BF5B-213C38D4C5A0}|Evently.API\\Evently.API.csproj|solutionrelative:evently.api\\migrations\\20260505114401_anadircomentariosyvaloraciones.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -232,97 +236,84 @@
       "DocumentGroups": [
         {
           "DockedWidth": 162,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
+              "Title": "20260506095340_AnadirPlazasOcupadas.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Migrations\\20260506095340_AnadirPlazasOcupadas.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Migrations\\20260506095340_AnadirPlazasOcupadas.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Migrations\\20260506095340_AnadirPlazasOcupadas.cs",
+              "RelativeToolTip": "Evently.API\\Migrations\\20260506095340_AnadirPlazasOcupadas.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T09:53:40.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "DetalleActividad.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\DetalleActividad.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\DetalleActividad.razor",
               "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\DetalleActividad.razor",
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\DetalleActividad.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAPwBAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAAcCAAAAAAAAAAAAAAsCAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-05-05T13:33:42.158Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ValoracionService.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ValoracionService.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Services\\ValoracionService.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ValoracionService.cs",
-              "RelativeToolTip": "Evently.API\\Services\\ValoracionService.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAIwGsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:51:02.896Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ValoracionService.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
-              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAgwBQAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T12:03:11.772Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ActividadService.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ActividadService.cs",
-              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ActividadService.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ActividadService.cs",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ActividadService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABMAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T14:36:09.744Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Actividades.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Actividades.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Actividades.razor",
               "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Actividades.razor",
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Actividades.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJAAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAM8AAAAAAAAAAAAAAJQAAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-24T10:11:55.277Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "ActividadDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Actividad\\ActividadDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Actividad\\ActividadDto.cs",
               "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Actividad\\ActividadDto.cs",
               "RelativeToolTip": "Evently.API\\DTOs\\Actividad\\ActividadDto.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwBEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwBEAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-05T10:19:10.603Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "ActividadService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ActividadService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\ActividadService.cs",
               "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ActividadService.cs",
               "RelativeToolTip": "Evently.API\\Services\\ActividadService.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAA0wB8AAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAJgAAAAAAAAAAAAowLoAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-24T10:23:25.247Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PedidoService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Services\\PedidoService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
+              "RelativeToolTip": "Evently.API\\Services\\PedidoService.cs",
+              "ViewState": "AgIAAMgAAAAAAAAAAAAmwMsAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T13:48:05.172Z",
               "EditorCaption": ""
             },
             {
@@ -331,16 +322,65 @@
               "Title": "ModelsActividad.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsActividad.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsActividad.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsActividad.cs",
-              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Models\\ModelsActividad.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAzwBEAAAAyAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsActividad.cs*",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Models\\ModelsActividad.cs*",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA5wAwAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-22T14:30:42.86Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ActividadService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ActividadService.cs",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ActividadService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ActividadService.cs",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ActividadService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABMAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T14:36:09.744Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "ValoracionService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
+              "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
+              "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ValoracionService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAgwBQAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T12:03:11.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Actividad.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Actividad.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Models\\Actividad.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Actividad.cs",
+              "RelativeToolTip": "Evently.API\\Models\\Actividad.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAA1wCIAAABhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T10:18:30.381Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ValoracionService.cs",
+              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ValoracionService.cs",
+              "RelativeDocumentMoniker": "Evently.API\\Services\\ValoracionService.cs",
+              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ValoracionService.cs",
+              "RelativeToolTip": "Evently.API\\Services\\ValoracionService.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAIwGsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:51:02.896Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "ModelsComentario.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsComentario.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsComentario.cs",
@@ -348,12 +388,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Models\\ModelsComentario.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T12:00:43.918Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T12:00:43.918Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "ModelsValoracion.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Models\\ModelsValoracion.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Models\\ModelsValoracion.cs",
@@ -361,12 +400,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Models\\ModelsValoracion.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwBYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T12:00:59.4Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T12:00:59.4Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "ComentarioService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ComentarioService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ComentarioService.cs",
@@ -374,12 +412,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Services\\ComentarioService.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAxwDMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T12:02:13.898Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T12:02:13.898Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "DetalleActividad.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Downloads\\DetalleActividad.razor",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Downloads\\DetalleActividad.razor",
@@ -387,12 +424,11 @@
               "RelativeToolTip": "..\\..\\..\\..\\..\\Downloads\\DetalleActividad.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-05T12:58:29.373Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T12:58:29.373Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "MisPedidos.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\MisPedidos.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\MisPedidos.razor",
@@ -400,12 +436,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\MisPedidos.razor",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAAUAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-24T13:30:43.774Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T13:30:43.774Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "ValoracionesController.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Controllers\\ValoracionesController.cs",
               "RelativeDocumentMoniker": "Evently.API\\Controllers\\ValoracionesController.cs",
@@ -413,12 +448,11 @@
               "RelativeToolTip": "Evently.API\\Controllers\\ValoracionesController.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAA1wCYAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:56:55.652Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:56:55.652Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "Home.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Home.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Home.razor",
@@ -426,12 +460,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Pages\\Home.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-22T14:14:04.344Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-22T14:14:04.344Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Program.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Program.cs",
@@ -439,12 +472,11 @@
               "RelativeToolTip": "..\\..\\frontend\\Evently.Web\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T14:10:11.967Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-22T14:10:11.967Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "ComentariosController.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Controllers\\ComentariosController.cs",
               "RelativeDocumentMoniker": "Evently.API\\Controllers\\ComentariosController.cs",
@@ -452,12 +484,11 @@
               "RelativeToolTip": "Evently.API\\Controllers\\ComentariosController.cs",
               "ViewState": "AgIAADUAAAAAAAAAAAAgwDgAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:55:05.639Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:55:05.639Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 21,
               "Title": "IValoracionService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\IValoracionService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\IValoracionService.cs",
@@ -465,12 +496,11 @@
               "RelativeToolTip": "Evently.API\\Services\\IValoracionService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:49:57.003Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:49:57.003Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 22,
               "Title": "ComentarioService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\ComentarioService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\ComentarioService.cs",
@@ -478,12 +508,11 @@
               "RelativeToolTip": "Evently.API\\Services\\ComentarioService.cs",
               "ViewState": "AgIAAAsAAAAAAAAAAAAAwE8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:48:34.754Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:48:34.754Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 23,
               "Title": "IComentarioService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\IComentarioService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\IComentarioService.cs",
@@ -491,12 +520,11 @@
               "RelativeToolTip": "Evently.API\\Services\\IComentarioService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:47:52.709Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:47:52.709Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 24,
               "Title": "ValoracionDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Valoracion\\ValoracionDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Valoracion\\ValoracionDto.cs",
@@ -504,12 +532,11 @@
               "RelativeToolTip": "Evently.API\\DTOs\\Valoracion\\ValoracionDto.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAYwB0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:46:40.535Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:46:40.535Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 25,
               "Title": "ComentarioDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Comentario\\ComentarioDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Comentario\\ComentarioDto.cs",
@@ -517,12 +544,11 @@
               "RelativeToolTip": "Evently.API\\DTOs\\Comentario\\ComentarioDto.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:45:31.267Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:45:31.267Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 20,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Program.cs",
               "RelativeDocumentMoniker": "Evently.API\\Program.cs",
@@ -530,12 +556,11 @@
               "RelativeToolTip": "Evently.API\\Program.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAAADsAAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-20T07:16:58.146Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-20T07:16:58.146Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 64,
               "Title": "20260505114401_AnadirComentariosYValoraciones.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Migrations\\20260505114401_AnadirComentariosYValoraciones.cs",
               "RelativeDocumentMoniker": "Evently.API\\Migrations\\20260505114401_AnadirComentariosYValoraciones.cs",
@@ -543,12 +568,11 @@
               "RelativeToolTip": "Evently.API\\Migrations\\20260505114401_AnadirComentariosYValoraciones.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:44:01.577Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:44:01.577Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 27,
               "Title": "Valoracion.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Valoracion.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Valoracion.cs",
@@ -556,12 +580,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Valoracion.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:40:24.639Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:40:24.639Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "Comentario.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Comentario.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\Comentario.cs",
@@ -569,12 +592,11 @@
               "RelativeToolTip": "Evently.API\\Models\\Comentario.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T11:39:18.434Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:39:18.434Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "EventlyDbContext.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Data\\EventlyDbContext.cs",
               "RelativeDocumentMoniker": "Evently.API\\Data\\EventlyDbContext.cs",
@@ -582,8 +604,7 @@
               "RelativeToolTip": "Evently.API\\Data\\EventlyDbContext.cs",
               "ViewState": "AgIAAGgAAAAAAAAAAAAQwHgAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T10:44:18.361Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T10:44:18.361Z"
             },
             {
               "$type": "Document",
@@ -599,7 +620,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "AdminActividades.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminActividades.razor",
@@ -611,7 +632,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "ImagenActividad.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\ImagenActividad.cs",
               "RelativeDocumentMoniker": "Evently.API\\Models\\ImagenActividad.cs",
@@ -623,7 +644,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 30,
               "Title": "CrearActividadDto.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\DTOs\\Actividad\\CrearActividadDto.cs",
               "RelativeDocumentMoniker": "Evently.API\\DTOs\\Actividad\\CrearActividadDto.cs",
@@ -647,19 +668,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "Actividad.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Actividad.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Models\\Actividad.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Models\\Actividad.cs",
-              "RelativeToolTip": "Evently.API\\Models\\Actividad.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAYwCUAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-05T10:18:30.381Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "AutenticacionService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\AutenticacionService.cs",
               "RelativeDocumentMoniker": "Evently.API\\Services\\AutenticacionService.cs",
@@ -671,7 +680,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "carritoHelper.js",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\wwwroot\\carritoHelper.js",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\wwwroot\\carritoHelper.js",
@@ -683,7 +692,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "AutenticacionService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\AutenticacionService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\AutenticacionService.cs",
@@ -695,7 +704,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "AdminPedidos.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminPedidos.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminPedidos.razor",
@@ -707,7 +716,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "MainLayout.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Layout\\MainLayout.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Layout\\MainLayout.razor",
@@ -719,7 +728,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 39,
               "Title": "Perfil.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Perfil.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Perfil.razor",
@@ -731,7 +740,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 38,
               "Title": "ClienteService.cs",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Services\\ClienteService.cs",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Services\\ClienteService.cs",
@@ -755,7 +764,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 37,
               "Title": "Carrito.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Carrito.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Carrito.razor",
@@ -779,7 +788,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 40,
               "Title": "AdminClientes.razor",
               "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Pages\\Admin\\AdminClientes.razor",
               "RelativeDocumentMoniker": "..\\..\\frontend\\Evently.Web\\Pages\\Admin\\AdminClientes.razor",
@@ -800,18 +809,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-24T12:08:20.255Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
-              "Title": "PedidoService.cs",
-              "DocumentMoniker": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
-              "RelativeDocumentMoniker": "Evently.API\\Services\\PedidoService.cs",
-              "ToolTip": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\backend\\Evently\\Evently.API\\Services\\PedidoService.cs",
-              "RelativeToolTip": "Evently.API\\Services\\PedidoService.cs",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAcwJsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T13:48:05.172Z"
             },
             {
               "$type": "Document",

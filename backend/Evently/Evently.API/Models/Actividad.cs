@@ -29,6 +29,12 @@ namespace Evently.API.Models
 
         public int? CupoMaximo { get; set; }
 
+        // Número de plazas ya ocupadas por pedidos
+        public int PlazasOcupadas { get; set; } = 0;
+        [NotMapped]
+        public int? PlazasDisponibles => CupoMaximo.HasValue ? CupoMaximo.Value - PlazasOcupadas : null;
+
+
         //Navegación hacia Categoria
         public Categoria Categoria { get; set; } = null!;
 
