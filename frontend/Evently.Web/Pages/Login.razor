@@ -69,8 +69,10 @@
         {
             
             await EstadoAuth.IniciarSesionAsync(respuesta);
-
-            NavManager.NavigateTo("/");
+            if (respuesta.Rol == "administrador")
+                NavManager.NavigateTo("/admin/dashboard");
+            else
+                NavManager.NavigateTo("/");
         }
 
         cargando = false;
