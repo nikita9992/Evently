@@ -2,6 +2,7 @@
 @using Evently.Web.Models
 @using Evently.Web.Services
 @inject AutenticacionService AutenticacionService
+@inject EstadoAuthService EstadoAuth
 @inject NavigationManager NavManager
 
 <PageTitle>Registro — Evently</PageTitle>
@@ -9,17 +10,15 @@
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
     <MudPaper Elevation="3" Class="pa-6">
 
-        <MudText Typo="Typo.h5" GutterBottom="true">Crear cuenta</MudText>
+        <MudText Typo="Typo.h5" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Class="mr-2" />
+            Crear cuenta
+        </MudText>
 
         @if (!string.IsNullOrEmpty(mensajeError))
         {
-            <MudAlert Severity="Severity.Error" Class="mb-4">@mensajeError</MudAlert>
-        }
-
-        @if (registroExitoso)
-        {
-            <MudAlert Severity="Severity.Success" Class="mb-4">
-                Cuenta creada correctamente. Ahora puedes iniciar sesión.
+            <MudAlert Severity="Severity.Error" Class="mb-4">
+                @mensajeError
             </MudAlert>
         }
 
@@ -27,24 +26,39 @@
                       Label="Email"
                       InputType="InputType.Email"
                       Variant="Variant.Outlined"
+                      Immediate="true"
                       Class="mb-3" />
 
         <MudTextField @bind-Value="datosRegistro.Password"
                       Label="Contraseña"
                       InputType="InputType.Password"
                       Variant="Variant.Outlined"
+                      Immediate="true"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="confirmacionPassword"
+                      Label="Repetir contraseña"
+                      InputType="InputType.Password"
+                      Variant="Variant.Outlined"
+                      Immediate="true"
+                      Error="@(!string.IsNullOrEmpty(confirmacionPassword)
+                                                     && confirmacionPassword != datosRegistro.Password)"
+                      ErrorText="Las contraseñas no coinciden"
                       Class="mb-4" />
 
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
                    FullWidth="true"
                    OnClick="Registrarse"
-                   Disabled="cargando">
+                   Disabled="@(cargando || !FormularioValido)"
+                   Size="Size.Large">
             @if (cargando)
             {
-                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                <MudProgressCircular Size="Size.Small"
+                                     Indeterminate="true"
+                                     Class="mr-2" />
             }
-            Registrarse
+            Crear cuenta
         </MudButton>
 
         <MudText Class="mt-4 text-center">
@@ -57,15 +71,33 @@
 
 @code {
     private RegistroDto datosRegistro = new();
+    private string confirmacionPassword = string.Empty;
     private string mensajeError = string.Empty;
     private bool cargando = false;
-    private bool registroExitoso = false;
+
+    private bool FormularioValido =>
+        !string.IsNullOrEmpty(datosRegistro.Email)
+        && datosRegistro.Password.Length >= 6
+        && datosRegistro.Password == confirmacionPassword;
 
     private async Task Registrarse()
     {
         cargando = true;
         mensajeError = string.Empty;
-        registroExitoso = false;
+
+        if (datosRegistro.Password != confirmacionPassword)
+        {
+            mensajeError = "Las contraseñas no coinciden";
+            cargando = false;
+            return;
+        }
+
+        if (datosRegistro.Password.Length < 6)
+        {
+            mensajeError = "La contraseña debe tener al menos 6 caracteres";
+            cargando = false;
+            return;
+        }
 
         var respuesta = await AutenticacionService.RegistrarAsync(datosRegistro);
 
@@ -75,9 +107,9 @@
         }
         else
         {
-            registroExitoso = true;
-            await Task.Delay(2000);
-            NavManager.NavigateTo("/login");
+            await EstadoAuth.IniciarSesionAsync(respuesta);
+
+            NavManager.NavigateTo("/completar-perfil");
         }
 
         cargando = false;

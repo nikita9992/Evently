@@ -48,13 +48,9 @@ namespace Evently.API.Services
                     Precio = a.Precio,
                     FechaActiv = a.FechaActiv,
                     CupoMaximo = a.CupoMaximo,
-                    Imagenes = a.Imagenes
-                        .OrderBy(i => i.Orden)
-                        .Select(i => i.Url)
-                        .ToList(),
-                    MediaValoracion = valoraciones.Any()
-                        ? Math.Round(valoraciones.Average(v => v.Puntuacion), 1)
-                        : 0,
+                    PlazasDisponibles = a.PlazasDisponibles,
+                    Imagenes = a.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList(),
+                    MediaValoracion = valoraciones.Any() ? Math.Round(valoraciones.Average(v => v.Puntuacion), 1) : 0,
                     TotalValoraciones = valoraciones.Count
                 });
             }
@@ -79,6 +75,7 @@ namespace Evently.API.Services
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
                 CupoMaximo = actividad.CupoMaximo,
+                PlazasDisponibles = actividad.PlazasDisponibles,
                 Imagenes = actividad.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList()
             };
         }
@@ -93,8 +90,7 @@ namespace Evently.API.Services
                 Descripcion = crearActividadDto.Descripcion,
                 Precio = crearActividadDto.Precio,
                 FechaActiv = crearActividadDto.FechaActiv.HasValue
-                            ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc)
-                            : null,
+                            ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc) : null,
                 CupoMaximo = crearActividadDto.CupoMaximo
             };
 
@@ -128,6 +124,7 @@ namespace Evently.API.Services
                 Precio = nuevaActividad.Precio,
                 FechaActiv = nuevaActividad.FechaActiv,
                 CupoMaximo = nuevaActividad.CupoMaximo,
+                PlazasDisponibles = nuevaActividad.PlazasDisponibles,
             };
         }
 
@@ -178,6 +175,7 @@ namespace Evently.API.Services
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
                 CupoMaximo = actividad.CupoMaximo,
+                PlazasDisponibles = actividad.PlazasDisponibles, 
             };
         }
 

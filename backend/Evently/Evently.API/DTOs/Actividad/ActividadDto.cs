@@ -12,10 +12,9 @@
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }
         public List<string> Imagenes { get; set; } = new();
-
         public string? ImagenPrincipal => Imagenes.FirstOrDefault();
         public double MediaValoracion { get; set; }
-
         public int TotalValoraciones { get; set; }
+        public int? PlazasDisponibles { get; set; }
     }
 }

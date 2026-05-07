@@ -201,11 +201,29 @@ namespace Evently.API.Services
             if (confirmarDto.Actividades == null || !confirmarDto.Actividades.Any())
                 return null;
 
+            // Verificar que hay plazas suficientes 
+            foreach (var item in confirmarDto.Actividades)
+            {
+                var actividad = await _contexto.Actividades
+                    .FirstOrDefaultAsync(a => a.IdActividad == item.IdActividad);
+
+                if (actividad == null) return null;
+
+                if (actividad.CupoMaximo.HasValue)
+                {
+                    var plazasDisponibles = actividad.CupoMaximo.Value - actividad.PlazasOcupadas;
+
+                    if (item.Cantidad > plazasDisponibles)
+                        return null; 
+                }
+            }
+
             var estado = await _contexto.Estados
                 .FirstOrDefaultAsync(e => e.NombreEstado == "Confirmado");
 
             if (estado == null) return null;
 
+            // Crear el pedido
             var pedido = new Pedido
             {
                 IdCliente = confirmarDto.IdCliente,
@@ -217,6 +235,7 @@ namespace Evently.API.Services
             _contexto.Pedidos.Add(pedido);
             await _contexto.SaveChangesAsync();
 
+            // Añadir detalles del pedido
             foreach (var item in confirmarDto.Actividades)
             {
                 var detalle = new DetallePedido
@@ -227,6 +246,20 @@ namespace Evently.API.Services
                     PrecioUnitario = item.PrecioUnitario
                 };
                 _contexto.DetallesPedido.Add(detalle);
+            }
+
+            await _contexto.SaveChangesAsync();
+
+            // Actualizar plazas ocupadas
+            foreach (var item in confirmarDto.Actividades)
+            {
+                var actividad = await _contexto.Actividades
+                    .FirstOrDefaultAsync(a => a.IdActividad == item.IdActividad);
+
+                if (actividad != null)
+                {
+                    actividad.PlazasOcupadas += item.Cantidad;
+                }
             }
 
             await _contexto.SaveChangesAsync();

@@ -1,0 +1,150 @@
+﻿@page "/completar-perfil"
+@inject ClienteService ClienteService
+@inject EstadoAuthService EstadoAuth
+@inject NavigationManager Navegacion
+@inject ISnackbar Snackbar
+
+<PageTitle>Completar perfil — Evently</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
+    <MudPaper Elevation="3" Class="pa-6">
+
+        <MudText Typo="Typo.h5" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.Person" Class="mr-2" />
+            Completa tu perfil
+        </MudText>
+
+        <MudAlert Severity="Severity.Info" Class="mb-4">
+            Estos datos son necesarios para confirmar pedidos.
+            Puedes completarlos más tarde desde "Mi perfil".
+        </MudAlert>
+
+        <MudTextField @bind-Value="datosCliente.Nombre"
+                      Label="Nombre"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosCliente.Apellidos"
+                      Label="Apellidos"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosCliente.Telefono"
+                      Label="Teléfono"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosCliente.Ciudad"
+                      Label="Ciudad"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosCliente.Direccion"
+                      Label="Dirección"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+
+        <MudTextField @bind-Value="datosCliente.CodPostal"
+                      Label="Código postal"
+                      Variant="Variant.Outlined"
+                      Class="mb-4" />
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   FullWidth="true"
+                   OnClick="GuardarPerfil"
+                   Disabled="cargando"
+                   Class="mb-2">
+            @if (cargando)
+            {
+                <MudProgressCircular Size="Size.Small"
+                                     Indeterminate="true"
+                                     Class="mr-2" />
+            }
+            Guardar y continuar
+        </MudButton>
+
+        <MudButton Variant="Variant.Text"
+                   Color="Color.Secondary"
+                   FullWidth="true"
+                   OnClick="Saltar">
+            Saltar por ahora
+        </MudButton>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private CrearClienteDto datosCliente = new();
+    private bool cargando = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+                StateHasChanged();
+            }
+
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                Navegacion.NavigateTo("/login");
+                return;
+            }
+
+            // si ya tiene perfil completo
+            var clienteExistente = await ClienteService.ObtenerPorUsuarioAsync(
+                EstadoAuth.IdUsuario, EstadoAuth.Token);
+
+            if (clienteExistente != null
+                && !string.IsNullOrEmpty(clienteExistente.Nombre)
+                && !string.IsNullOrEmpty(clienteExistente.Apellidos))
+            {
+                Navegacion.NavigateTo("/perfil");
+                return;
+            }
+
+            datosCliente.IdUsuario = EstadoAuth.IdUsuario;
+            StateHasChanged();
+        }
+    }
+
+    private async Task GuardarPerfil()
+    {
+        cargando = true;
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Nombre)
+            || string.IsNullOrWhiteSpace(datosCliente.Apellidos))
+        {
+            Snackbar.Add(
+                "Por favor introduce al menos tu nombre y apellidos",
+                Severity.Warning);
+            cargando = false;
+            return;
+        }
+
+        datosCliente.IdUsuario = EstadoAuth.IdUsuario;
+
+        var resultado = await ClienteService.CrearAsync(
+            datosCliente, EstadoAuth.Token);
+
+        if (resultado != null)
+        {
+            Snackbar.Add("¡Perfil guardado correctamente!", Severity.Success);
+            Navegacion.NavigateTo("/actividades");
+        }
+        else
+        {
+            Snackbar.Add("Error al guardar el perfil", Severity.Error);
+        }
+
+        cargando = false;
+    }
+
+    private void Saltar()
+    {
+        Navegacion.NavigateTo("/actividades");
+    }
+}

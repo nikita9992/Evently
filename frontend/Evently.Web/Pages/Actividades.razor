@@ -135,12 +135,29 @@ else
                                 @actividad.FechaActiv.Value.ToString("dd/MM/yyyy")
                             </MudText>
                         }
-                        @if (actividad.CupoMaximo.HasValue)
+                        @if (actividad.PlazasDisponibles.HasValue)
                         {
-                            <MudText Typo="Typo.caption" Class="ml-2">
-                                <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
-                                @actividad.CupoMaximo plazas
-                            </MudText>
+                            @if (actividad.PlazasDisponibles == 0)
+                            {
+                                <MudText Typo="Typo.caption" Class="ml-2" Style="color:red;">
+                                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
+                                    <strong>Agotado</strong>
+                                </MudText>
+                            }
+                            else if (actividad.PlazasDisponibles <= 3)
+                            {
+                                <MudText Typo="Typo.caption" Class="ml-2" Style="color:red;">
+                                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
+                                    ⚠ @actividad.PlazasDisponibles plazas
+                                </MudText>
+                            }
+                            else
+                            {
+                                <MudText Typo="Typo.caption" Class="ml-2">
+                                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
+                                    @actividad.PlazasDisponibles plazas
+                                </MudText>
+                            }
                         }
                     </MudCardContent>
                     <MudCardActions>
