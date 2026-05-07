@@ -1,0 +1,105 @@
+﻿@page "/admin/usuarios"
+@layout AdminLayout
+@inject HttpClient Http
+@inject EstadoAuthService EstadoAuth
+@inject ISnackbar Snackbar
+@inject NavigationManager Navegacion
+
+<PageTitle>Admin — Usuarios</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="@Icons.Material.Filled.People" Class="mr-2" />
+    Gestión de Usuarios
+</MudText>
+
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (!usuarios.Any())
+{
+    <MudAlert Severity="Severity.Info">No hay usuarios registrados.</MudAlert>
+}
+else
+{
+    <MudTable Items="usuarios" Hover="true" Striped="true" Elevation="3">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Email</MudTh>
+            <MudTh>Rol</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdUsuario</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>@context.Rol</MudTd>
+            <MudTd>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Warning"
+                           Size="Size.Small"
+                           OnClick="@(() => CambiarRol(context))">
+                    Cambiar rol
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Error"
+                           Size="Size.Small"
+                           OnClick="@(() => EliminarUsuario(context.IdUsuario))">
+                    Eliminar
+                </MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+    // Lista de usuarios que se muestra en la tabla
+    private List<ModeloUsuario> usuarios = new();
+    // Controla si la página está cargando datos
+    private bool cargando = true;
+
+    protected override async Task OnAfterRenderAsync(bool primeraCarga)
+    {
+        if (primeraCarga)
+        {
+            await CargarUsuarios();
+            StateHasChanged();
+        }
+    }
+
+    // Obtiene todos los usuarios del backend y los guarda en la lista
+    private async Task CargarUsuarios()
+    {
+        cargando = true;
+        var listaUsuarios = await Http.GetFromJsonAsync<List<ModeloUsuario>>(
+            "api/Usuarios",
+            new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (listaUsuarios != null)
+            usuarios = listaUsuarios;
+        cargando = false;
+    }
+
+    // Cambia el rol del usuario entre "usuario" y "administrador"
+    private async Task CambiarRol(ModeloUsuario usuario)
+    {
+        usuario.Rol = usuario.Rol == "administrador" ? "usuario" : "administrador";
+        await Http.PutAsJsonAsync($"api/Usuarios/{usuario.IdUsuario}", usuario);
+        Snackbar.Add($"Rol cambiado a {usuario.Rol}", Severity.Success);
+    }
+
+    // Elimina un usuario por su id y lo quita de la lista
+    private async Task EliminarUsuario(int idUsuario)
+    {
+        await Http.DeleteAsync($"api/Usuarios/{idUsuario}");
+        usuarios.RemoveAll(u => u.IdUsuario == idUsuario);
+        Snackbar.Add("Usuario eliminado", Severity.Info);
+        StateHasChanged();
+    }
+
+    // Modelo que representa los datos de un usuario en esta página
+    private class ModeloUsuario
+    {
+        public int IdUsuario { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Rol { get; set; } = string.Empty;
+    }
+}
