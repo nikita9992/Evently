@@ -3,98 +3,83 @@
 @inject NavigationManager Navegacion
 @inject ISnackbar Snackbar
 
-<MudThemeProvider Theme="temaAdmin" />
+<MudThemeProvider Theme="temaAdministrador" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <!-- Barra superior -->
-    <MudAppBar Elevation="1" Style="background:#1a2236;">
+    @* Barra superior *@
+    <MudAppBar Elevation="1" Dense="true" Class="barraSuperior">
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
                        Color="Color.Inherit"
                        Edge="Edge.Start"
-                       OnClick="ToogleDrawer" />
+                       OnClick="alternarMenuLateral" />
         <MudText Typo="Typo.h6"
-                 Style="font-weight:700; color:white; letter-spacing:0.5px; cursor:pointer;"
+                 Class="tituloAplicacion"
                  @onclick='@(() => Navegacion.NavigateTo("/admin/dashboard"))'>
-            Evently <span style="color:#7c6fee;">Admin</span>
+            Evently <span class="resaltadoTitulo">Admin</span>
         </MudText>
         <MudSpacer />
-        <MudText Typo="Typo.body2" Style="color:#94a3b8;" Class="mr-2 d-none d-sm-flex">
+        <MudText Typo="Typo.body2" Class="correoUsuario mr-2 d-none d-sm-flex">
             @EstadoAuth.Email
         </MudText>
     </MudAppBar>
 
-    <!-- Menú lateral responsive -->
-    <MudDrawer @bind-Open="drawerAbierto"
-               Elevation="0"
+    @* Menú lateral *@
+    <MudDrawer @bind-Open="menuLateralAbierto"
+               Elevation="1"
+               ClipMode="DrawerClipMode.Always"
                Breakpoint="Breakpoint.Md"
-               Style="background:#1a2236; border-right: 1px solid #243044;">
+               Class="panelLateral">
 
-        <div style="padding:24px 16px 16px 16px; border-bottom: 1px solid #243044;">
-            <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings"
-                     Style="color:#7c6fee; font-size:20px; margin-right:8px;" />
-            <span style="color:#e2e8f0; font-weight:700; letter-spacing:1px; font-size:13px;">
-                EVENTLY
-            </span>
-        </div>
+        <nav class="contenedorEnlaces">
+            <p class="etiquetaGestion">GESTIÓN</p>
 
-        <div style="padding:16px 8px;">
-            <p style="color:#4a5568; font-size:10px; font-weight:700; letter-spacing:1.5px; padding:0 8px; margin-bottom:8px;">
-                GESTIÓN
-            </p>
+            <MudNavMenu>                
+                <MudNavLink Href="/admin/actividades"
+                            Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.EventNote">
+                    Actividades
+                </MudNavLink>
+                <MudNavLink Href="/admin/categorias"
+                            Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.Category">
+                    Categorías
+                </MudNavLink>
+                <MudNavLink Href="/admin/pedidos"
+                            Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.Receipt">
+                    Pedidos
+                </MudNavLink>
+                <MudNavLink Href="/admin/clientes"
+                            Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.People">
+                    Clientes
+                </MudNavLink>
+                <MudNavLink Href="/admin/usuarios"
+                            Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.ManageAccounts">
+                    Usuarios
+                </MudNavLink>
+                <MudNavLink Href="/admin/estados"
+                            Match="NavLinkMatch.Prefix"
+                            Icon="@Icons.Material.Filled.Flag">
+                    Estados
+                </MudNavLink>
+            </MudNavMenu>
 
-            <a href="/admin/actividades"
-               style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; text-decoration:none; color:#94a3b8; margin-bottom:2px; transition:all 0.2s;"
-               onmouseover="this.style.background='rgba(124,111,238,0.15)'; this.style.color='#fff';"
-               onmouseout="this.style.background='transparent'; this.style.color='#94a3b8';">
-                <span class="material-icons" style="font-size:20px;">event_note</span>
-                <span style="font-size:14px; font-weight:500;">Actividades</span>
-            </a>
+            <div class="separadorNavegacion"></div>
 
-            <a href="/admin/categorias"
-               style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; text-decoration:none; color:#94a3b8; margin-bottom:2px; transition:all 0.2s;"
-               onmouseover="this.style.background='rgba(124,111,238,0.15)'; this.style.color='#fff';"
-               onmouseout="this.style.background='transparent'; this.style.color='#94a3b8';">
-                <span class="material-icons" style="font-size:20px;">category</span>
-                <span style="font-size:14px; font-weight:500;">Categorías</span>
-            </a>
-
-            <a href="/admin/pedidos"
-               style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; text-decoration:none; color:#94a3b8; margin-bottom:2px; transition:all 0.2s;"
-               onmouseover="this.style.background='rgba(124,111,238,0.15)'; this.style.color='#fff';"
-               onmouseout="this.style.background='transparent'; this.style.color='#94a3b8';">
-                <span class="material-icons" style="font-size:20px;">receipt</span>
-                <span style="font-size:14px; font-weight:500;">Pedidos</span>
-            </a>
-
-            <a href="/admin/clientes"
-               style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; text-decoration:none; color:#94a3b8; margin-bottom:2px; transition:all 0.2s;"
-               onmouseover="this.style.background='rgba(124,111,238,0.15)'; this.style.color='#fff';"
-               onmouseout="this.style.background='transparent'; this.style.color='#94a3b8';">
-                <span class="material-icons" style="font-size:20px;">people</span>
-                <span style="font-size:14px; font-weight:500;">Clientes</span>
-            </a>
-
-            <a href="/admin/usuarios" class="enlace-menu">
-                <span class="material-icons icono-menu">manage_accounts</span>
-                <span class="texto-menu">Usuarios</span>
-            </a>
-            <div style="border-top:1px solid #243044; margin:16px 0;"></div>
-
-            <button @onclick="CerrarSesion"
-                    style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; background:transparent; border:none; color:#ef4444; cursor:pointer; width:100%; text-align:left; transition:all 0.2s;"
-                    onmouseover="this.style.background='rgba(239,68,68,0.1)';"
-                    onmouseout="this.style.background='transparent';">
-                <span class="material-icons" style="font-size:20px;">logout</span>
-                <span style="font-size:14px; font-weight:500;">Cerrar sesión</span>
+            <button @onclick="CerrarSesion" class="botonCerrarSesion">
+                <span class="material-icons iconoNavegacion">logout</span>
+                <span class="textoNavegacion">Cerrar sesión</span>
             </button>
-        </div>
+        </nav>
     </MudDrawer>
 
-    <!-- Contenido -->
-    <MudMainContent Style="background:#f1f5f9; min-height:100vh;">
+    @* Contenido principal *@
+    <MudMainContent Class="fondoPrincipal">
         <MudContainer MaxWidth="MaxWidth.Large" Class="pa-4 pa-sm-6">
             @Body
         </MudContainer>
@@ -102,13 +87,17 @@
 </MudLayout>
 
 @code {
-    private bool drawerAbierto = true;
+    // Controla si el menú lateral está abierto o cerrado
+    private bool menuLateralAbierto = true;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool primeraCarga)
     {
-        if (firstRender)
+        if (primeraCarga)
         {
+            // Cargamos el token guardado en el navegador
             await EstadoAuth.CargarDesdeLocalStorageAsync();
+
+            // Si no es administrador lo mandamos al login
             if (!EstadoAuth.EsAdministrador)
             {
                 Navegacion.NavigateTo("/login");
@@ -119,11 +108,13 @@
         }
     }
 
-    private void ToogleDrawer()
+    // Abre o cierra el menú lateral
+    private void alternarMenuLateral()
     {
-        drawerAbierto = !drawerAbierto;
+        menuLateralAbierto = !menuLateralAbierto;
     }
 
+    // Cierra la sesión y redirige al login
     private async Task CerrarSesion()
     {
         await EstadoAuth.CerrarSesionAsync();
@@ -131,7 +122,8 @@
         Navegacion.NavigateTo("/login");
     }
 
-    private MudTheme temaAdmin = new MudTheme()
+    // Tema de colores del panel de administración
+    private MudTheme temaAdministrador = new MudTheme()
     {
         PaletteLight = new PaletteLight()
         {

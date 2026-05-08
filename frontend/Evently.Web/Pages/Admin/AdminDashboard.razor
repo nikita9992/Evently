@@ -12,91 +12,312 @@
 }
 else
 {
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; margin-bottom:16px;">
+    @* Tarjetas con las estadísticas principales *@
+    <section class="rejillaTarjetas">
 
-        <div style="background:white; border-radius:14px; padding:20px; border-left:5px solid #746EEA; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-            <p style="font-size:11px; font-weight:700; color:#746EEA; letter-spacing:1.5px; margin:0 0 8px 0;">PEDIDOS</p>
-            <p style="font-size:36px; font-weight:800; color:#1e293b; margin:0 0 4px 0; line-height:1;">@totalPedidos</p>
-            <p style="font-size:13px; color:#64748b; margin:0;">Total realizados</p>
+        <article class="tarjetaEstadistica tarjetaPedidos">
+            <p class="etiquetaTarjeta">PEDIDOS</p>
+            <p class="valorTarjeta">@totalPedidos</p>
+            <p class="descripcionTarjeta">Total realizados</p>
+        </article>
+
+        <article class="tarjetaEstadistica tarjetaIngresos">
+            <p class="etiquetaTarjeta">INGRESOS TOTALES</p>
+            <p class="valorTarjeta">@ingresosTotales.ToString("C")</p>
+            <p class="descripcionTarjeta">Pedidos confirmados</p>
+        </article>
+
+        <article class="tarjetaEstadistica tarjetaTicket">
+            <p class="etiquetaTarjeta">TICKET MEDIO</p>
+            <p class="valorTarjeta">@ticketMedio.ToString("C")</p>
+            <p class="descripcionTarjeta">Por pedido confirmado</p>
+        </article>
+
+        <article class="tarjetaEstadistica tarjetaConfirmacion">
+            <p class="etiquetaTarjeta">TASA CONFIRMACIÓN</p>
+            <p class="valorTarjeta">@tasaConfirmacion%</p>
+            <p class="descripcionTarjeta">Pedidos confirmados</p>
+        </article>
+
+    </section>
+
+    @* Sección con gráfico y últimos pedidos *@
+    <section class="rejillaGraficos">
+
+        @* Gráfico de distribución de estados *@
+        <article class="tarjetaGrafico">
+            <h2 class="tituloTarjeta">Estado de pedidos</h2>
+            <p class="subtituloTarjeta">Distribución actual</p>
+
+            @if (totalPedidos > 0)
+            {
+                <section class="contenedorGrafico">
+                    <MudChart T="double"
+                              ChartType="ChartType.Donut"
+                              ChartSeries="@datosGrafico.AsChartDataSet()"
+                              ChartLabels="@etiquetasGrafico"
+                              Width="100%"
+                              Height="220px"
+                              ChartOptions="@opcionesGrafico"
+                              Class="donutSinLeyenda" />
+                </section>
+            }
+            else
+            {
+                <section class="contenedorSinDatos">
+                    <p class="textoSinDatos">Sin datos todavía</p>
+                </section>
+            }
+
+            @* Leyenda del gráfico *@
+            <section class="leyendaGrafico">
+                <article class="itemLeyenda">
+                    <span class="puntoLeyenda puntoConfirmado"></span>
+                    <span class="textoLeyenda">Confirmados: <strong>@pedidosConfirmados</strong></span>
+                </article>
+                <article class="itemLeyenda">
+                    <span class="puntoLeyenda puntoPendiente"></span>
+                    <span class="textoLeyenda">Pendientes: <strong>@pedidosPendientes</strong></span>
+                </article>
+                <article class="itemLeyenda">
+                    <span class="puntoLeyenda puntoCancelado"></span>
+                    <span class="textoLeyenda">Cancelados: <strong>@pedidosCancelados</strong></span>
+                </article>
+            </section>
+        </article>
+
+        @* Lista de los últimos pedidos *@
+        <article class="tarjetaGrafico">
+            <header class="cabeceraTarjeta">
+                <section>
+                    <h2 class="tituloTarjeta">Últimos pedidos</h2>
+                    <p class="subtituloTarjeta">Los 5 más recientes</p>
+                </section>
+                <MudButton Variant="Variant.Text"
+                           Size="Size.Small"
+                           Class="botonVerTodos"
+                           OnClick='@(() => Navegacion.NavigateTo("/admin/pedidos"))'>
+                    Ver todos →
+                </MudButton>
+            </header>
+
+            @if (!ultimosPedidos.Any())
+            {
+                <p class="textoSinDatos">No hay pedidos todavía</p>
+            }
+            else
+            {
+                <section>
+                    @foreach (var pedido in ultimosPedidos)
+                    {
+                        <article class="filaPedido">
+                            <section>
+                                <p class="nombrePedido">#@pedido.IdPedido — @pedido.NombreCliente</p>
+                                <p class="fechaPedido">@pedido.FechaConfirm.ToString("dd/MM/yyyy")</p>
+                            </section>
+                            <footer class="importePedido">
+                                <p class="totalPedido">@pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C")</p>
+                                @if (pedido.NombreEstado == "Confirmado")
+                                {
+                                    <span class="estadoPedido estadoConfirmado">Confirmado</span>
+                                }
+                                else if (pedido.NombreEstado == "Cancelado")
+                                {
+                                    <span class="estadoPedido estadoCancelado">Cancelado</span>
+                                }
+                                else
+                                {
+                                    <span class="estadoPedido estadoPendiente">@pedido.NombreEstado</span>
+                                }
+                            </footer>
+                        </article>
+                    }
+                </section>
+            }
+        </article>
+
+    </section>
+}
+
+@code {
+    private int totalPedidos = 0;
+    private int pedidosConfirmados = 0;
+    private int pedidosPendientes = 0;
+    private int pedidosCancelados = 0;
+    private decimal ingresosTotales = 0;
+    private decimal ticketMedio = 0;
+    private int tasaConfirmacion = 0;
+    private List<PedidoDto> ultimosPedidos = new();
+    private bool cargando = true;
+
+    private double[] datosGrafico = Array.Empty<double>();
+    private string[] etiquetasGrafico = Array.Empty<string>();
+    private ChartOptions opcionesGrafico = new ChartOptions
+    {
+        ChartPalette = new[] { "#746EEA", "#00BDA1", "#00FCE7" }
+    };
+
+    protected override async Task OnAfterRenderAsync(bool primeraCarga)
+    {
+        if (primeraCarga)
+        {
+            // Cargamos el token guardado en el navegador antes de pedir datos
+            await EstadoAuth.CargarDesdeLocalStorageAsync();
+            await CargarEstadisticas();
+            StateHasChanged();
+        }
+    }
+
+    private async Task CargarEstadisticas()
+    {
+        cargando = true;
+
+        // Obtenemos todos los pedidos del backend
+        var pedidos = await PedidoService.ObtenerTodosAsync(EstadoAuth.Token);
+        totalPedidos = pedidos.Count;
+
+        // Contamos pedidos por estado
+        pedidosConfirmados = pedidos.Count(p => p.NombreEstado == "Confirmado");
+        pedidosPendientes = pedidos.Count(p => p.NombreEstado == "Pendiente");
+        pedidosCancelados = pedidos.Count(p => p.NombreEstado == "Cancelado");
+
+        // Calculamos los ingresos de pedidos confirmados
+        ingresosTotales = pedidos
+            .Where(p => p.NombreEstado == "Confirmado")
+            .Sum(p => p.Detalles.Sum(d => d.ImporteLinea));
+
+        // Calculamos el ticket medio por pedido confirmado
+        ticketMedio = pedidosConfirmados > 0
+            ? ingresosTotales / pedidosConfirmados
+            : 0;
+
+        // Calculamos el porcentaje de pedidos confirmados
+        tasaConfirmacion = totalPedidos > 0
+            ? (int)Math.Round((double)pedidosConfirmados / totalPedidos * 100)
+            : 0;
+
+        // Tomamos los 5 pedidos más recientes
+        ultimosPedidos = pedidos
+            .OrderByDescending(p => p.FechaConfirm)
+            .Take(5)
+            .ToList();
+
+        // Preparamos los datos para el gráfico
+        datosGrafico = new double[] { pedidosConfirmados, pedidosPendientes, pedidosCancelados };
+        etiquetasGrafico = new[] { "Confirmados", "Pendientes", "Cancelados" };
+
+        cargando = false;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @page "/admin/dashboard"
+@layout AdminLayout
+@inject PedidoService PedidoService
+@inject NavigationManager Navegacion
+@inject EstadoAuthService EstadoAuth
+
+<PageTitle>Dashboard — Admin Evently</PageTitle>
+
+@if (cargando)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mb-4" />
+}
+else
+{
+    <div class="rejillaTarjetas">
+
+        <div class="tarjetaEstadistica tarjetaPedidos">
+            <p class="etiquetaTarjeta">PEDIDOS</p>
+            <p class="valorTarjeta">@totalPedidos</p>
+            <p class="descripcionTarjeta">Total realizados</p>
         </div>
 
-        <div style="background:white; border-radius:14px; padding:20px; border-left:5px solid #7c6fee; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-            <p style="font-size:11px; font-weight:700; color:#7c6fee; letter-spacing:1.5px; margin:0 0 8px 0;">INGRESOS TOTALES</p>
-            <p style="font-size:36px; font-weight:800; color:#1e293b; margin:0 0 4px 0; line-height:1;">@ingresosTotales.ToString("C")</p>
-            <p style="font-size:13px; color:#64748b; margin:0;">Pedidos confirmados</p>
+        <div class="tarjetaEstadistica tarjetaIngresos">
+            <p class="etiquetaTarjeta">INGRESOS TOTALES</p>
+            <p class="valorTarjeta">@ingresosTotales.ToString("C")</p>
+            <p class="descripcionTarjeta">Pedidos confirmados</p>
         </div>
 
-        <div style="background:white; border-radius:14px; padding:20px; border-left:5px solid #06b6d4; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-            <p style="font-size:11px; font-weight:700; color:#06b6d4; letter-spacing:1.5px; margin:0 0 8px 0;">TICKET MEDIO</p>
-            <p style="font-size:36px; font-weight:800; color:#1e293b; margin:0 0 4px 0; line-height:1;">@ticketMedio.ToString("C")</p>
-            <p style="font-size:13px; color:#64748b; margin:0;">Por pedido confirmado</p>
+        <div class="tarjetaEstadistica tarjetaTicket">
+            <p class="etiquetaTarjeta">TICKET MEDIO</p>
+            <p class="valorTarjeta">@ticketMedio.ToString("C")</p>
+            <p class="descripcionTarjeta">Por pedido confirmado</p>
         </div>
 
-        <div style="background:white; border-radius:14px; padding:20px; border-left:5px solid #00BDA1; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-            <p style="font-size:11px; font-weight:700; color:#00BDA1; letter-spacing:1.5px; margin:0 0 8px 0;">TASA CONFIRMACIÓN</p>
-            <p style="font-size:36px; font-weight:800; color:#1e293b; margin:0 0 4px 0; line-height:1;">@tasaConfirmacion%</p>
-            <p style="font-size:13px; color:#64748b; margin:0;">Pedidos confirmados</p>
+        <div class="tarjetaEstadistica tarjetaConfirmacion">
+            <p class="etiquetaTarjeta">TASA CONFIRMACIÓN</p>
+            <p class="valorTarjeta">@tasaConfirmacion%</p>
+            <p class="descripcionTarjeta">Pedidos confirmados</p>
         </div>
 
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px;">
+    <div class="rejillaGraficos">
 
-        <div style="background:white; border-radius:14px; padding:24px; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-            <h6 style="font-size:16px; font-weight:700; color:#1e293b; margin:0 0 4px 0;">Estado de pedidos</h6>
-            <p style="font-size:13px; color:#64748b; margin:0 0 16px 0;">Distribución actual</p>
+        <div class="tarjetaGrafico">
+            <h2 class="tituloTarjeta">Estado de pedidos</h2>
+            <p class="subtituloTarjeta">Distribución actual</p>
 
             @if (totalPedidos > 0)
             {
-                <div style="position:relative;">
-                    <style>
-                        .donut-sin-leyenda .mud-chart-legend {
-                            display: none !important;
-                        }
-                    </style>
-                    <div class="donut-sin-leyenda">
-                        <MudChart T="double"
-                                  ChartType="ChartType.Donut"
-                                  ChartSeries="@datosDonut.AsChartDataSet()"
-                                  ChartLabels="@etiquetasDonut"
-                                  Width="100%"
-                                  Height="220px"
-                                  ChartOptions="@opcionesDonut" />
-                    </div>
+                <div class="contenedorGrafico">
+                    <MudChart T="double"
+                              ChartType="ChartType.Donut"
+                              ChartSeries="@datosGrafico.AsChartDataSet()"
+                              ChartLabels="@etiquetasGrafico"
+                              Width="100%"
+                              Height="220px"
+                              ChartOptions="@opcionesGrafico"
+                              Class="donutSinLeyenda" />
                 </div>
             }
             else
             {
-                <div style="height:200px; display:flex; align-items:center; justify-content:center;">
-                    <p style="color:#64748b; font-size:14px;">Sin datos todavía</p>
+                <div class="contenedorSinDatos">
+                    <p class="textoSinDatos">Sin datos todavía</p>
                 </div>
             }
 
-            <div style="margin-top:16px;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                    <div style="width:12px; height:12px; border-radius:50%; background:#746EEA; flex-shrink:0;"></div>
-                    <span style="font-size:13px; color:#334155;">Confirmados: <strong>@pedidosConfirmados</strong></span>
+            <div class="leyendaGrafico">
+                <div class="itemLeyenda">
+                    <span class="puntoLeyenda puntoConfirmado"></span>
+                    <span class="textoLeyenda">Confirmados: <strong>@pedidosConfirmados</strong></span>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                    <div style="width:12px; height:12px; border-radius:50%; background:#00BDA1; flex-shrink:0;"></div>
-                    <span style="font-size:13px; color:#334155;">Pendientes: <strong>@pedidosPendientes</strong></span>
+                <div class="itemLeyenda">
+                    <span class="puntoLeyenda puntoPendiente"></span>
+                    <span class="textoLeyenda">Pendientes: <strong>@pedidosPendientes</strong></span>
                 </div>
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="width:12px; height:12px; border-radius:50%; background:#00FCE7; flex-shrink:0;"></div>
-                    <span style="font-size:13px; color:#334155;">Cancelados: <strong>@pedidosCancelados</strong></span>
+                <div class="itemLeyenda">
+                    <span class="puntoLeyenda puntoCancelado"></span>
+                    <span class="textoLeyenda">Cancelados: <strong>@pedidosCancelados</strong></span>
                 </div>
             </div>
         </div>
 
-        <div style="background:white; border-radius:14px; padding:24px; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <div class="tarjetaGrafico">
+            <div class="cabeceraTarjeta">
                 <div>
-                    <h6 style="font-size:16px; font-weight:700; color:#1e293b; margin:0 0 4px 0;">Últimos pedidos</h6>
-                    <p style="font-size:13px; color:#64748b; margin:0;">Los 5 más recientes</p>
+                    <h2 class="tituloTarjeta">Últimos pedidos</h2>
+                    <p class="subtituloTarjeta">Los 5 más recientes</p>
                 </div>
                 <MudButton Variant="Variant.Text"
                            Size="Size.Small"
-                           Style="color:#7c6fee; font-size:13px; font-weight:600;"
+                           Class="botonVerTodos"
                            OnClick='@(() => Navegacion.NavigateTo("/admin/pedidos"))'>
                     Ver todos →
                 </MudButton>
@@ -104,36 +325,30 @@ else
 
             @if (!ultimosPedidos.Any())
             {
-                <p style="color:#64748b; font-size:14px;">No hay pedidos todavía</p>
+                <p class="textoSinDatos">No hay pedidos todavía</p>
             }
             else
             {
                 @foreach (var pedido in ultimosPedidos)
                 {
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #f1f5f9;">
+                    <div class="filaPedido">
                         <div>
-                            <p style="font-size:14px; font-weight:600; color:#1e293b; margin:0 0 2px 0;">
-                                #@pedido.IdPedido — @pedido.NombreCliente
-                            </p>
-                            <p style="font-size:12px; color:#64748b; margin:0;">
-                                @pedido.FechaConfirm.ToString("dd/MM/yyyy")
-                            </p>
+                            <p class="nombrePedido">#@pedido.IdPedido — @pedido.NombreCliente</p>
+                            <p class="fechaPedido">@pedido.FechaConfirm.ToString("dd/MM/yyyy")</p>
                         </div>
-                        <div style="text-align:right;">
-                            <p style="font-size:14px; font-weight:700; color:#1e293b; margin:0 0 4px 0;">
-                                @pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C")
-                            </p>
+                        <div class="importePedido">
+                            <p class="totalPedido">@pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C")</p>
                             @if (pedido.NombreEstado == "Confirmado")
                             {
-                                <span style="background:#dcfce7; color:#16a34a; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:600;">Confirmado</span>
+                                <span class="estadoPedido estadoConfirmado">Confirmado</span>
                             }
                             else if (pedido.NombreEstado == "Cancelado")
                             {
-                                <span style="background:#fee2e2; color:#dc2626; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:600;">Cancelado</span>
+                                <span class="estadoPedido estadoCancelado">Cancelado</span>
                             }
                             else
                             {
-                                <span style="background:#fef9c3; color:#ca8a04; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:600;">@pedido.NombreEstado</span>
+                                <span class="estadoPedido estadoPendiente">@pedido.NombreEstado</span>
                             }
                         </div>
                     </div>
@@ -155,17 +370,19 @@ else
     private List<PedidoDto> ultimosPedidos = new();
     private bool cargando = true;
 
-    private double[] datosDonut = Array.Empty<double>();
-    private string[] etiquetasDonut = Array.Empty<string>();
-    private ChartOptions opcionesDonut = new ChartOptions
+    private double[] datosGrafico = Array.Empty<double>();
+    private string[] etiquetasGrafico = Array.Empty<string>();
+    private ChartOptions opcionesGrafico = new ChartOptions
     {
         ChartPalette = new[] { "#746EEA", "#00BDA1", "#00FCE7" }
     };
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool primeraCarga)
     {
-        if (firstRender)
+        if (primeraCarga)
         {
+            // Cargamos el token guardado en el navegador antes de pedir datos
+            await EstadoAuth.CargarDesdeLocalStorageAsync();
             await CargarEstadisticas();
             StateHasChanged();
         }
@@ -175,33 +392,40 @@ else
     {
         cargando = true;
 
+        // Obtenemos todos los pedidos del backend
         var pedidos = await PedidoService.ObtenerTodosAsync(EstadoAuth.Token);
         totalPedidos = pedidos.Count;
 
+        // Contamos pedidos por estado
         pedidosConfirmados = pedidos.Count(p => p.NombreEstado == "Confirmado");
         pedidosPendientes = pedidos.Count(p => p.NombreEstado == "Pendiente");
         pedidosCancelados = pedidos.Count(p => p.NombreEstado == "Cancelado");
 
+        // Calculamos los ingresos de pedidos confirmados
         ingresosTotales = pedidos
             .Where(p => p.NombreEstado == "Confirmado")
             .Sum(p => p.Detalles.Sum(d => d.ImporteLinea));
 
+        // Calculamos el ticket medio por pedido confirmado
         ticketMedio = pedidosConfirmados > 0
             ? ingresosTotales / pedidosConfirmados
             : 0;
 
+        // Calculamos el porcentaje de pedidos confirmados
         tasaConfirmacion = totalPedidos > 0
             ? (int)Math.Round((double)pedidosConfirmados / totalPedidos * 100)
             : 0;
 
+        // Tomamos los 5 pedidos más recientes
         ultimosPedidos = pedidos
             .OrderByDescending(p => p.FechaConfirm)
             .Take(5)
             .ToList();
 
-        datosDonut = new double[] { pedidosConfirmados, pedidosPendientes, pedidosCancelados };
-        etiquetasDonut = new[] { "Confirmados", "Pendientes", "Cancelados" };
+        // Preparamos los datos para el gráfico
+        datosGrafico = new double[] { pedidosConfirmados, pedidosPendientes, pedidosCancelados };
+        etiquetasGrafico = new[] { "Confirmados", "Pendientes", "Cancelados" };
 
         cargando = false;
     }
-}
+} *@
