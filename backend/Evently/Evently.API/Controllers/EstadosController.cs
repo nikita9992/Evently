@@ -70,10 +70,26 @@ namespace Evently.API.Controllers
         [Authorize(Roles = "administrador")]
         public async Task<IActionResult> Eliminar(int id)
         {
-            var resultado = await _estadoService.EliminarAsync(id);
+            var estado = await _estadoService.ObtenerPorIdAsync(id);
 
-            if (!resultado)
+            if (estado == null)
+            {
                 return NotFound(new { mensaje = "Estado no encontrado" });
+            }
+
+            bool tienePedidos = await _estadoService.TienePedidosAsociadosAsync(id);
+
+            if (tienePedidos)
+            {
+                return BadRequest(new { mensaje = "No se puede eliminar el estado porque tiene pedidos asociados" });
+            }
+
+            bool eliminado = await _estadoService.EliminarAsync(id);
+
+            if (!eliminado)
+            {
+                return NotFound(new { mensaje = "Estado no encontrado" });
+            }
 
             return Ok(new { mensaje = "Estado eliminado correctamente" });
         }

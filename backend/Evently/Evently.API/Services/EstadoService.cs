@@ -85,6 +85,13 @@ namespace Evently.API.Services
             };
         }
 
+        // Comprueba si el estado tiene pedidos asociados
+        public async Task<bool> TienePedidosAsociadosAsync(int id)
+        {
+            return await _contexto.Pedidos
+                .AnyAsync(p => p.IdEstado == id);
+        }
+
         // Eliminar un estado
         public async Task<bool> EliminarAsync(int id)
         {

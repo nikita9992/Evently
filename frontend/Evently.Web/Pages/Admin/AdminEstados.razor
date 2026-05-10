@@ -1,0 +1,202 @@
+﻿@page "/admin/estados"
+@layout AdminLayout
+@inject EstadoService EstadoService
+@inject EstadoAuthService EstadoAuth
+@inject ISnackbar Snackbar
+@inject NavigationManager Navegacion
+
+<PageTitle>Admin — Estados</PageTitle>
+
+<MudText Typo="Typo.h4" GutterBottom="true">
+    <MudIcon Icon="@Icons.Material.Filled.Flag" Class="mr-2" />
+    Gestión de Estados
+</MudText>
+
+<MudButton Variant="Variant.Filled"
+           Color="Color.Primary"
+           StartIcon="@Icons.Material.Filled.Add"
+           OnClick="AbrirFormularioCrear"
+           Class="mb-4">
+    Nuevo estado
+</MudButton>
+
+@if (cargando)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else if (!listaEstados.Any())
+{
+    <MudAlert Severity="Severity.Info">No hay estados registrados.</MudAlert>
+}
+else
+{
+    <MudTable Items="listaEstados" Hover="true" Striped="true" Elevation="3">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Descripción</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.IdEstado</MudTd>
+            <MudTd>@context.NombreEstado</MudTd>
+            <MudTd>@(context.DescripEstado ?? "—")</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                               Color="Color.Warning"
+                               Size="Size.Small"
+                               OnClick="@(() => AbrirFormularioEditar(context))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="@(() => ConfirmarEliminar(context))" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+<MudDialog @bind-Visible="dialogoAbierto" Options="opcionesDialogo">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            @(estadoEditando?.IdEstado == 0 ? "Nuevo estado" : "Editar estado")
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="estadoEditando!.NombreEstado"
+                      Label="Nombre del estado"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+        <MudTextField @bind-Value="estadoEditando!.DescripEstado"
+                      Label="Descripción"
+                      Variant="Variant.Outlined"
+                      Lines="3" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CerrarDialogo">Cancelar</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="GuardarEstado">
+            Guardar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    // Lista de estados que se muestra en la tabla
+    private List<EstadoDto> listaEstados = new();
+    private bool cargando = true;
+
+    // Control del diálogo de crear/editar
+    private bool dialogoAbierto = false;
+    private EstadoDto? estadoEditando = null;
+    private DialogOptions opcionesDialogo = new()
+    {
+        MaxWidth = MaxWidth.Small,
+        FullWidth = true
+    };
+
+    protected override async Task OnAfterRenderAsync(bool primeraCarga)
+    {
+        if (primeraCarga)
+        {
+            // Redirigir si no es administrador
+            if (!EstadoAuth.EstaAutenticado)
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
+
+            await CargarEstados();
+            StateHasChanged();
+        }
+    }
+
+    // Obtiene todos los estados del backend
+    private async Task CargarEstados()
+    {
+        cargando = true;
+        listaEstados = await EstadoService.ObtenerTodosAsync(EstadoAuth.Token);
+        cargando = false;
+    }
+
+    // Abre el formulario para crear un estado nuevo
+    private void AbrirFormularioCrear()
+    {
+        estadoEditando = new EstadoDto { IdEstado = 0 };
+        dialogoAbierto = true;
+    }
+
+    // Abre el formulario para editar un estado existente
+    private void AbrirFormularioEditar(EstadoDto estado)
+    {
+        estadoEditando = new EstadoDto
+        {
+            IdEstado = estado.IdEstado,
+            NombreEstado = estado.NombreEstado,
+            DescripEstado = estado.DescripEstado
+        };
+        dialogoAbierto = true;
+    }
+
+    // Cierra el diálogo sin guardar
+    private void CerrarDialogo()
+    {
+        dialogoAbierto = false;
+        estadoEditando = null;
+    }
+
+    // Guarda el estado: crea uno nuevo o edita el existente
+    private async Task GuardarEstado()
+    {
+        if (estadoEditando == null) return;
+
+        if (string.IsNullOrWhiteSpace(estadoEditando.NombreEstado))
+        {
+            Snackbar.Add("El nombre del estado es obligatorio.", Severity.Warning);
+            return;
+        }
+
+        if (estadoEditando.IdEstado == 0)
+        {
+            EstadoDto? estadoCreado = await EstadoService.CrearAsync(estadoEditando, EstadoAuth.Token);
+
+            if (estadoCreado == null)
+            {
+                Snackbar.Add("No se pudo crear el estado.", Severity.Error);
+                return;
+            }
+        }
+        else
+        {
+            EstadoDto? estadoEditado = await EstadoService.EditarAsync(estadoEditando, EstadoAuth.Token);
+
+            if (estadoEditado == null)
+            {
+                Snackbar.Add("No se pudo editar el estado.", Severity.Error);
+                return;
+            }
+        }
+
+        Snackbar.Add("Estado guardado correctamente", Severity.Success);
+        dialogoAbierto = false;
+        await CargarEstados();
+    }
+
+    // Elimina un estado
+    private async Task ConfirmarEliminar(EstadoDto estado)
+    {
+        bool eliminado = await EstadoService.EliminarAsync(estado.IdEstado, EstadoAuth.Token);
+
+        if (!eliminado)
+        {
+            Snackbar.Add("No se pudo eliminar el estado.", Severity.Error);
+            return;
+        }
+
+        Snackbar.Add("Estado eliminado", Severity.Info);
+        await CargarEstados();
+    }
+}
