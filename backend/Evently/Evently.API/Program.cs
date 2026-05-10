@@ -8,14 +8,14 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Base de datos Neon.tech
+// Base de datos Neon.tech
 builder.Services.AddDbContext<EventlyDbContext>(opciones =>
     opciones.UseNpgsql(
         builder.Configuration.GetConnectionString("ConexionEvently")
     )
 );
 
-//JWT Autenticación
+// JWT Autenticación
 var claveJwt = builder.Configuration["Jwt:Clave"]!;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opciones =>
@@ -35,20 +35,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-//Servicios de la aplicación
+// Servicios de la aplicación
 builder.Services.AddScoped<IAutenticacionService, AutenticacionService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IActividadService, ActividadService>();
-builder.Services.AddScoped<IEstadoService, EstadoService>();
 
-//Controladores
-builder.Services.AddControllers();
+// Controladores con manejo de referencias circulares entre modelos
+builder.Services.AddControllers()
+    .AddJsonOptions(opciones =>
+    {
+        // Evitamos que el servidor se quede en bucle al convertir los datos a JSON
+        opciones.JsonSerializerOptions.ReferenceHandler =
+            System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
 builder.Services.AddCors(opciones =>
 {
     opciones.AddPolicy("PolicyEvently", politica =>
         politica.AllowAnyOrigin()
-                .AllowAnyMethod()               
+                .AllowAnyMethod()
                 .AllowAnyHeader());
 });
 
@@ -58,8 +63,9 @@ builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IDetallePedidoService, DetallePedidoService>();
 builder.Services.AddScoped<IComentarioService, ComentarioService>();
 builder.Services.AddScoped<IValoracionService, ValoracionService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
-//Swagger con soporte JWT
+// Swagger con soporte JWT
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opciones =>
 {
@@ -96,7 +102,6 @@ builder.Services.AddSwaggerGen(opciones =>
         }
     });
 });
-
 
 var app = builder.Build();
 

@@ -1,120 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Evently.API.Data;
-using Evently.API.Models;
+﻿using Evently.API.DTOs.Usuario;
+using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Evently.API.Controllers
 {
-    //Controlador para gestionar usuarios. Solo accesible por administradores.
+    // Controlador para gestionar usuarios. Solo accesible por administradores.
     [Authorize(Roles = "administrador")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {
-        private readonly EventlyDbContext _context;
+        private readonly IUsuarioService _usuarioService;
 
-        public UsuariosController(EventlyDbContext context)
+        public UsuariosController(IUsuarioService usuarioService)
         {
-            _context = context;
+            _usuarioService = usuarioService;
         }
 
         // GET: api/Usuarios
-        // Obtenemos todos los usuarios de la base de datos.
-        // Con Include traemos sus datos personales
-        // AsNoTracking se usa porque solo consultamos, no modificamos.
+        // Obtenemos los usuarios para mostrarlos en el panel de administración.
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<UsuarioAdminDto>>> GetUsuarios()
         {
-            var usuarios = _context.Usuarios
-                .Include(u => u.Cliente);
+            List<UsuarioAdminDto> usuarios = await _usuarioService.ObtenerTodosAsync();
 
-            return await usuarios.AsNoTracking().ToListAsync();
+            return Ok(usuarios);
         }
 
         // GET: api/Usuarios/5
         // Buscamos un usuario por su id.
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        public async Task<ActionResult<UsuarioAdminDto>> GetUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
+            UsuarioAdminDto? usuario = await _usuarioService.ObtenerPorIdAsync(id);
 
             if (usuario == null)
             {
-                return NotFound();
+                return NotFound(new { mensaje = "Usuario no encontrado" });
             }
 
-            return usuario;
-        }
-
-        // PUT: api/Usuarios/5
-        // Modificamos los datos de un usuario
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
-        {
-            if (id != usuario.IdUsuario)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(usuario).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(usuario);
         }
 
         // POST: api/Usuarios
-        // Creamos un nuevo usuario desde el panel de administrador.
+        // Creamos un nuevo usuario desde el panel de administración.
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<UsuarioAdminDto>> PostUsuario(CrearUsuarioDto crearUsuarioDto)
         {
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
+            if (string.IsNullOrWhiteSpace(crearUsuarioDto.Email) ||
+                string.IsNullOrWhiteSpace(crearUsuarioDto.Password))
+            {
+                return BadRequest(new { mensaje = "El email y la contraseña son obligatorios" });
+            }
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.IdUsuario }, usuario);
+            UsuarioAdminDto? usuarioCreado = await _usuarioService.CrearAsync(crearUsuarioDto);
+
+            if (usuarioCreado == null)
+            {
+                return BadRequest(new { mensaje = "Ya existe un usuario con ese email" });
+            }
+
+            return CreatedAtAction(
+                nameof(GetUsuario),
+                new { id = usuarioCreado.IdUsuario },
+                usuarioCreado
+            );
+        }
+
+        // PUT: api/Usuarios/5/rol
+        // Cambiamos únicamente el rol de un usuario.
+        // No modificamos la contraseña ni el resto de datos.
+        // No permitimos que un administrador cambie su propio rol.
+        [HttpPut("{id}/rol")]
+        public async Task<IActionResult> CambiarRolUsuario(int id, CambiarRolUsuarioDto cambiarRolUsuarioDto)
+        {
+            string? idUsuarioActual = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (idUsuarioActual == id.ToString())
+            {
+                return BadRequest(new { mensaje = "No puedes cambiar tu propio rol mientras tienes la sesión iniciada" });
+            }
+
+            if (string.IsNullOrWhiteSpace(cambiarRolUsuarioDto.Rol))
+            {
+                return BadRequest(new { mensaje = "El rol es obligatorio" });
+            }
+
+            if (cambiarRolUsuarioDto.Rol != "usuario" &&
+                cambiarRolUsuarioDto.Rol != "administrador")
+            {
+                return BadRequest(new { mensaje = "El rol no es válido" });
+            }
+
+            UsuarioAdminDto? usuarioActualizado = await _usuarioService.CambiarRolAsync(id, cambiarRolUsuarioDto);
+
+            if (usuarioActualizado == null)
+            {
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+            }
+
+            return Ok(usuarioActualizado);
         }
 
         // DELETE: api/Usuarios/5
         // Eliminamos un usuario por su id.
-        // Primero comprobamos que existe antes de borrarlo.
+        // No permitimos que un administrador elimine su propia cuenta.
+        // Tampoco eliminamos usuarios con cliente, perfil o pedidos asociados.
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
+            string? idUsuarioActual = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (idUsuarioActual == id.ToString())
             {
-                return NotFound();
+                return BadRequest(new { mensaje = "No puedes eliminar tu propio usuario mientras tienes la sesión iniciada" });
             }
 
-            _context.Usuarios.Remove(usuario);
-            await _context.SaveChangesAsync();
+            bool tieneDatosAsociados = await _usuarioService.TieneDatosAsociadosAsync(id);
 
-            return NoContent();
-        }
+            if (tieneDatosAsociados)
+            {
+                return BadRequest(new { mensaje = "No se puede eliminar el usuario porque tiene datos asociados" });
+            }
 
-        private bool UsuarioExists(int id)
-        {
-            return _context.Usuarios.Any(e => e.IdUsuario == id);
+            bool eliminado = await _usuarioService.EliminarAsync(id);
+
+            if (!eliminado)
+            {
+                return NotFound(new { mensaje = "Usuario no encontrado" });
+            }
+
+            return Ok(new { mensaje = "Usuario eliminado correctamente" });
         }
     }
 }

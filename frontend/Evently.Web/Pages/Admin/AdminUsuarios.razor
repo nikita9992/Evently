@@ -8,9 +8,17 @@
 <PageTitle>Admin — Usuarios</PageTitle>
 
 <MudText Typo="Typo.h4" GutterBottom="true">
-    <MudIcon Icon="@Icons.Material.Filled.People" Class="mr-2" />
+    <MudIcon Icon="@Icons.Material.Filled.ManageAccounts" Class="mr-2" />
     Gestión de Usuarios
 </MudText>
+
+<MudButton Variant="Variant.Filled"
+           Color="Color.Primary"
+           StartIcon="@Icons.Material.Filled.Add"
+           OnClick="AbrirFormularioCrear"
+           Class="mb-4">
+    Nuevo usuario
+</MudButton>
 
 @if (cargando)
 {
@@ -22,7 +30,16 @@ else if (!usuarios.Any())
 }
 else
 {
-    <MudTable Items="usuarios" Hover="true" Striped="true" Elevation="3">
+    <MudTable Items="usuarios" Hover="true" Striped="true" Elevation="3"
+              Filter="FiltrarUsuario">
+        <ToolBarContent>
+            <MudTextField @bind-Value="textoBusqueda"
+                          Placeholder="Buscar usuario..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium"
+                          Class="mt-0" />
+        </ToolBarContent>
         <HeaderContent>
             <MudTh>ID</MudTh>
             <MudTh>Email</MudTh>
@@ -34,65 +51,275 @@ else
             <MudTd>@context.Email</MudTd>
             <MudTd>@context.Rol</MudTd>
             <MudTd>
-                <MudButton Variant="Variant.Filled"
-                           Color="Color.Warning"
-                           Size="Size.Small"
-                           OnClick="@(() => CambiarRol(context))">
-                    Cambiar rol
-                </MudButton>
-                <MudButton Variant="Variant.Filled"
-                           Color="Color.Error"
-                           Size="Size.Small"
-                           OnClick="@(() => EliminarUsuario(context.IdUsuario))">
-                    Eliminar
-                </MudButton>
+                <MudIconButton Icon="@Icons.Material.Filled.ManageAccounts"
+                               Color="Color.Warning"
+                               Size="Size.Small"
+                               OnClick="@(() => ConfirmarCambioRol(context))" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="@(() => ConfirmarEliminar(context))" />
             </MudTd>
         </RowTemplate>
     </MudTable>
 }
 
+@* Diálogo para crear un usuario nuevo *@
+<MudDialog @bind-Visible="dialogoCrearAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Nuevo usuario</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="emailNuevo"
+                      Label="Email"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+        <MudTextField @bind-Value="passwordNuevo"
+                      Label="Contraseña"
+                      InputType="InputType.Password"
+                      Variant="Variant.Outlined"
+                      Class="mb-3" />
+        <MudSelect @bind-Value="rolNuevo"
+                   Label="Rol"
+                   Variant="Variant.Outlined">
+            <MudSelectItem Value="@("usuario")">Usuario</MudSelectItem>
+            <MudSelectItem Value="@("administrador")">Administrador</MudSelectItem>
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => dialogoCrearAbierto = false)">Cancelar</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CrearUsuario">
+            Guardar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@* Diálogo de confirmación para cambiar el rol *@
+<MudDialog @bind-Visible="dialogoCambioRolAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Cambiar rol</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>
+            ¿Cambiar el rol de <strong>@usuarioSeleccionado?.Email</strong> a
+            <strong>@(usuarioSeleccionado?.Rol == "administrador" ? "usuario" : "administrador")</strong>?
+        </MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => dialogoCambioRolAbierto = false)">Cancelar</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="CambiarRol">
+            Confirmar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@* Diálogo de confirmación para eliminar *@
+<MudDialog @bind-Visible="dialogoEliminarAbierto">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Eliminar usuario</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText>¿Eliminar a <strong>@usuarioSeleccionado?.Email</strong>? Esta acción no se puede deshacer.</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(() => dialogoEliminarAbierto = false)">Cancelar</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="EliminarUsuario">
+            Eliminar
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
 @code {
-    // Lista de usuarios que se muestra en la tabla
+    // Lista de usuarios cargados del backend
     private List<ModeloUsuario> usuarios = new();
-    // Controla si la página está cargando datos
     private bool cargando = true;
+    private string textoBusqueda = string.Empty;
+
+    // Control del diálogo de crear usuario
+    private bool dialogoCrearAbierto = false;
+    private string emailNuevo = string.Empty;
+    private string passwordNuevo = string.Empty;
+    private string rolNuevo = "usuario";
+
+    // Control del diálogo de cambio de rol
+    private bool dialogoCambioRolAbierto = false;
+
+    // Control del diálogo de eliminar
+    private bool dialogoEliminarAbierto = false;
+
+    // Usuario que se está editando o eliminando
+    private ModeloUsuario? usuarioSeleccionado = null;
 
     protected override async Task OnAfterRenderAsync(bool primeraCarga)
     {
         if (primeraCarga)
         {
+            // Cargamos el token antes de pedir datos al backend
+            if (!EstadoAuth.EstaAutenticado)
+                await EstadoAuth.CargarDesdeLocalStorageAsync();
+
+            // Si no es administrador lo mandamos al inicio
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
+
             await CargarUsuarios();
             StateHasChanged();
         }
     }
 
-    // Obtiene todos los usuarios del backend y los guarda en la lista
+    // Obtiene todos los usuarios del backend
     private async Task CargarUsuarios()
     {
         cargando = true;
-        var listaUsuarios = await Http.GetFromJsonAsync<List<ModeloUsuario>>(
-            "api/Usuarios",
-            new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        if (listaUsuarios != null)
-            usuarios = listaUsuarios;
+        PonerToken();
+
+        try
+        {
+            List<ModeloUsuario>? lista = await Http.GetFromJsonAsync<List<ModeloUsuario>>(
+                "api/Usuarios",
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (lista != null)
+            {
+                usuarios = lista;
+            }
+        }
+        catch
+        {
+            Snackbar.Add("No se pudieron cargar los usuarios.", Severity.Error);
+        }
+
         cargando = false;
     }
 
-    // Cambia el rol del usuario entre "usuario" y "administrador"
-    private async Task CambiarRol(ModeloUsuario usuario)
+    // Filtra los usuarios según el texto de búsqueda
+    private bool FiltrarUsuario(ModeloUsuario usuario)
     {
-        usuario.Rol = usuario.Rol == "administrador" ? "usuario" : "administrador";
-        await Http.PutAsJsonAsync($"api/Usuarios/{usuario.IdUsuario}", usuario);
-        Snackbar.Add($"Rol cambiado a {usuario.Rol}", Severity.Success);
+        if (string.IsNullOrWhiteSpace(textoBusqueda)) return true;
+        return usuario.Email.Contains(textoBusqueda, StringComparison.OrdinalIgnoreCase)
+            || usuario.Rol.Contains(textoBusqueda, StringComparison.OrdinalIgnoreCase);
     }
 
-    // Elimina un usuario por su id y lo quita de la lista
-    private async Task EliminarUsuario(int idUsuario)
+    // Abre el formulario para crear un usuario nuevo
+    private void AbrirFormularioCrear()
     {
-        await Http.DeleteAsync($"api/Usuarios/{idUsuario}");
-        usuarios.RemoveAll(u => u.IdUsuario == idUsuario);
+        emailNuevo = string.Empty;
+        passwordNuevo = string.Empty;
+        rolNuevo = "usuario";
+        dialogoCrearAbierto = true;
+    }
+
+    // Crea un usuario nuevo en el backend
+    private async Task CrearUsuario()
+    {
+        if (string.IsNullOrWhiteSpace(emailNuevo) || string.IsNullOrWhiteSpace(passwordNuevo))
+        {
+            Snackbar.Add("El email y la contraseña son obligatorios.", Severity.Warning);
+            return;
+        }
+
+        PonerToken();
+
+        var nuevoUsuario = new { Email = emailNuevo, Password = passwordNuevo, Rol = rolNuevo };
+
+        HttpResponseMessage respuesta = await Http.PostAsJsonAsync("api/Usuarios", nuevoUsuario);
+
+        if (!respuesta.IsSuccessStatusCode)
+        {
+            Snackbar.Add("No se pudo crear el usuario.", Severity.Error);
+            return;
+        }
+
+        Snackbar.Add("Usuario creado correctamente", Severity.Success);
+        dialogoCrearAbierto = false;
+        await CargarUsuarios();
+    }
+
+    // Abre el diálogo de confirmación para cambiar el rol
+    private void ConfirmarCambioRol(ModeloUsuario usuario)
+    {
+        usuarioSeleccionado = usuario;
+        dialogoCambioRolAbierto = true;
+    }
+
+    // Cambia el rol del usuario seleccionado
+    private async Task CambiarRol()
+    {
+        if (usuarioSeleccionado == null) return;
+
+        // Evitamos que el administrador cambie su propio rol mientras tiene la sesión iniciada
+        if (usuarioSeleccionado.IdUsuario == EstadoAuth.IdUsuario)
+        {
+            Snackbar.Add("No puedes cambiar tu propio rol mientras tienes la sesión iniciada.", Severity.Warning);
+            dialogoCambioRolAbierto = false;
+            return;
+        }
+
+        string nuevoRol = usuarioSeleccionado.Rol == "administrador" ? "usuario" : "administrador";
+
+        PonerToken();
+
+        HttpResponseMessage respuesta = await Http.PutAsJsonAsync(
+            $"api/Usuarios/{usuarioSeleccionado.IdUsuario}/rol",
+            new { Rol = nuevoRol });
+
+        if (!respuesta.IsSuccessStatusCode)
+        {
+            Snackbar.Add("No se pudo cambiar el rol.", Severity.Error);
+            return;
+        }
+
+        Snackbar.Add($"Rol cambiado a {nuevoRol}", Severity.Success);
+        dialogoCambioRolAbierto = false;
+        await CargarUsuarios();
+    }
+
+    // Abre el diálogo de confirmación para eliminar
+    private void ConfirmarEliminar(ModeloUsuario usuario)
+    {
+        usuarioSeleccionado = usuario;
+        dialogoEliminarAbierto = true;
+    }
+
+    // Elimina el usuario seleccionado
+    private async Task EliminarUsuario()
+    {
+        if (usuarioSeleccionado == null) return;
+
+        // Evitamos que el administrador elimine su propia cuenta mientras tiene la sesión iniciada
+        if (usuarioSeleccionado.IdUsuario == EstadoAuth.IdUsuario)
+        {
+            Snackbar.Add("No puedes eliminar tu propio usuario mientras tienes la sesión iniciada.", Severity.Warning);
+            dialogoEliminarAbierto = false;
+            return;
+        }
+
+        PonerToken();
+
+        HttpResponseMessage respuesta = await Http.DeleteAsync($"api/Usuarios/{usuarioSeleccionado.IdUsuario}");
+
+        if (!respuesta.IsSuccessStatusCode)
+        {
+            Snackbar.Add("No se pudo eliminar el usuario.", Severity.Error);
+            return;
+        }
+
         Snackbar.Add("Usuario eliminado", Severity.Info);
-        StateHasChanged();
+        dialogoEliminarAbierto = false;
+        await CargarUsuarios();
+    }
+
+    // Asigna el token JWT a las peticiones protegidas del panel administrador
+    private void PonerToken()
+    {
+        if (string.IsNullOrWhiteSpace(EstadoAuth.Token))
+            return;
+
+        Http.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", EstadoAuth.Token);
     }
 
     // Modelo que representa los datos de un usuario en esta página
