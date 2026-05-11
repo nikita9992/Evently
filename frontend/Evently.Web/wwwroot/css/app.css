@@ -101,17 +101,41 @@ html {
     box-sizing: inherit;
 }
 
-/* Panel de administración - menú lateral */
+/* Panel de administración */
+
+/* Barra superior */
 
 .barraSuperior {
     background: #1a2236;
+    min-height: 68px;
+    border-bottom: 1px solid #243044;
+}
+
+.barraSuperior .mud-toolbar {
+    min-height: 68px;
+    padding-left: 22px;
+    padding-right: 28px;
+}
+
+.marcaAdministrador {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.logoAdministrador {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
 }
 
 .tituloAplicacion {
     font-weight: 700;
     color: white;
-    letter-spacing: 0.5px;
-    cursor: pointer;
+    letter-spacing: 0.4px;
+    font-size: 23px;
+    line-height: 1;
 }
 
 .resaltadoTitulo {
@@ -119,93 +143,90 @@ html {
 }
 
 .correoUsuario {
-    color: #94a3b8;
+    color: #cbd5e1;
+    font-size: 16px;
 }
+
+/* Menú lateral */
 
 .panelLateral {
     background: #1a2236;
     border-right: 1px solid #243044;
 }
 
-.cabeceraPanelLateral {
-    display: grid;
-    grid-template-columns: 24px 1fr;
-    align-items: center;
-    gap: 8px;
-    padding: 24px 16px 16px 16px;
-    border-bottom: 1px solid #243044;
-}
-
-
-.iconoAdministrador {
-    color: #7c6fee;
-    font-size: 20px;
-}
-
-.nombreAplicacion {
-    color: #e2e8f0;
-    font-weight: 700;
-    letter-spacing: 1px;
-    font-size: 13px;
-}
-
 .contenedorEnlaces {
-    padding: 16px 8px;
+    padding: 20px 10px;
 }
-
 
 .etiquetaGestion {
-    color: #4a5568;
-    font-size: 10px;
+    color: #64748b;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    padding: 0 8px;
-    margin-bottom: 8px;
+    letter-spacing: 1.2px;
+    padding: 0 14px;
+    margin-bottom: 14px;
 }
-
 
 .enlaceNavegacion,
 .botonCerrarSesion {
     display: grid;
-    grid-template-columns: 24px 1fr;
+    grid-template-columns: 26px 1fr;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    margin-bottom: 2px;
-    transition: all 0.2s;
+    gap: 14px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: background 0.2s ease, color 0.2s ease;
     width: 100%;
     text-align: left;
 }
 
 .enlaceNavegacion {
     text-decoration: none;
-    color: #94a3b8;
+    color: #cbd5e1;
 }
 
 .enlaceNavegacion:hover {
-    background: rgba(124, 111, 238, 0.15);
-    color: #fff;
+    background: rgba(124, 111, 238, 0.18);
+    color: #ffffff;
+}
+
+.enlaceNavegacionActivo {
+    background: rgba(124, 111, 238, 0.26);
+    color: #ffffff;
+    font-weight: 700;
 }
 
 .botonCerrarSesion {
     background: transparent;
-    border: none;
-    color: #ef4444;
+    border: 1px solid transparent;
+    color: #f87171;
     cursor: pointer;
+    font-size: 15px;
 }
 
 .botonCerrarSesion:hover {
-    background: rgba(239, 68, 68, 0.1);
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(248, 113, 113, 0.45);
+    color: #fecaca;
+}
+
+.iconoNavegacion,
+.textoNavegacion {
+    display: inline-flex;
+    align-items: center;
 }
 
 .iconoNavegacion {
-    font-size: 20px;
+    font-size: 21px;
+    line-height: 1;
 }
 
 .textoNavegacion {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
 }
 
 .separadorNavegacion {
@@ -213,109 +234,135 @@ html {
     margin: 16px 0;
 }
 
+/* Contenido principal */
+
 .fondoPrincipal {
     background: #f1f5f9;
-    min-height: 100vh;
+    min-height: calc(100vh - 68px);
 }
 
 /* Dashboard de administración */
 
+/* Distribución general */
+
 .rejillaTarjetas {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: 26px;
+    margin-bottom: 26px;
 }
 
 .rejillaGraficos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 26px;
 }
+
+/* Tarjetas superiores */
 
 .tarjetaEstadistica {
     background: white;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    padding: 18px 24px;
+    min-height: 120px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .tarjetaPedidos {
-    border-left: 5px solid #746EEA;
-}
-
-.tarjetaIngresos {
     border-left: 5px solid #7c6fee;
 }
 
-.tarjetaTicket {
+.tarjetaIngresos {
     border-left: 5px solid #06b6d4;
 }
 
-.tarjetaConfirmacion {
-    border-left: 5px solid #00BDA1;
+.tarjetaTicket {
+    border-left: 5px solid #3b82f6;
 }
 
+.tarjetaConfirmacion {
+    border-left: 5px solid #ff7b7b;
+}
 
 .tarjetaPedidos .etiquetaTarjeta {
-    color: #746EEA;
-}
-
-.tarjetaIngresos .etiquetaTarjeta {
     color: #7c6fee;
 }
 
-.tarjetaTicket .etiquetaTarjeta {
+.tarjetaIngresos .etiquetaTarjeta {
     color: #06b6d4;
 }
 
+.tarjetaTicket .etiquetaTarjeta {
+    color: #3b82f6;
+}
+
 .tarjetaConfirmacion .etiquetaTarjeta {
-    color: #00BDA1;
+    color: #ff7b7b;
 }
 
 .etiquetaTarjeta {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.4px;
     margin: 0 0 8px 0;
 }
 
 .valorTarjeta {
-    font-size: 36px;
+    font-size: 38px;
     font-weight: 800;
-    color: #1e293b;
-    margin: 0 0 4px 0;
+    color: #0f172a;
+    margin: 0 0 8px 0;
     line-height: 1;
 }
 
 .descripcionTarjeta {
-    font-size: 13px;
+    font-size: 15px;
     color: #64748b;
     margin: 0;
 }
 
+/* Tarjetas inferiores */
+
 .tarjetaGrafico {
     background: white;
     border-radius: 14px;
-    padding: 24px;
+    padding: 20px 24px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .tituloTarjeta {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     color: #1e293b;
     margin: 0 0 4px 0;
 }
 
 .subtituloTarjeta {
-    font-size: 13px;
+    font-size: 14px;
     color: #64748b;
     margin: 0 0 16px 0;
 }
 
+.cabeceraTarjeta {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.botonVerTodos {
+    color: #7c6fee;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Gráfico */
+
 .donutSinLeyenda .mud-chart-legend {
-    display: none ;
+    display: none;
 }
 
 .contenedorGrafico {
@@ -337,7 +384,6 @@ html {
     margin-top: 16px;
 }
 
-
 .itemLeyenda {
     display: grid;
     grid-template-columns: 12px 1fr;
@@ -352,7 +398,6 @@ html {
     border-radius: 50%;
 }
 
-
 .puntoConfirmado {
     background: #746EEA;
 }
@@ -366,33 +411,22 @@ html {
 }
 
 .textoLeyenda {
-    font-size: 13px;
+    font-size: 14px;
     color: #334155;
 }
 
-.cabeceraTarjeta {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.botonVerTodos {
-    color: #7c6fee;
-    font-size: 13px;
-    font-weight: 600;
-}
+/* Últimos pedidos */
 
 .filaPedido {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    padding: 12px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #f1f5f9;
 }
 
 .nombrePedido {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #1e293b;
     margin: 0 0 2px 0;
@@ -404,26 +438,23 @@ html {
     margin: 0;
 }
 
-
-
 .importePedido {
     text-align: right;
 }
 
 .totalPedido {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: #1e293b;
     margin: 0 0 4px 0;
 }
 
 .estadoPedido {
-    padding: 2px 10px;
+    padding: 3px 10px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
 }
-
 
 .estadoConfirmado {
     background: #dcfce7;
@@ -440,42 +471,11 @@ html {
     color: #ca8a04;
 }
 
+/* Adaptación a pantallas pequeñas */
 
-/* Colores del menú lateral de navegación */
-.mud-nav-link {
-    color: #94a3b8 ;
-    font-size: 14px;
-    font-weight: 500;
+@media (max-width: 900px) {
+    .rejillaGraficos {
+        grid-template-columns: 1fr;
+    }
 }
 
-.mud-nav-link:hover,
-.mud-nav-link.active {
-    background: rgba(124, 111, 238, 0.15) ;
-    color: #fff ;
-}
-
-.mud-nav-link .mud-nav-link-icon {
-    color: #94a3b8 ;
-}
-
-.mud-nav-link:hover .mud-nav-link-icon,
-.mud-nav-link.active .mud-nav-link-icon {
-    color: #fff ;
-}
-
-/* Ajuste del dashboard para que quepa en pantalla sin scroll */
-.rejillaTarjetas {
-    margin-bottom: 12px;
-}
-
-.tarjetaEstadistica {
-    padding: 14px;
-}
-
-.valorTarjeta {
-    font-size: 28px;
-}
-
-.tarjetaGrafico {
-    padding: 16px;
-}

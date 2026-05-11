@@ -10,16 +10,21 @@
 
 <MudLayout>
     @* Barra superior *@
-    <MudAppBar Elevation="1" Dense="true" Class="barraSuperior">
+    <MudAppBar Elevation="2" Class="barraSuperior">
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
                        Color="Color.Inherit"
                        Edge="Edge.Start"
-                       OnClick="alternarMenuLateral" />
-        <MudText Typo="Typo.h6"
-                 Class="tituloAplicacion"
-                 @onclick='@(() => Navegacion.NavigateTo("/admin/dashboard"))'>
-            Evently <span class="resaltadoTitulo">Admin</span>
-        </MudText>
+                       OnClick="AlternarMenuLateral" />
+
+        <section class="marcaAdministrador" @onclick='@(() => Navegacion.NavigateTo("/admin/dashboard"))'>
+            <img src="img/icono-evently.png"
+                 alt="Logo de Evently"
+                 class="logoAdministrador" />
+            <span class="tituloAplicacion">
+                Evently <span class="resaltadoTitulo">Admin</span>
+            </span>
+        </section>
+       
         <MudSpacer />
         <MudText Typo="Typo.body2" Class="correoUsuario mr-2 d-none d-sm-flex">
             @EstadoAuth.Email
@@ -36,40 +41,51 @@
         <nav class="contenedorEnlaces">
             <p class="etiquetaGestion">GESTIÓN</p>
 
-            <MudNavMenu>                
-                <MudNavLink Href="/admin/actividades"
-                            Match="NavLinkMatch.Prefix"
-                            Icon="@Icons.Material.Filled.EventNote">
-                    Actividades
-                </MudNavLink>
-                <MudNavLink Href="/admin/categorias"
-                            Match="NavLinkMatch.Prefix"
-                            Icon="@Icons.Material.Filled.Category">
-                    Categorías
-                </MudNavLink>
-                <MudNavLink Href="/admin/pedidos"
-                            Match="NavLinkMatch.Prefix"
-                            Icon="@Icons.Material.Filled.Receipt">
-                    Pedidos
-                </MudNavLink>
-                <MudNavLink Href="/admin/clientes"
-                            Match="NavLinkMatch.Prefix"
-                            Icon="@Icons.Material.Filled.People">
-                    Clientes
-                </MudNavLink>
-                <MudNavLink Href="/admin/usuarios"
-                            Match="NavLinkMatch.Prefix"
-                            Icon="@Icons.Material.Filled.ManageAccounts">
-                    Usuarios
-                </MudNavLink>
-                <MudNavLink Href="/admin/estados"
-                            Match="NavLinkMatch.Prefix"
-                            Icon="@Icons.Material.Filled.Flag">
-                    Estados
-                </MudNavLink>
-            </MudNavMenu>
+            
+            <NavLink href="/admin/actividades"
+                        class="enlaceNavegacion"
+                        activeClass="enlaceNavegacionActivo">
+                <span class="material-icons iconoNavegacion">event_note</span>
+                <span class="textoNavegacion">Actividades</span>
+            </NavLink>
 
-            <div class="separadorNavegacion"></div>
+            <NavLink href="/admin/categorias"
+                        class="enlaceNavegacion"
+                        activeClass="enlaceNavegacionActivo">
+                <span class="material-icons iconoNavegacion">category</span>
+                <span class="textoNavegacion">Categorías</span>
+            </NavLink>
+
+            <NavLink href="/admin/pedidos"
+                        class="enlaceNavegacion"
+                        activeClass="enlaceNavegacionActivo">
+                <span class="material-icons iconoNavegacion">receipt_long</span>
+                <span class="textoNavegacion">Pedidos</span>
+            </NavLink>
+
+            <NavLink href="/admin/clientes"
+                        class="enlaceNavegacion"
+                        activeClass="enlaceNavegacionActivo">
+                <span class="material-icons iconoNavegacion">groups</span>
+                <span class="textoNavegacion">Clientes</span>
+            </NavLink>
+
+            <NavLink href="/admin/usuarios"
+                        class="enlaceNavegacion"
+                        activeClass="enlaceNavegacionActivo">
+                <span class="material-icons iconoNavegacion">manage_accounts</span>
+                <span class="textoNavegacion">Usuarios</span>
+            </NavLink>
+
+            <NavLink href="/admin/estados"
+                        class="enlaceNavegacion"
+                        activeClass="enlaceNavegacionActivo">
+                <span class="material-icons iconoNavegacion">flag</span>
+                <span class="textoNavegacion">Estados</span>
+            </NavLink>
+            
+
+            <hr class="separadorNavegacion" />
 
             <button @onclick="CerrarSesion" class="botonCerrarSesion">
                 <span class="material-icons iconoNavegacion">logout</span>
@@ -109,7 +125,7 @@
     }
 
     // Abre o cierra el menú lateral
-    private void alternarMenuLateral()
+    private void AlternarMenuLateral()
     {
         menuLateralAbierto = !menuLateralAbierto;
     }
