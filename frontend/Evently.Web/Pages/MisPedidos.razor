@@ -1,4 +1,4 @@
-﻿@page "/mispedidos"
+@page "/mispedidos"
 @using Evently.Web.Models
 @using Evently.Web.Services
 @inject PedidoService PedidoService
@@ -8,7 +8,8 @@
 
 <PageTitle>Mis pedidos — Evently</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-8">
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+
     <MudText Typo="Typo.h4" GutterBottom="true">
         <MudIcon Icon="@Icons.Material.Filled.Receipt" Class="mr-2" />
         Mis pedidos
@@ -16,69 +17,125 @@
 
     @if (estaCargando)
     {
-        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        <div style="display:flex; justify-content:center; margin-top:60px;">
+            <MudProgressCircular Color="Color.Primary"
+                                 Indeterminate="true"
+                                 Size="Size.Large" />
+        </div>
     }
     else if (!string.IsNullOrEmpty(errorMensaje))
     {
-        <MudAlert Severity="Severity.Error">@errorMensaje</MudAlert>
+        <MudAlert Severity="Severity.Warning" Class="mt-4">
+            @errorMensaje
+            <MudLink Href="/perfil" Class="ml-2">
+                Completar perfil
+            </MudLink>
+        </MudAlert>
     }
     else if (listaPedidos.Count == 0)
     {
-        <MudAlert Severity="Severity.Info" Class="mt-4">
-            No tienes pedidos realizados todavía.
-        </MudAlert>
-        <MudButton Variant="Variant.Outlined"
-                   Color="Color.Primary"
-                   Href="/actividades"
-                   Class="mt-3"
-                   StartIcon="@Icons.Material.Filled.EventNote">
-            Ver actividades
-        </MudButton>
+        <MudPaper Elevation="0"
+                  Class="pa-8 mt-4"
+                  Style="text-align:center; border: 2px dashed #e0e0e0; border-radius:12px;">
+            <MudIcon Icon="@Icons.Material.Filled.ReceiptLong"
+                     Style="font-size:4rem; color:#bdbdbd;" />
+            <MudText Typo="Typo.h6" Class="mt-3" Color="Color.Default">
+                Aún no tienes pedidos
+            </MudText>
+            <MudText Typo="Typo.body2" Color="Color.Default" Class="mb-4">
+                ¡Explora nuestras actividades y haz tu primera reserva!
+            </MudText>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Href="/actividades"
+                       StartIcon="@Icons.Material.Filled.EventNote">
+                Ver actividades
+            </MudButton>
+        </MudPaper>
     }
     else
     {
-        @foreach (var pedido in listaPedidos)
+        <MudText Typo="Typo.subtitle1" Class="mb-4" Color="Color.Default">
+            @listaPedidos.Count @(listaPedidos.Count == 1 ? "pedido" : "pedidos") realizados
+        </MudText>
+
+        @foreach (var pedido in listaPedidos.OrderByDescending(p => p.FechaConfirm))
         {
-            <MudPaper Elevation="3" Class="pa-4 mb-4">
-                <MudGrid>
-                    <MudItem xs="12" sm="8">
-                        <MudText Typo="Typo.h6">
-                            Pedido #@pedido.IdPedido
-                        </MudText>
-                        <MudText Typo="Typo.body2" Class="mb-2">
+            var estaExpandido = pedidosExpandidos.Contains(pedido.IdPedido);
+
+            <MudCard Elevation="2" Class="mb-4" Style="border-radius:12px; overflow:hidden;">
+
+                <!-- Cabecera del pedido -->
+                <MudCardHeader
+                    Style="@($"background:{(pedido.NombreEstado == "Confirmado" ? "#f0fdf4" : "#fef2f2")}; border-radius:{(estaExpandido ? "12px 12px 0 0" : "12px")}; cursor:pointer;")"
+                    @onclick="() => ToggleExpansion(pedido.IdPedido)">
+                    <CardHeaderContent>
+                        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                            <MudText Typo="Typo.h6" Style="margin:0;">
+                                Pedido #@pedido.IdPedido
+                            </MudText>
+                            <MudChip T="string"
+                                     Size="Size.Small"
+                                     Color="@(pedido.NombreEstado == "Confirmado" ? Color.Success : Color.Error)"
+                                     Icon="@(pedido.NombreEstado == "Confirmado"
+                                         ? Icons.Material.Filled.CheckCircle
+                                         : Icons.Material.Filled.Cancel)">
+                                @pedido.NombreEstado
+                            </MudChip>
+
+                            <MudText Typo="Typo.body2" Style="margin-left:auto; font-weight:600; color:#7c3aed;">
+                                @pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C")
+                            </MudText>
+
+                            <MudIcon Icon="@(estaExpandido
+                                ? Icons.Material.Filled.ExpandLess
+                                : Icons.Material.Filled.ExpandMore)"
+                                     Style="color:#9e9e9e;" />
+                        </div>
+                        <MudText Typo="Typo.caption" Color="Color.Default" Class="mt-1">
                             <MudIcon Icon="@Icons.Material.Filled.CalendarToday"
                                      Size="Size.Small" Class="mr-1" />
-                            @pedido.FechaConfirm.ToString("dd/MM/yyyy HH:mm")
+                            @pedido.FechaConfirm.ToString("dd/MM/yyyy") a las @pedido.FechaConfirm.ToString("HH:mm")
                         </MudText>
-                    </MudItem>
-                    <MudItem xs="12" sm="4" Class="d-flex justify-end align-center">
-                        <MudChip T="string"
-                                 Color="@(pedido.NombreEstado == "Confirmado"
-                                                                      ? Color.Success : Color.Error)">
-                    @pedido.NombreEstado
-                </MudChip>
-            </MudItem>
-        </MudGrid>
+                    </CardHeaderContent>
+                </MudCardHeader>
 
-                <MudDivider Class="my-2" />
-
-        @foreach (var detalle in pedido.Detalles)
+                <!-- Detalles del pedido (colapsables) -->
+                @if (estaExpandido)
                 {
-                    <MudText Typo="Typo.body2" Class="mb-1">
-                        • @detalle.TituloActividad —
-                        @detalle.Cantidad ud. x @detalle.PrecioUnitario.ToString("C")
-                        = <strong>@detalle.ImporteLinea.ToString("C")</strong>
-                    </MudText>
+                    <MudCardContent Class="pt-3 pb-0">
+                        @foreach (var detalle in pedido.Detalles)
+                        {
+                            <div style="display:flex; justify-content:space-between;
+                                        align-items:center; padding:8px 0;
+                                        border-bottom:1px solid #f5f5f5;">
+                                <div>
+                                    <MudText Typo="Typo.body2" Style="font-weight:500;">
+                                        @detalle.TituloActividad
+                                    </MudText>
+                                    <MudText Typo="Typo.caption" Color="Color.Default">
+                                        @detalle.Cantidad ud. × @detalle.PrecioUnitario.ToString("C")
+                                    </MudText>
+                                </div>
+                                <MudText Typo="Typo.body2" Style="font-weight:600;">
+                                    @detalle.ImporteLinea.ToString("C")
+                                </MudText>
+                            </div>
+                        }
+                    </MudCardContent>
+
+                    <!-- Total -->
+                    <MudCardActions Style="justify-content:flex-end; padding:12px 16px;">
+                        <MudText Typo="Typo.subtitle1">
+                            Total:
+                            <strong style="color:#7c3aed; font-size:1.1rem;">
+                                @pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C")
+                            </strong>
+                        </MudText>
+                    </MudCardActions>
                 }
 
-                <MudDivider Class="my-2" />
-
-                <MudText Typo="Typo.subtitle1" Align="Align.Right">
-                    Total: <strong>
-                        @(pedido.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
-                    </strong>
-                </MudText>
-            </MudPaper>
+            </MudCard>
         }
     }
 </MudContainer>
@@ -88,38 +145,44 @@
     private string errorMensaje = string.Empty;
     private bool estaCargando = true;
 
+    // Conjunto de IDs de pedidos actualmente expandidos
+    private HashSet<int> pedidosExpandidos = new();
+
+    private void ToggleExpansion(int idPedido)
+    {
+        if (pedidosExpandidos.Contains(idPedido))
+            pedidosExpandidos.Remove(idPedido);
+        else
+            pedidosExpandidos.Add(idPedido);
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Cargar token si no está cargado
             if (!EstadoAuth.EstaAutenticado)
             {
                 await EstadoAuth.CargarDesdeLocalStorageAsync();
                 StateHasChanged();
             }
 
-            // Redirigir si no está autenticado
             if (!EstadoAuth.EstaAutenticado)
             {
                 Navegacion.NavigateTo("/login");
                 return;
             }
 
-            // Obtener el cliente del usuario
             var cliente = await ClienteService.ObtenerPorUsuarioAsync(
                 EstadoAuth.IdUsuario, EstadoAuth.Token);
 
             if (cliente == null)
             {
-                errorMensaje = "No tienes datos personales registrados. " +
-                               "Completa tu perfil primero.";
+                errorMensaje = "No tienes datos personales registrados.";
                 estaCargando = false;
                 StateHasChanged();
                 return;
             }
 
-            // Cargar pedidos del cliente
             listaPedidos = await PedidoService.ObtenerPorClienteAsync(
                 cliente.IdCliente, EstadoAuth.Token);
 

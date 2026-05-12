@@ -75,8 +75,8 @@ else
     <MudGrid>
         @foreach (var actividad in actividades)
         {
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Elevation="3" Class="h-100">
+            <MudItem xs="12" sm="6" md="4" Style="display:flex; flex-direction:column;">
+                <MudCard Elevation="3" Style="display:flex; flex-direction:column; height:100%;">
                     <!-- Imagen -->
                     @if (!string.IsNullOrEmpty(actividad.ImagenPrincipal))
                     {
@@ -99,7 +99,7 @@ else
                             </MudChip>
                         </CardHeaderContent>
                     </MudCardHeader>
-                    <MudCardContent>
+                    <MudCardContent Style="flex-grow:1;">
                         <!-- Valoración -->
                         @if (actividad.TotalValoraciones > 0)
                         {
