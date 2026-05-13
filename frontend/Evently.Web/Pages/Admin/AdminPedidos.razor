@@ -96,19 +96,20 @@
                     </MudText>
                 </header>
 
-            <MudSelect T="int"
-                       Value="nuevoIdEstado"
-                       ValueChanged="EstadoSeleccionado"
-                       Label="Cambiar estado"
-                       Variant="Variant.Outlined"
-                       Class="mb-2">
-            @foreach (var estado in estados)
-                {
-                    <MudSelectItem T="int" Value="@estado.IdEstado">
-                        @estado.NombreEstado
-                    </MudSelectItem>
-                }
-            </MudSelect>
+                <aside class="panel-cambio-estado seccion-con-margen">
+                    <MudSelect T="int"
+                               Value="nuevoIdEstado"
+                               ValueChanged="EstadoSeleccionado"
+                               Label="Cambiar estado"
+                               Variant="Variant.Outlined"
+                               Class="mb-2">
+                    @foreach (var estado in estados)
+                        {
+                            <MudSelectItem T="int" Value="@estado.IdEstado">
+                                @estado.NombreEstado
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
 
                     <MudButton Variant="Variant.Filled"
                                Color="Color.Warning"
