@@ -48,6 +48,7 @@ namespace Evently.API.Controllers
 
         // Crea un nuevo pedido
         [HttpPost]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> PostPedido([FromBody] CrearPedidoDto crearPedidoDto)
         {
             if (!ModelState.IsValid)
@@ -60,6 +61,7 @@ namespace Evently.API.Controllers
 
         // Actualiza un pedido existente
         [HttpPut("{id}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> PutPedido(int id, [FromBody] CrearPedidoDto crearPedidoDto)
         {
             if (!ModelState.IsValid)
@@ -69,6 +71,26 @@ namespace Evently.API.Controllers
 
             if (pedido == null)
                 return NotFound(new { mensaje = "Pedido no encontrado" });
+
+            return Ok(pedido);
+        }
+
+        // Cambia solo el estado de un pedido
+        [HttpPut("{id}/estado")]
+        [Authorize(Roles = "administrador")]
+        public async Task<IActionResult> CambiarEstadoPedido(int id, [FromBody] CambiarEstadoPedidoDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var pedido = await _pedidoService.CambiarEstadoAsync(id, dto.IdEstado);
+
+            if (pedido == null)
+            {
+                return BadRequest(new { mensaje = "No se ha podido cambiar el estado del pedido" });
+            }
 
             return Ok(pedido);
         }

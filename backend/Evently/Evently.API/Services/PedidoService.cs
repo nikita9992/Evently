@@ -176,6 +176,111 @@ namespace Evently.API.Services
             };
         }
 
+        // Cambia el estado de un pedido
+        public async Task<PedidoDto?> CambiarEstadoAsync(int idPedido, int idEstado)
+        {
+            var pedido = await _contexto.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Estado)
+                .Include(p => p.DetallesPedido)
+                    .ThenInclude(d => d.Actividad)
+                .FirstOrDefaultAsync(p => p.IdPedido == idPedido);
+
+            if (pedido == null)
+            {
+                return null;
+            }
+
+            var estadoNuevo = await _contexto.Estados
+                .FirstOrDefaultAsync(e => e.IdEstado == idEstado);
+
+            if (estadoNuevo == null)
+            {
+                return null;
+            }
+
+            var estadoAnteriorOcupaPlazas = EstadoOcupaPlazas(pedido.Estado.NombreEstado);
+            var estadoNuevoOcupaPlazas = EstadoOcupaPlazas(estadoNuevo.NombreEstado);
+
+            if (!estadoAnteriorOcupaPlazas && estadoNuevoOcupaPlazas)
+            {
+                if (!HayPlazasParaPedido(pedido))
+                {
+                    return null;
+                }
+
+                OcuparPlazasPedido(pedido);
+            }
+
+            if (estadoAnteriorOcupaPlazas && !estadoNuevoOcupaPlazas)
+            {
+                DevolverPlazasPedido(pedido);
+            }
+
+            pedido.IdEstado = estadoNuevo.IdEstado;
+            pedido.Estado = estadoNuevo;
+
+            await _contexto.SaveChangesAsync();
+
+            return CrearPedidoDto(
+                pedido,
+                pedido.Cliente,
+                estadoNuevo,
+                pedido.DetallesPedido.ToList());
+        }
+
+        // Indica si un estado debe ocupar plazas
+        private bool EstadoOcupaPlazas(string nombreEstado)
+        {
+            return nombreEstado == "Confirmado";
+        }
+
+        // Comprueba si hay plazas para volver a confirmar un pedido
+        private bool HayPlazasParaPedido(Pedido pedido)
+        {
+            foreach (var detalle in pedido.DetallesPedido)
+            {
+                var actividad = detalle.Actividad;
+
+                if (actividad.CupoMaximo.HasValue)
+                {
+                    var plazasDisponibles = actividad.CupoMaximo.Value - actividad.PlazasOcupadas;
+
+                    if (detalle.Cantidad > plazasDisponibles)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        // Suma las plazas ocupadas de las actividades del pedido
+        private void OcuparPlazasPedido(Pedido pedido)
+        {
+            foreach (var detalle in pedido.DetallesPedido)
+            {
+                detalle.Actividad.PlazasOcupadas += detalle.Cantidad;
+            }
+        }
+
+        // Devuelve las plazas ocupadas cuando el pedido deja de estar confirmado
+        private void DevolverPlazasPedido(Pedido pedido)
+        {
+            foreach (var detalle in pedido.DetallesPedido)
+            {
+                var plazas = detalle.Actividad.PlazasOcupadas - detalle.Cantidad;
+
+                if (plazas < 0)
+                {
+                    plazas = 0;
+                }
+
+                detalle.Actividad.PlazasOcupadas = plazas;
+            }
+        }
+
         // Eliminar un pedido
         public async Task<bool> EliminarAsync(int id)
         {
@@ -193,74 +298,38 @@ namespace Evently.API.Services
         // Confirma el pedido con las actividades del carrito (localStorage)
         public async Task<PedidoDto?> ConfirmarAsync(ConfirmarPedidoDto confirmarDto)
         {
-            var cliente = await _contexto.Clientes
-                .FirstOrDefaultAsync(c => c.IdCliente == confirmarDto.IdCliente);
+            var cliente = await ObtenerClienteAsync(confirmarDto.IdCliente);
 
-            if (cliente == null) return null;
-
-            if (confirmarDto.Actividades == null || !confirmarDto.Actividades.Any())
-                return null;
-
-            // Verificar que hay plazas suficientes 
-            foreach (var item in confirmarDto.Actividades)
+            if (cliente == null)
             {
-                var actividad = await _contexto.Actividades
-                    .FirstOrDefaultAsync(a => a.IdActividad == item.IdActividad);
-
-                if (actividad == null) return null;
-
-                if (actividad.CupoMaximo.HasValue)
-                {
-                    var plazasDisponibles = actividad.CupoMaximo.Value - actividad.PlazasOcupadas;
-
-                    if (item.Cantidad > plazasDisponibles)
-                        return null; 
-                }
+                return null;
             }
 
-            var estado = await _contexto.Estados
-                .FirstOrDefaultAsync(e => e.NombreEstado == "Confirmado");
-
-            if (estado == null) return null;
-
-            // Crear el pedido
-            var pedido = new Pedido
+            if (confirmarDto.Actividades == null || !confirmarDto.Actividades.Any())
             {
-                IdCliente = confirmarDto.IdCliente,
-                IdEstado = estado.IdEstado,
-                FechaCreacion = DateTime.UtcNow,
-                FechaConfirm = DateTime.UtcNow
-            };
+                return null;
+            }
+
+            var actividades = await ObtenerActividadesValidasAsync(confirmarDto.Actividades);
+
+            if (actividades == null)
+            {
+                return null;
+            }
+
+            var estado = await ObtenerEstadoConfirmadoAsync();
+
+            if (estado == null)
+            {
+                return null;
+            }
+
+            var pedido = CrearPedido(confirmarDto.IdCliente, estado.IdEstado);
 
             _contexto.Pedidos.Add(pedido);
             await _contexto.SaveChangesAsync();
 
-            // Añadir detalles del pedido
-            foreach (var item in confirmarDto.Actividades)
-            {
-                var detalle = new DetallePedido
-                {
-                    IdPedido = pedido.IdPedido,
-                    IdActividad = item.IdActividad,
-                    Cantidad = item.Cantidad,
-                    PrecioUnitario = item.PrecioUnitario
-                };
-                _contexto.DetallesPedido.Add(detalle);
-            }
-
-            await _contexto.SaveChangesAsync();
-
-            // Actualizar plazas ocupadas
-            foreach (var item in confirmarDto.Actividades)
-            {
-                var actividad = await _contexto.Actividades
-                    .FirstOrDefaultAsync(a => a.IdActividad == item.IdActividad);
-
-                if (actividad != null)
-                {
-                    actividad.PlazasOcupadas += item.Cantidad;
-                }
-            }
+            AñadirDetallesYActualizarPlazas(pedido, confirmarDto.Actividades, actividades);
 
             await _contexto.SaveChangesAsync();
 
@@ -269,6 +338,96 @@ namespace Evently.API.Services
                 .Where(d => d.IdPedido == pedido.IdPedido)
                 .ToListAsync();
 
+            return CrearPedidoDto(pedido, cliente, estado, detalles);
+        }
+
+        // Busca el cliente que va a realizar el pedido
+        private async Task<Cliente?> ObtenerClienteAsync(int idCliente)
+        {
+            return await _contexto.Clientes
+                .FirstOrDefaultAsync(c => c.IdCliente == idCliente);
+        }
+
+        // Busca el estado Confirmado
+        private async Task<Estado?> ObtenerEstadoConfirmadoAsync()
+        {
+            return await _contexto.Estados
+                .FirstOrDefaultAsync(e => e.NombreEstado == "Confirmado");
+        }
+
+        // Comprueba que las actividades existen, que las cantidades son correctas y que hay plazas
+        private async Task<List<Actividad>?> ObtenerActividadesValidasAsync(List<ItemCarritoDto> items)
+        {
+            var actividades = new List<Actividad>();
+
+            foreach (var item in items)
+            {
+                if (item.Cantidad <= 0)
+                {
+                    return null;
+                }
+
+                var actividad = await _contexto.Actividades
+                    .FirstOrDefaultAsync(a => a.IdActividad == item.IdActividad);
+
+                if (actividad == null)
+                {
+                    return null;
+                }
+
+                if (actividad.CupoMaximo.HasValue)
+                {
+                    var plazasDisponibles = actividad.CupoMaximo.Value - actividad.PlazasOcupadas;
+
+                    if (item.Cantidad > plazasDisponibles)
+                    {
+                        return null;
+                    }
+                }
+
+                actividades.Add(actividad);
+            }
+
+            return actividades;
+        }
+
+        // Crea el pedido principal
+        private Pedido CrearPedido(int idCliente, int idEstado)
+        {
+            return new Pedido
+            {
+                IdCliente = idCliente,
+                IdEstado = idEstado,
+                FechaCreacion = DateTime.UtcNow,
+                FechaConfirm = DateTime.UtcNow
+            };
+        }
+
+        // Añade las líneas del pedido y actualiza las plazas ocupadas
+        private void AñadirDetallesYActualizarPlazas(Pedido pedido, List<ItemCarritoDto> items, List<Actividad> actividades)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                var actividad = actividades[i];
+
+                var detalle = new DetallePedido
+                {
+                    IdPedido = pedido.IdPedido,
+                    IdActividad = item.IdActividad,
+                    Cantidad = item.Cantidad,
+                    PrecioUnitario = actividad.Precio
+                };
+
+                _contexto.DetallesPedido.Add(detalle);
+
+                actividad.PlazasOcupadas += item.Cantidad;
+            }
+        }
+
+        // Prepara el DTO que se devuelve al frontend
+        private PedidoDto CrearPedidoDto(Pedido pedido, Cliente cliente, Estado estado, List<DetallePedido> detalles)
+        {
             return new PedidoDto
             {
                 IdPedido = pedido.IdPedido,
@@ -288,5 +447,6 @@ namespace Evently.API.Services
                 }).ToList()
             };
         }
+
     }
 }
