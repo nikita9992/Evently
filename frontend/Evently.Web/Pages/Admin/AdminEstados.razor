@@ -1,4 +1,4 @@
-﻿@page "/admin/estados"
+@page "/admin/estados"
 @layout AdminLayout
 @inject EstadoService EstadoService
 @inject EstadoAuthService EstadoAuth
@@ -7,53 +7,63 @@
 
 <PageTitle>Admin — Estados</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">
-    <MudIcon Icon="@Icons.Material.Filled.Flag" Class="mr-2" />
-    Gestión de Estados
-</MudText>
+<main id="pagina-admin-estados">
 
-<MudButton Variant="Variant.Filled"
-           Color="Color.Primary"
-           StartIcon="@Icons.Material.Filled.Add"
-           OnClick="AbrirFormularioCrear"
-           Class="mb-4">
-    Nuevo estado
-</MudButton>
+    <header class="cabecera-pagina">
+        <MudText Typo="Typo.h4" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.Flag" Class="mr-2" />
+            Gestión de Estados
+        </MudText>
 
-@if (cargando)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else if (!listaEstados.Any())
-{
-    <MudAlert Severity="Severity.Info">No hay estados registrados.</MudAlert>
-}
-else
-{
-    <MudTable Items="listaEstados" Hover="true" Striped="true" Elevation="3">
-        <HeaderContent>
-            <MudTh>ID</MudTh>
-            <MudTh>Nombre</MudTh>
-            <MudTh>Descripción</MudTh>
-            <MudTh>Acciones</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.IdEstado</MudTd>
-            <MudTd>@context.NombreEstado</MudTd>
-            <MudTd>@(context.DescripEstado ?? "—")</MudTd>
-            <MudTd>
-                <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                               Color="Color.Warning"
-                               Size="Size.Small"
-                               OnClick="@(() => AbrirFormularioEditar(context))" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="@(() => ConfirmarEliminar(context))" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="AbrirFormularioCrear"
+                   Class="mb-4">
+            Nuevo estado
+        </MudButton>
+    </header>
+
+    <section id="seccion-tabla-estados">
+        @if (cargando)
+        {
+            <aside class="contenedor-cargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </aside>
+        }
+        else if (!listaEstados.Any())
+        {
+            <MudAlert Severity="Severity.Info">No hay estados registrados.</MudAlert>
+        }
+        else
+        {
+            <MudTable Items="listaEstados" Hover="true" Striped="true" Elevation="3">
+                <HeaderContent>
+                    <MudTh>ID</MudTh>
+                    <MudTh>Nombre</MudTh>
+                    <MudTh>Descripción</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.IdEstado</MudTd>
+                    <MudTd>@context.NombreEstado</MudTd>
+                    <MudTd>@(context.DescripEstado ?? "—")</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                       Color="Color.Warning"
+                                       Size="Size.Small"
+                                       OnClick="@(() => AbrirFormularioEditar(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ConfirmarEliminar(context))" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </section>
+
+</main>
 
 <MudDialog @bind-Visible="dialogoAbierto" Options="opcionesDialogo">
     <TitleContent>

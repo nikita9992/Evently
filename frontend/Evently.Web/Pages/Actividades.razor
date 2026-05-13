@@ -1,182 +1,216 @@
-﻿@page "/actividades"
+@page "/actividades"
 @inject ActividadService ActividadService
 @inject CategoriaService CategoriaService
 @inject NavigationManager Navegacion
 
 <PageTitle>Actividades — Evently</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">Actividades</MudText>
-<MudText Typo="Typo.subtitle1" Class="mb-4">
-    Descubre todas nuestras actividades de ocio
-</MudText>
+<link href="css/actividades.css" rel="stylesheet" />
 
-<!-- Filtros -->
-<MudExpansionPanels Class="mb-4">
-    <MudExpansionPanel Text="Filtros de búsqueda"
-                       Icon="@Icons.Material.Filled.FilterList">
-        <MudGrid>
-            <MudItem xs="12" sm="6">
-                <MudTextField @bind-Value="filtroPorTitulo"
-                              Label="Buscar por nombre"
-                              Variant="Variant.Outlined"
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Search"
-                              Immediate="true"
-                              OnKeyUp="FiltrarActividades" />
-            </MudItem>
-            <MudItem xs="12" sm="6">
-                <MudSelect T="int?" @bind-Value="filtroPorCategoria"
-                           Label="Filtrar por categoría"
-                           Variant="Variant.Outlined"
-                           AnchorOrigin="Origin.BottomCenter">
-                    <MudSelectItem T="int?" Value="null">
-                        Todas las categorías
-                    </MudSelectItem>
-                    @foreach (var categoria in categorias)
-                    {
-                        <MudSelectItem T="int?" Value="categoria.IdCategoria">
-                            @categoria.NombreCatego
-                        </MudSelectItem>
-                    }
-                </MudSelect>
-            </MudItem>
-            <MudItem xs="12">
-                <MudButton Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           OnClick="FiltrarActividades"
-                           StartIcon="@Icons.Material.Filled.FilterList">
-                    Aplicar filtros
-                </MudButton>
-                <MudButton Variant="Variant.Outlined"
-                           Color="Color.Secondary"
-                           OnClick="LimpiarFiltros"
-                           Class="ml-2"
-                           StartIcon="@Icons.Material.Filled.Clear">
-                    Limpiar
-                </MudButton>
-            </MudItem>
-        </MudGrid>
-    </MudExpansionPanel>
-</MudExpansionPanels>
+<main id="pagina-actividades">
 
-<!-- Lista de actividades -->
-@if (cargando)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else if (!actividades.Any())
-{
-    <MudAlert Severity="Severity.Info">
-        No se encontraron actividades con los filtros seleccionados.
-    </MudAlert>
-}
-else
-{
-    <MudGrid>
-        @foreach (var actividad in actividades)
-        {
-            <MudItem xs="12" sm="6" md="4" Style="display:flex; flex-direction:column;">
-                <MudCard Elevation="3" Style="display:flex; flex-direction:column; height:100%;">
-                    <!-- Imagen -->
-                    @if (!string.IsNullOrEmpty(actividad.ImagenPrincipal))
-                    {
-                        <MudCardMedia Image="@actividad.ImagenPrincipal"
-                                      Height="200" />
-                    }
-                    else
-                    {
-                        <div style="height:200px; background:linear-gradient(135deg,#667eea,#764ba2);
-                                    display:flex; align-items:center; justify-content:center;">
-                            <MudIcon Icon="@Icons.Material.Filled.EventNote"
-                                     Style="font-size:4rem; color:white; opacity:0.7" />
-                        </div>
-                    }
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                            <MudText Typo="Typo.h6">@actividad.Titulo</MudText>
-                            <MudChip T="string" Color="Color.Primary" Size="Size.Small">
-                                @actividad.NombreCatego
-                            </MudChip>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent Style="flex-grow:1;">
-                        <!-- Valoración -->
-                        @if (actividad.TotalValoraciones > 0)
-                        {
-                            var mediaCard = (int)Math.Round(actividad.MediaValoracion);
-                            <div style="display:flex; align-items:center; gap:4px; margin-bottom:8px;">
-                                @for (int s = 1; s <= 5; s++)
-                                {
-                                    int estrella = s;
-                                    <span style="font-size:1rem; color:#ED6C02;">
-                                        @(estrella <= mediaCard ? "★" : "☆")
-                                    </span>
-                                }
-                                <MudText Typo="Typo.caption" Class="ml-1">
-                                    @actividad.MediaValoracion.ToString("F1")
-                                    (@actividad.TotalValoraciones)
-                                </MudText>
-                            </div>
-                        }
-                        else
-                        {
-                            <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mb-2">
-                                Sin valoraciones aún
-                            </MudText>
-                        }
+    <header class="cabecera-seccion">
+        <MudText Typo="Typo.h4" GutterBottom="true">Actividades</MudText>
+        <MudText Typo="Typo.subtitle1" Class="mb-4">
+            Descubre todas nuestras actividades de ocio
+        </MudText>
+    </header>
 
-                        <MudText Typo="Typo.body2" Class="mb-2">
-                            @actividad.Descripcion
-                        </MudText>
-                        @if (actividad.FechaActiv.HasValue)
-                        {
-                            <MudText Typo="Typo.caption">
-                                <MudIcon Icon="@Icons.Material.Filled.Event" Size="Size.Small" />
-                                @actividad.FechaActiv.Value.ToString("dd/MM/yyyy")
-                            </MudText>
-                        }
-                        @if (actividad.PlazasDisponibles.HasValue)
-                        {
-                            @if (actividad.PlazasDisponibles == 0)
+    <!-- Filtros -->
+    <section id="seccion-filtros" class="contenedor-filtros">
+        <MudExpansionPanels Class="mb-4">
+            <MudExpansionPanel Text="Filtros de búsqueda"
+                               Icon="@Icons.Material.Filled.FilterList">
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField @bind-Value="filtroPorTitulo"
+                                      Label="Buscar por nombre"
+                                      Variant="Variant.Outlined"
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Search"
+                                      Immediate="true"
+                                      OnKeyUp="FiltrarActividades" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="int?" @bind-Value="filtroPorCategoria"
+                                   Label="Filtrar por categoría"
+                                   Variant="Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="int?" Value="null">
+                                Todas las categorías
+                            </MudSelectItem>
+                            @foreach (var categoria in categorias)
                             {
-                                <MudText Typo="Typo.caption" Class="ml-2" Style="color:red;">
-                                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
-                                    <strong>Agotado</strong>
-                                </MudText>
+                                <MudSelectItem T="int?" Value="categoria.IdCategoria">
+                                    @categoria.NombreCatego
+                                </MudSelectItem>
                             }
-                            else if (actividad.PlazasDisponibles <= 3)
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="FiltrarActividades"
+                                   StartIcon="@Icons.Material.Filled.FilterList">
+                            Aplicar filtros
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined"
+                                   Color="Color.Secondary"
+                                   OnClick="LimpiarFiltros"
+                                   Class="ml-2"
+                                   StartIcon="@Icons.Material.Filled.Clear">
+                            Limpiar
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </section>
+
+    <!-- Lista de actividades -->
+    <section id="seccion-actividades">
+        @if (cargando)
+        {
+            <div class="contenedor-cargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </div>
+        }
+        else if (!actividades.Any())
+        {
+            <MudAlert Severity="Severity.Info">
+                No se encontraron actividades con los filtros seleccionados.
+            </MudAlert>
+        }
+        else
+        {
+            <MudGrid>
+                @foreach (var actividad in actividades)
+                {
+                    <MudItem xs="12" sm="6" md="4" Class="item-actividad">
+                        <MudCard Elevation="3" Class="tarjeta-actividad">
+
+                            <!-- Imagen de la actividad -->
+                            @if (!string.IsNullOrEmpty(actividad.ImagenPrincipal))
                             {
-                                <MudText Typo="Typo.caption" Class="ml-2" Style="color:red;">
-                                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
-                                    ⚠ @actividad.PlazasDisponibles plazas
-                                </MudText>
+                                <MudCardMedia Image="@actividad.ImagenPrincipal"
+                                              Height="200" />
                             }
                             else
                             {
-                                <MudText Typo="Typo.caption" Class="ml-2">
-                                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" />
-                                    @actividad.PlazasDisponibles plazas
-                                </MudText>
+                                <figure class="imagen-placeholder">
+                                    <MudIcon Icon="@Icons.Material.Filled.EventNote"
+                                             Class="icono-placeholder" />
+                                </figure>
                             }
-                        }
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudText Typo="Typo.h6" Color="Color.Primary">
-                            @actividad.Precio.ToString("C")
-                        </MudText>
-                        <MudSpacer />
-                        <MudButton Variant="Variant.Filled"
-                                   Color="Color.Primary"
-                                   Size="Size.Small"
-                                   OnClick="@(() => VerDetalle(actividad.IdActividad))">
-                            Ver detalle
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
+
+                            <MudCardHeader>
+                                <CardHeaderContent>
+                                    <MudText Typo="Typo.h6">@actividad.Titulo</MudText>
+                                    <MudChip T="string" Color="Color.Primary" Size="Size.Small">
+                                        @actividad.NombreCatego
+                                    </MudChip>
+                                </CardHeaderContent>
+                            </MudCardHeader>
+
+                            <MudCardContent Class="contenido-tarjeta">
+
+                                <!-- Valoración -->
+                                <section class="seccion-valoracion">
+                                    @if (actividad.TotalValoraciones > 0)
+                                    {
+                                        var mediaCard = (int)Math.Round(actividad.MediaValoracion);
+                                        <div class="estrellas-valoracion">
+                                            @for (int s = 1; s <= 5; s++)
+                                            {
+                                                int estrella = s;
+                                                <span class="estrella">
+                                                    @(estrella <= mediaCard ? "★" : "☆")
+                                                </span>
+                                            }
+                                            <MudText Typo="Typo.caption" Class="ml-1">
+                                                @actividad.MediaValoracion.ToString("F1")
+                                                (@actividad.TotalValoraciones)
+                                            </MudText>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <MudText Typo="Typo.caption"
+                                                 Color="Color.Secondary"
+                                                 Class="mb-2">
+                                            Sin valoraciones aún
+                                        </MudText>
+                                    }
+                                </section>
+
+                                <!-- Descripción -->
+                                <p class="descripcion-actividad">
+                                    @actividad.Descripcion
+                                </p>
+
+                                <!-- Fecha y plazas -->
+                                <footer class="pie-info-actividad">
+                                    @if (actividad.FechaActiv.HasValue)
+                                    {
+                                        <span class="info-fecha">
+                                            <MudIcon Icon="@Icons.Material.Filled.Event"
+                                                     Size="Size.Small" />
+                                            @actividad.FechaActiv.Value.ToString("dd/MM/yyyy")
+                                        </span>
+                                    }
+
+                                    @if (actividad.PlazasDisponibles.HasValue)
+                                    {
+                                        @if (actividad.PlazasDisponibles == 0)
+                                        {
+                                            <span class="info-plazas plazas-agotadas">
+                                                <MudIcon Icon="@Icons.Material.Filled.People"
+                                                         Size="Size.Small" />
+                                                <strong>Agotado</strong>
+                                            </span>
+                                        }
+                                        else if (actividad.PlazasDisponibles <= 3)
+                                        {
+                                            <span class="info-plazas plazas-pocas">
+                                                <MudIcon Icon="@Icons.Material.Filled.People"
+                                                         Size="Size.Small" />
+                                                ⚠ @actividad.PlazasDisponibles plazas
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="info-plazas">
+                                                <MudIcon Icon="@Icons.Material.Filled.People"
+                                                         Size="Size.Small" />
+                                                @actividad.PlazasDisponibles plazas
+                                            </span>
+                                        }
+                                    }
+                                </footer>
+
+                            </MudCardContent>
+
+                            <MudCardActions Class="acciones-tarjeta">
+                                <strong class="precio-actividad">
+                                    @actividad.Precio.ToString("C")
+                                </strong>
+                                <MudSpacer />
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           Size="Size.Small"
+                                           OnClick="@(() => VerDetalle(actividad.IdActividad))">
+                                    Ver detalle
+                                </MudButton>
+                            </MudCardActions>
+
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
         }
-    </MudGrid>
-}
+    </section>
+
+</main>
 
 @code {
     private List<ActividadDto> actividades = new();
@@ -187,32 +221,30 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        categorias = await CategoriaService.ObtenerTodasAsync();
-
+        categorias  = await CategoriaService.ObtenerTodasAsync();
         actividades = await ActividadService.ObtenerTodasAsync();
-
-        cargando = false;
+        cargando    = false;
     }
 
-    // Aplicar filtros
+    /* Aplicar filtros */
     private async Task FiltrarActividades()
     {
-        cargando = true;
+        cargando    = true;
         actividades = await ActividadService.ObtenerTodasAsync(
             filtroPorCategoria,
             filtroPorTitulo);
         cargando = false;
     }
 
-    // Limpiar filtros
+    /* Limpiar filtros */
     private async Task LimpiarFiltros()
     {
-        filtroPorTitulo = null;
+        filtroPorTitulo    = null;
         filtroPorCategoria = null;
         await FiltrarActividades();
     }
 
-    // Ir al detalle de la actividad
+    /* Ir al detalle de la actividad */
     private void VerDetalle(int id)
     {
         Navegacion.NavigateTo($"/actividades/{id}");

@@ -1,0 +1,521 @@
+/* COLORES */
+:root {
+    --color-principal: #7c3aed;
+    --color-principal-oscuro: #5b21b6;
+    --color-secundario: #ec4899;
+    --color-fondo-oscuro: #1a1a2e;
+    --color-peligro: #d32f2f;
+    --color-aviso: #ED6C02;
+    --color-exito: #2e7d32;
+    --color-texto-suave: rgba(0, 0, 0, 0.6);
+    --color-borde: rgba(0, 0, 0, 0.06);
+    --radio-tarjeta: 12px;
+}
+
+/*centrar con flexbox*/
+.centrado-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*gradiente de Evently*/
+.fondo-gradiente-evently {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/*texto en color principal*/
+.texto-precio {
+    color: var(--color-principal);
+    font-weight: 700;
+}
+
+/*texto en rojo para errores*/
+.texto-peligro {
+    color: var(--color-peligro) !important;
+}
+
+/*texto en naranja para avisos*/
+.texto-aviso {
+    color: var(--color-aviso);
+}
+
+/*efecto hover en tarjetas */
+.tarjeta-con-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: var(--radio-tarjeta);
+}
+
+    .tarjeta-con-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    }
+
+/*contenedor de carga centrado*/
+.contenedor-cargando {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+}
+
+/*cabecera de una sección*/
+.cabecera-seccion {
+    margin-bottom: 8px;
+}
+
+/*cabecera de una página completa*/
+.cabecera-pagina {
+    margin-bottom: 16px;
+}
+
+/*separación entre secciones */
+.seccion-con-margen {
+    margin-bottom: 24px;
+}
+
+
+
+/* ESTRELLAS Y VALORACIONES */
+
+
+/*contenedor de estrellas*/
+.estrellas-valoracion {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+
+/*estrella básica*/
+.estrella {
+    color: var(--color-aviso);
+    line-height: 1;
+}
+
+/*estrella pequeña*/
+.estrella-pequena {
+    font-size: 1rem;
+}
+
+/*estrella grande*/
+.estrella-grande {
+    font-size: 2rem;
+}
+
+/*estrellas interactivas para poner valoración*/
+.selector-estrellas {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.estrella-selector {
+    font-size: 2.2rem;
+    color: var(--color-aviso);
+    cursor: pointer;
+    line-height: 1;
+    transition: transform 0.1s ease;
+}
+
+.estrella-selector-activa {
+    transform: scale(1.15);
+}
+
+/*resumen grande de valoraciones*/
+.resumen-valoracion {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+
+
+/* TARJETAS DE ACTIVIDADES */
+
+/*grid para que la tarjeta ocupe todo el alto */
+.item-actividad {
+    display: flex;
+    flex-direction: column;
+}
+
+/*la tarjeta*/
+.tarjeta-actividad {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--radio-tarjeta);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .tarjeta-actividad:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    }
+
+/* contenido de la tarjeta*/
+.contenido-tarjeta {
+    flex-grow: 1;
+}
+
+/*acciones de la tarjeta*/
+.acciones-tarjeta {
+    padding: 12px 16px;
+    border-top: 1px solid var(--color-borde);
+}
+
+/*precio en las tarjetas*/
+.precio-actividad {
+    font-size: 1.1rem;
+    color: var(--color-principal);
+    font-weight: 700;
+}
+
+/*descripción corta en las tarjetas*/
+.descripcion-actividad {
+    font-size: 0.875rem;
+    color: var(--color-texto-suave);
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/*pie de info de cada tarjeta (fecha y plazas)*/
+.pie-info-actividad {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+/*fecha en la tarjeta*/
+.info-fecha {
+    font-size: 0.75rem;
+    color: var(--color-texto-suave);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/*plazas en la tarjeta*/
+.info-plazas {
+    font-size: 0.75rem;
+    color: var(--color-texto-suave);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/*pocas plazas: naranja/rojo*/
+.plazas-pocas {
+    color: var(--color-peligro);
+    font-weight: 500;
+}
+
+/*agotado: rojo*/
+.plazas-agotadas {
+    color: var(--color-peligro);
+    font-weight: 700;
+}
+
+/*valoración dentro de la tarjeta*/
+.seccion-valoracion {
+    margin-bottom: 8px;
+}
+
+
+
+/*IMAGEN (cuando una actividad no tiene foto) */
+
+
+.imagen-placeholder {
+    margin: 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*tamaño pequeño*/
+.imagen-placeholder {
+    height: 200px;
+}
+
+/*tamaño grande*/
+.imagen-placeholder-grande {
+    height: 300px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.icono-placeholder {
+    color: white;
+    opacity: 0.7;
+}
+
+.icono-placeholder {
+    font-size: 4rem !important;
+}
+
+.icono-placeholder-grande {
+    font-size: 6rem !important;
+}
+
+
+
+/* PÁGINA DE DETALLE DE ACTIVIDAD */
+
+
+/*página principal del detalle*/
+#pagina-detalle {
+    padding: 8px 0;
+}
+
+/*cabecera del artículo*/
+.cabecera-articulo {
+    margin-bottom: 8px;
+}
+
+/*galería de imágenes*/
+.galeria-imagenes {
+    margin: 0 0 16px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/*imagen principal*/
+.imagen-principal {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+}
+
+/*fila de miniaturas*/
+.miniaturas-galeria {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    overflow-x: auto;
+}
+
+/*cada miniatura*/
+.miniatura {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+/*miniatura seleccionada*/
+.miniatura-activa {
+    border-color: var(--color-principal);
+}
+
+/*descripción*/
+.descripcion-detalle {
+    font-size: 1rem;
+    color: var(--color-texto-suave);
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+/*sección de info adicional (fecha y plazas)*/
+.seccion-info-detalle {
+    margin-top: 16px;
+}
+
+/*panel lateral de compra */
+.panel-compra {
+    position: sticky;
+    top: 80px;
+}
+
+
+
+/* COMENTARIOS */
+
+
+/*sección entera de reseñas*/
+#seccion-resenas {
+    margin-top: 8px;
+}
+
+/*lista de comentarios*/
+.lista-comentarios {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+/*cabecera del comentario (nombre fecha)*/
+.cabecera-comentario {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+/*botones de acción del comentario*/
+.acciones-comentario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/*texto del comentario*/
+.texto-comentario {
+    font-size: 0.875rem;
+    color: var(--color-texto-suave);
+    margin: 8px 0 0 0;
+    line-height: 1.5;
+}
+
+
+
+/*PÁGINA DE ACTIVIDADES (listado)*/
+
+#pagina-actividades {
+    padding: 16px 0;
+}
+
+#seccion-filtros {
+    margin-bottom: 24px;
+}
+
+
+
+/* PANEL DE ADMINISTRACIÓN */
+
+
+/*páginas del panel admin*/
+#pagina-admin-actividades,
+#pagina-admin-categorias,
+#pagina-admin-clientes,
+#pagina-admin-estados,
+#pagina-admin-pedidos,
+#pagina-admin-usuarios {
+    padding: 8px 0;
+}
+
+/*secciones de tabla en el admin*/
+#seccion-tabla-actividades,
+#seccion-tabla-categorias,
+#seccion-tabla-clientes,
+#seccion-tabla-estados,
+#seccion-tabla-pedidos,
+#seccion-tabla-usuarios {
+    margin-top: 8px;
+}
+
+/*miniatura de imagen en la tabla de actividades*/
+.miniatura-tabla {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/*lista de campos de imagen en el formulario*/
+.lista-campos-imagen {
+    margin-bottom: 8px;
+}
+
+/*fila individual de campo de imagen + preview + botón eliminar*/
+.fila-imagen {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/*preview de imagen en el formulario de actividad*/
+.miniatura-preview {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/*contenedor del detalle de un pedido en el diálogo*/
+.detalle-pedido {
+    padding: 4px 0;
+}
+
+/*cabecera del detalle: estado actual y fecha*/
+.cabecera-detalle-pedido {
+    margin-bottom: 8px;
+}
+
+/*panel lateral para cambiar el estado del pedido*/
+.panel-cambio-estado {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radio-tarjeta);
+    padding: 12px;
+}
+
+/*tabla de líneas del pedido*/
+.lineas-pedido {
+    margin-bottom: 8px;
+}
+
+/*pie con el total del pedido*/
+.pie-total-pedido {
+    padding-top: 8px;
+}
+
+
+
+/*RESPONSIVE*/
+
+
+@media (max-width: 600px) {
+
+    /*imagen principal*/
+    .imagen-principal {
+        height: 250px;
+    }
+
+    /*panel de compra*/
+    .panel-compra {
+        position: static;
+    }
+
+    /* las miniaturas*/
+    .miniatura {
+        width: 60px;
+        height: 45px;
+    }
+
+    /*descripcion*/
+    .descripcion-actividad {
+        -webkit-line-clamp: unset;
+    }
+
+    /*miniatura de tabla en móvil*/
+    .miniatura-tabla {
+        width: 45px;
+        height: 34px;
+    }
+
+    /*preview de imagen en formulario en móvil*/
+    .miniatura-preview {
+        width: 45px;
+        height: 34px;
+    }
+
+    /*panel de cambio de estado en móvil*/
+    .panel-cambio-estado {
+        padding: 8px;
+    }
+}

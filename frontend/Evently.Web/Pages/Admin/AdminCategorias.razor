@@ -1,4 +1,4 @@
-﻿@page "/admin/categorias"
+@page "/admin/categorias"
 @layout AdminLayout
 @inject CategoriaService CategoriaService
 @inject ISnackbar Snackbar
@@ -7,49 +7,59 @@
 
 <PageTitle>Admin — Categorías</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">
-    <MudIcon Icon="@Icons.Material.Filled.Category" Class="mr-2" />
-    Gestión de Categorías
-</MudText>
+<main id="pagina-admin-categorias">
 
-<MudButton Variant="Variant.Filled"
-           Color="Color.Primary"
-           StartIcon="@Icons.Material.Filled.Add"
-           OnClick="AbrirFormularioCrear"
-           Class="mb-4">
-    Nueva categoría
-</MudButton>
+    <header class="cabecera-pagina">
+        <MudText Typo="Typo.h4" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.Category" Class="mr-2" />
+            Gestión de Categorías
+        </MudText>
 
-@if (cargando)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else
-{
-    <MudTable Items="categorias" Hover="true" Striped="true" Elevation="3">
-        <HeaderContent>
-            <MudTh>ID</MudTh>
-            <MudTh>Nombre</MudTh>
-            <MudTh>Descripción</MudTh>
-            <MudTh>Acciones</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.IdCategoria</MudTd>
-            <MudTd>@context.NombreCatego</MudTd>
-            <MudTd>@(context.Descripcion ?? "—")</MudTd>
-            <MudTd>
-                <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                               Color="Color.Warning"
-                               Size="Size.Small"
-                               OnClick="@(() => AbrirFormularioEditar(context))" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="@(() => ConfirmarEliminar(context))" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="AbrirFormularioCrear"
+                   Class="mb-4">
+            Nueva categoría
+        </MudButton>
+    </header>
+
+    <section id="seccion-tabla-categorias">
+        @if (cargando)
+        {
+            <aside class="contenedor-cargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </aside>
+        }
+        else
+        {
+            <MudTable Items="categorias" Hover="true" Striped="true" Elevation="3">
+                <HeaderContent>
+                    <MudTh>ID</MudTh>
+                    <MudTh>Nombre</MudTh>
+                    <MudTh>Descripción</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.IdCategoria</MudTd>
+                    <MudTd>@context.NombreCatego</MudTd>
+                    <MudTd>@(context.Descripcion ?? "—")</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                       Color="Color.Warning"
+                                       Size="Size.Small"
+                                       OnClick="@(() => AbrirFormularioEditar(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ConfirmarEliminar(context))" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </section>
+
+</main>
 
 <!-- Diálogo crear/editar -->
 <MudDialog @bind-Visible="dialogoAbierto">

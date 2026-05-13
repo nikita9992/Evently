@@ -1,4 +1,4 @@
-﻿@page "/admin/pedidos"
+@page "/admin/pedidos"
 @layout AdminLayout
 @inject PedidoService PedidoService
 @inject EstadoService EstadoService
@@ -9,54 +9,64 @@
 
 <PageTitle>Admin — Pedidos</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">
-    <MudIcon Icon="@Icons.Material.Filled.Receipt" Class="mr-2" />
-    Gestión de Pedidos
-</MudText>
+<main id="pagina-admin-pedidos">
 
-@if (cargando)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else if (!pedidos.Any())
-{
-    <MudAlert Severity="Severity.Info">No hay pedidos registrados.</MudAlert>
-}
-else
-{
-    <MudTable Items="pedidos" Hover="true" Striped="true" Elevation="3">
-        <HeaderContent>
-            <MudTh>ID</MudTh>
-            <MudTh>Cliente</MudTh>
-            <MudTh>Estado</MudTh>
-            <MudTh>Fecha</MudTh>
-            <MudTh>Total</MudTh>
-            <MudTh>Acciones</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.IdPedido</MudTd>
-            <MudTd>@context.NombreCliente</MudTd>
-            <MudTd>
-                <MudChip T="string"
-                         Color="@(context.NombreEstado == "Confirmado"
-                                                      ? Color.Success : Color.Error)"
-                     Size="Size.Small">
-                @context.NombreEstado
-            </MudChip>
-        </MudTd>
-        <MudTd>@context.FechaConfirm.ToString("dd/MM/yyyy HH:mm")</MudTd>
-        <MudTd>
-            @(context.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
-        </MudTd>
-        <MudTd>
-            <MudIconButton Icon="@Icons.Material.Filled.Visibility"
-                           Color="Color.Primary"
-                           Size="Size.Small"
-                           OnClick="@(() => VerDetalle(context))" />
-        </MudTd>
-    </RowTemplate>
-</MudTable>
-}
+    <header class="cabecera-pagina">
+        <MudText Typo="Typo.h4" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.Receipt" Class="mr-2" />
+            Gestión de Pedidos
+        </MudText>
+    </header>
+
+    <section id="seccion-tabla-pedidos">
+        @if (cargando)
+        {
+            <aside class="contenedor-cargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </aside>
+        }
+        else if (!pedidos.Any())
+        {
+            <MudAlert Severity="Severity.Info">No hay pedidos registrados.</MudAlert>
+        }
+        else
+        {
+            <MudTable Items="pedidos" Hover="true" Striped="true" Elevation="3">
+                <HeaderContent>
+                    <MudTh>ID</MudTh>
+                    <MudTh>Cliente</MudTh>
+                    <MudTh>Estado</MudTh>
+                    <MudTh>Fecha</MudTh>
+                    <MudTh>Total</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.IdPedido</MudTd>
+                    <MudTd>@context.NombreCliente</MudTd>
+                    <MudTd>
+                        <MudChip T="string"
+                                 Color="@(context.NombreEstado == "Confirmado"
+                                     ? Color.Success : Color.Error)"
+                                 Size="Size.Small">
+                            @context.NombreEstado
+                        </MudChip>
+                    </MudTd>
+                    <MudTd>@context.FechaConfirm.ToString("dd/MM/yyyy HH:mm")</MudTd>
+                    <MudTd>
+                        @(context.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
+                    </MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Visibility"
+                                       Color="Color.Primary"
+                                       Size="Size.Small"
+                                       OnClick="@(() => VerDetalle(context))" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </section>
+
+</main>
 
 <MudDialog @bind-Visible="dialogoAbierto" Options="opcionesDialogo">
     <TitleContent>
@@ -68,64 +78,76 @@ else
     <DialogContent>
         @if (pedidoSeleccionado != null)
         {
-            <MudText Class="mb-2">
-                <strong>Estado actual:</strong>
-                <MudChip T="string"
-                         Color="@(pedidoSeleccionado.NombreEstado == "Confirmado"
-                                                      ? Color.Success : Color.Error)"
-                     Size="Size.Small">
-                @pedidoSeleccionado.NombreEstado
-            </MudChip>
-        </MudText>
+            <section class="detalle-pedido">
 
-            <MudText Class="mb-4">
-                <strong>Fecha:</strong>
-                @pedidoSeleccionado.FechaConfirm.ToString("dd/MM/yyyy HH:mm")
-            </MudText>
+                <header class="cabecera-detalle-pedido">
+                    <MudText Class="mb-2">
+                        <strong>Estado actual:</strong>
+                        <MudChip T="string"
+                                 Color="@(pedidoSeleccionado.NombreEstado == "Confirmado"
+                                     ? Color.Success : Color.Error)"
+                                 Size="Size.Small">
+                            @pedidoSeleccionado.NombreEstado
+                        </MudChip>
+                    </MudText>
 
-            <MudSelect T="int" @bind-Value="nuevoIdEstado"
-                       Label="Cambiar estado"
-                       Variant="Variant.Outlined"
-                       Class="mb-2">
-            @foreach (var estado in estados)
-                {
-                    <MudSelectItem T="int" Value="estado.IdEstado">
-                        @estado.NombreEstado
-                    </MudSelectItem>
-                }
-            </MudSelect>
+                    <MudText Class="mb-4">
+                        <strong>Fecha:</strong>
+                        @pedidoSeleccionado.FechaConfirm.ToString("dd/MM/yyyy HH:mm")
+                    </MudText>
+                </header>
 
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Warning"
-                       StartIcon="@Icons.Material.Filled.Update"
-                       OnClick="CambiarEstado"
-                       Class="mb-4">
-                Actualizar estado
-            </MudButton>
+                <aside class="panel-cambio-estado seccion-con-margen">
+                    <MudSelect T="int" @bind-Value="nuevoIdEstado"
+                               Label="Cambiar estado"
+                               Variant="Variant.Outlined"
+                               Class="mb-2">
+                        @foreach (var estado in estados)
+                        {
+                            <MudSelectItem T="int" Value="estado.IdEstado">
+                                @estado.NombreEstado
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
 
-            <MudDivider Class="mb-3" />
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Warning"
+                               StartIcon="@Icons.Material.Filled.Update"
+                               OnClick="CambiarEstado"
+                               Class="mb-4">
+                        Actualizar estado
+                    </MudButton>
+                </aside>
 
-            <MudTable Items="pedidoSeleccionado.Detalles"
-                      Elevation="0" Dense="true">
-                <HeaderContent>
-                    <MudTh>Actividad</MudTh>
-                    <MudTh>Cantidad</MudTh>
-                    <MudTh>Precio</MudTh>
-                    <MudTh>Importe</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd>@context.TituloActividad</MudTd>
-                    <MudTd>@context.Cantidad</MudTd>
-                    <MudTd>@context.PrecioUnitario.ToString("C")</MudTd>
-                    <MudTd>@context.ImporteLinea.ToString("C")</MudTd>
-                </RowTemplate>
-            </MudTable>
+                <MudDivider Class="mb-3" />
 
-            <MudDivider Class="my-3" />
+                <section class="lineas-pedido">
+                    <MudTable Items="pedidoSeleccionado.Detalles"
+                              Elevation="0" Dense="true">
+                        <HeaderContent>
+                            <MudTh>Actividad</MudTh>
+                            <MudTh>Cantidad</MudTh>
+                            <MudTh>Precio</MudTh>
+                            <MudTh>Importe</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd>@context.TituloActividad</MudTd>
+                            <MudTd>@context.Cantidad</MudTd>
+                            <MudTd>@context.PrecioUnitario.ToString("C")</MudTd>
+                            <MudTd>@context.ImporteLinea.ToString("C")</MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </section>
 
-            <MudText Typo="Typo.h6" Align="Align.Right">
-                Total: @(pedidoSeleccionado.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
-            </MudText>
+                <MudDivider Class="my-3" />
+
+                <footer class="pie-total-pedido">
+                    <MudText Typo="Typo.h6" Align="Align.Right">
+                        Total: @(pedidoSeleccionado.Detalles.Sum(d => d.ImporteLinea).ToString("C"))
+                    </MudText>
+                </footer>
+
+            </section>
         }
     </DialogContent>
     <DialogActions>

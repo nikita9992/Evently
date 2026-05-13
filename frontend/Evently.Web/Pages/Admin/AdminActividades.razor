@@ -1,4 +1,4 @@
-﻿@page "/admin/actividades"
+@page "/admin/actividades"
 @layout AdminLayout
 @inject ActividadService ActividadService
 @inject CategoriaService CategoriaService
@@ -8,80 +8,144 @@
 
 <PageTitle>Admin — Actividades</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">
-    <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" Class="mr-2" />
-    Gestión de Actividades
-</MudText>
+<main id="pagina-admin-actividades">
 
-<MudButton Variant="Variant.Filled"
-           Color="Color.Primary"
-           StartIcon="@Icons.Material.Filled.Add"
-           OnClick="AbrirFormularioCrear"
-           Class="mb-4">
-    Nueva actividad
-</MudButton>
+    <header class="cabecera-pagina">
+        <MudText Typo="Typo.h4" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" Class="mr-2" />
+            Gestión de Actividades
+        </MudText>
 
-@if (cargando)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else
-{
-    <MudTable Items="actividades" Hover="true" Striped="true" Elevation="3">
-        <HeaderContent>
-            <MudTh>ID</MudTh>
-            <MudTh>Imagen</MudTh>
-            <MudTh>Título</MudTh>
-            <MudTh>Categoría</MudTh>
-            <MudTh>Precio</MudTh>
-            <MudTh>Fecha</MudTh>
-            <MudTh>Plazas</MudTh>
-            <MudTh>Acciones</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.IdActividad</MudTd>
-            <MudTd>
-                @if (context.Imagenes.Any())
-                {
-                    <img src="@context.Imagenes[0]"
-                         alt="@context.Titulo"
-                         style="width:60px; height:45px; object-fit:cover; border-radius:4px;" />
-                }
-                else
-                {
-                    <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported"
-                             Color="Color.Default" />
-                }
-        </MudTd>
-        <MudTd>@context.Titulo</MudTd>
-        <MudTd>
-            <MudChip T="string" Color="Color.Primary" Size="Size.Small">
-                @context.NombreCatego
-            </MudChip>
-        </MudTd>
-        <MudTd>@context.Precio.ToString("C")</MudTd>
-        <MudTd>
-            @(context.FechaActiv.HasValue
-                        ? context.FechaActiv.Value.ToString("dd/MM/yyyy")
-                        : "—")
-        </MudTd>
-        <MudTd>@(context.CupoMaximo?.ToString() ?? "—")</MudTd>
-        <MudTd>
-            <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                           Color="Color.Warning"
-                           Size="Size.Small"
-                           OnClick="@(() => AbrirFormularioEditar(context))" />
-            <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                           Color="Color.Error"
-                           Size="Size.Small"
-                           OnClick="@(() => ConfirmarEliminar(context))" />
-        </MudTd>
-    </RowTemplate>
-</MudTable>
-}
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="AbrirFormularioCrear"
+                   Class="mb-4">
+            Nueva actividad
+        </MudButton>
+    </header>
 
-<!-- Сrear/editar -->
-<MudDialog @bind-Visible="dialogoAbierto" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <!-- Filtros -->
+    <section id="seccion-filtros">
+        <MudExpansionPanels Class="mb-4">
+            <MudExpansionPanel Text="Filtros de búsqueda"
+                               Icon="@Icons.Material.Filled.FilterList">
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField @bind-Value="filtroPorTitulo"
+                                      Label="Buscar por título"
+                                      Variant="Variant.Outlined"
+                                      Adornment="Adornment.Start"
+                                      AdornmentIcon="@Icons.Material.Filled.Search"
+                                      Immediate="true" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="int?" @bind-Value="filtroPorCategoria"
+                                   Label="Filtrar por categoría"
+                                   Variant="Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="int?" Value="null">
+                                Todas las categorías
+                            </MudSelectItem>
+                            @foreach (var categoria in categorias)
+                            {
+                                <MudSelectItem T="int?" Value="categoria.IdCategoria">
+                                    @categoria.NombreCatego
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudButton Variant="Variant.Outlined"
+                                   Color="Color.Secondary"
+                                   StartIcon="@Icons.Material.Filled.Clear"
+                                   OnClick="LimpiarFiltros">
+                            Limpiar filtros
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </section>
+
+    <!-- Tabla de actividades -->
+    <section id="seccion-tabla-actividades">
+        @if (cargando)
+        {
+            <aside class="contenedor-cargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </aside>
+        }
+        else
+        {
+            <MudTable Items="ActividadesFiltradas" Hover="true" Striped="true" Elevation="3">
+                <HeaderContent>
+                    <MudTh>ID</MudTh>
+                    <MudTh>Imagen</MudTh>
+                    <MudTh>Título</MudTh>
+                    <MudTh>Categoría</MudTh>
+                    <MudTh>Precio</MudTh>
+                    <MudTh>Fecha</MudTh>
+                    <MudTh>Plazas</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.IdActividad</MudTd>
+                    <MudTd>
+                        @if (context.Imagenes.Any())
+                        {
+                            <img src="@context.Imagenes[0]"
+                                 alt="@context.Titulo"
+                                 class="miniatura-tabla" />
+                        }
+                        else
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported"
+                                     Color="Color.Default" />
+                        }
+                    </MudTd>
+                    <MudTd>@context.Titulo</MudTd>
+                    <MudTd>
+                        <MudChip T="string" Color="Color.Primary" Size="Size.Small">
+                            @context.NombreCatego
+                        </MudChip>
+                    </MudTd>
+                    <MudTd>@context.Precio.ToString("C")</MudTd>
+                    <MudTd>
+                        @(context.FechaActiv.HasValue
+                            ? context.FechaActiv.Value.ToString("dd/MM/yyyy HH:mm")
+                            : "—")
+                    </MudTd>
+                    <MudTd>
+                        @if (context.CupoMaximo.HasValue)
+                        {
+                            @($"{context.PlazasDisponibles} / {context.CupoMaximo}")
+                        }
+                        else
+                        {
+                            <span>—</span>
+                        }
+                    </MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                       Color="Color.Warning"
+                                       Size="Size.Small"
+                                       OnClick="@(() => AbrirFormularioEditar(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ConfirmarEliminar(context))" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </section>
+
+</main>
+
+<!-- Diálogo crear/editar -->
+<MudDialog @bind-Visible="dialogoAbierto"
+           Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">
             @(modoEdicion ? "Editar actividad" : "Nueva actividad")
@@ -116,46 +180,72 @@ else
                          Label="Precio (€)"
                          Variant="Variant.Outlined"
                          Min="0"
+                         Format="F2"
+                         Adornment="Adornment.Start"
+                         AdornmentText="€"
                          Class="mb-3" />
 
-        <MudDatePicker @bind-Date="fechaSeleccionada"
-                       Label="Fecha de la actividad"
-                       Variant="Variant.Outlined"
-                       Class="mb-3" />
+        <!-- Fecha y hora -->
+        <MudGrid Class="mb-3">
+            <MudItem xs="12" sm="6">
+                <MudDatePicker @bind-Date="fechaSeleccionada"
+                               Label="Fecha de la actividad"
+                               Variant="Variant.Outlined" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudTimePicker @bind-Time="horaSeleccionada"
+                               Label="Hora de la actividad"
+                               Variant="Variant.Outlined"
+                               AmPm="false" />
+            </MudItem>
+        </MudGrid>
 
-        <MudNumericField @bind-Value="formulario.CupoMaximo"
-                         Label="Cupo máximo"
-                         Variant="Variant.Outlined"
-                         Min="1"
-                         Class="mb-3" />
+        <!-- Cupo máximo con switch -->
+        <MudSwitch @bind-Value="tieneCupoMaximo"
+                   Color="Color.Primary"
+                   Label="Limitar número de plazas"
+                   Class="mb-2" />
+
+        @if (tieneCupoMaximo)
+        {
+            <MudNumericField @bind-Value="formulario.CupoMaximo"
+                             Label="Cupo máximo de plazas"
+                             Variant="Variant.Outlined"
+                             Min="1"
+                             Class="mb-3"
+                             Adornment="Adornment.End"
+                             AdornmentText="plazas" />
+        }
 
         <!-- Imágenes -->
         <MudText Typo="Typo.subtitle2" Class="mt-2 mb-2">
             Imágenes (máximo 8)
         </MudText>
 
-        @for (int i = 0; i < listaImagenes.Count; i++)
-        {
-            var indice = i;
-            <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-                <MudTextField @bind-Value="listaImagenes[indice]"
-                              Label="@($"URL imagen {indice + 1}")"
-                              Variant="Variant.Outlined"
-                              FullWidth="true"/>
-                @if (!string.IsNullOrEmpty(listaImagenes[indice]))
-                {
-                    <img src="@listaImagenes[indice]"
-                         alt="Preview"
-                         style="width:60px; height:45px; object-fit:cover;
-                                        border-radius:4px; flex-shrink:0;"
-                         onerror="this.style.display='none'" />
-                }
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="@(() => EliminarImagen(indice))" />
-            </div>
-        }
+        <section class="lista-campos-imagen">
+            @for (int i = 0; i < listaImagenes.Count; i++)
+            {
+                var indice = i;
+                <article class="fila-imagen">
+                    <MudTextField @bind-Value="listaImagenes[indice]"
+                                  Label="@($"URL imagen {indice + 1}")"
+                                  Variant="Variant.Outlined"
+                                  FullWidth="true"
+                                  Placeholder="https://ejemplo.com/imagen.jpg" />
+                    @if (!string.IsNullOrEmpty(listaImagenes[indice]))
+                    {
+                        <img src="@listaImagenes[indice]"
+                             alt="Preview"
+                             class="miniatura-preview"
+                             onerror="this.style.display='none'" />
+                    }
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   Size="Size.Small"
+                                   OnClick="@(() => EliminarImagen(indice))" />
+                </article>
+            }
+        </section>
 
         @if (listaImagenes.Count < 8)
         {
@@ -214,9 +304,21 @@ else
     private bool modoEdicion = false;
     private CrearActividadDto formulario = new();
     private DateTime? fechaSeleccionada;
+    private TimeSpan? horaSeleccionada;
+    private bool tieneCupoMaximo = false;
     private int actividadEditandoId;
     private ActividadDto? actividadAEliminar;
     private List<string> listaImagenes = new() { "" };
+    private string filtroPorTitulo = string.Empty;
+    private int? filtroPorCategoria = null;
+
+    private IEnumerable<ActividadDto> ActividadesFiltradas => actividades
+        .Where(a =>
+            (string.IsNullOrEmpty(filtroPorTitulo)
+             || a.Titulo.ToLower().Contains(filtroPorTitulo.ToLower()))
+            &&
+            (!filtroPorCategoria.HasValue
+             || a.IdCategoria == filtroPorCategoria.Value));
 
     private string tokenAdmin => EstadoAuth.Token;
 
@@ -249,10 +351,18 @@ else
         cargando = false;
     }
 
+    private void LimpiarFiltros()
+    {
+        filtroPorTitulo = string.Empty;
+        filtroPorCategoria = null;
+    }
+
     private void AbrirFormularioCrear()
     {
         formulario = new CrearActividadDto();
         fechaSeleccionada = null;
+        horaSeleccionada = null;
+        tieneCupoMaximo = false;
         listaImagenes = new List<string> { "" };
         modoEdicion = false;
         dialogoAbierto = true;
@@ -268,25 +378,39 @@ else
             Precio = actividad.Precio,
             CupoMaximo = actividad.CupoMaximo
         };
-        fechaSeleccionada = actividad.FechaActiv;
+
+        fechaSeleccionada = actividad.FechaActiv?.Date;
+        horaSeleccionada = actividad.FechaActiv?.TimeOfDay;
+        tieneCupoMaximo = actividad.CupoMaximo.HasValue;
         actividadEditandoId = actividad.IdActividad;
+
         listaImagenes = actividad.Imagenes.Any()
             ? actividad.Imagenes.ToList()
             : new List<string> { "" };
+
         modoEdicion = true;
         dialogoAbierto = true;
     }
 
     private async Task GuardarActividad()
     {
-        // Filtrar URLs vacías
+        if (fechaSeleccionada.HasValue)
+        {
+            var fecha = fechaSeleccionada.Value.Date;
+            var hora = horaSeleccionada ?? TimeSpan.Zero;
+            formulario.FechaActiv = DateTime.SpecifyKind(fecha + hora, DateTimeKind.Utc);
+        }
+        else
+        {
+            formulario.FechaActiv = null;
+        }
+
+        if (!tieneCupoMaximo)
+            formulario.CupoMaximo = null;
+
         formulario.Imagenes = listaImagenes
             .Where(url => !string.IsNullOrWhiteSpace(url))
             .ToList();
-
-        formulario.FechaActiv = fechaSeleccionada.HasValue
-            ? DateTime.SpecifyKind(fechaSeleccionada.Value, DateTimeKind.Utc)
-            : null;
 
         if (modoEdicion)
         {
@@ -341,7 +465,9 @@ else
         if (resultado)
             Snackbar.Add("Actividad eliminada correctamente", Severity.Success);
         else
-            Snackbar.Add("Error al eliminar la actividad", Severity.Error);
+            Snackbar.Add(
+                "No se puede eliminar: la actividad tiene pedidos asociados",
+                Severity.Warning);
 
         dialogoEliminarAbierto = false;
         await CargarDatos();

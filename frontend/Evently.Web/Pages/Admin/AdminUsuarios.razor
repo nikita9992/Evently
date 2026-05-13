@@ -1,4 +1,4 @@
-﻿@page "/admin/usuarios"
+@page "/admin/usuarios"
 @layout AdminLayout
 @inject HttpClient Http
 @inject EstadoAuthService EstadoAuth
@@ -7,62 +7,72 @@
 
 <PageTitle>Admin — Usuarios</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">
-    <MudIcon Icon="@Icons.Material.Filled.ManageAccounts" Class="mr-2" />
-    Gestión de Usuarios
-</MudText>
+<main id="pagina-admin-usuarios">
 
-<MudButton Variant="Variant.Filled"
-           Color="Color.Primary"
-           StartIcon="@Icons.Material.Filled.Add"
-           OnClick="AbrirFormularioCrear"
-           Class="mb-4">
-    Nuevo usuario
-</MudButton>
+    <header class="cabecera-pagina">
+        <MudText Typo="Typo.h4" GutterBottom="true">
+            <MudIcon Icon="@Icons.Material.Filled.ManageAccounts" Class="mr-2" />
+            Gestión de Usuarios
+        </MudText>
 
-@if (cargando)
-{
-    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-}
-else if (!usuarios.Any())
-{
-    <MudAlert Severity="Severity.Info">No hay usuarios registrados.</MudAlert>
-}
-else
-{
-    <MudTable Items="usuarios" Hover="true" Striped="true" Elevation="3"
-              Filter="FiltrarUsuario">
-        <ToolBarContent>
-            <MudTextField @bind-Value="textoBusqueda"
-                          Placeholder="Buscar usuario..."
-                          Adornment="Adornment.Start"
-                          AdornmentIcon="@Icons.Material.Filled.Search"
-                          IconSize="Size.Medium"
-                          Class="mt-0" />
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh>ID</MudTh>
-            <MudTh>Email</MudTh>
-            <MudTh>Rol</MudTh>
-            <MudTh>Acciones</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.IdUsuario</MudTd>
-            <MudTd>@context.Email</MudTd>
-            <MudTd>@context.Rol</MudTd>
-            <MudTd>
-                <MudIconButton Icon="@Icons.Material.Filled.ManageAccounts"
-                               Color="Color.Warning"
-                               Size="Size.Small"
-                               OnClick="@(() => ConfirmarCambioRol(context))" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                               Color="Color.Error"
-                               Size="Size.Small"
-                               OnClick="@(() => ConfirmarEliminar(context))" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="AbrirFormularioCrear"
+                   Class="mb-4">
+            Nuevo usuario
+        </MudButton>
+    </header>
+
+    <section id="seccion-tabla-usuarios">
+        @if (cargando)
+        {
+            <aside class="contenedor-cargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </aside>
+        }
+        else if (!usuarios.Any())
+        {
+            <MudAlert Severity="Severity.Info">No hay usuarios registrados.</MudAlert>
+        }
+        else
+        {
+            <MudTable Items="usuarios" Hover="true" Striped="true" Elevation="3"
+                      Filter="FiltrarUsuario">
+                <ToolBarContent>
+                    <MudTextField @bind-Value="textoBusqueda"
+                                  Placeholder="Buscar usuario..."
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  IconSize="Size.Medium"
+                                  Class="mt-0" />
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>ID</MudTh>
+                    <MudTh>Email</MudTh>
+                    <MudTh>Rol</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.IdUsuario</MudTd>
+                    <MudTd>@context.Email</MudTd>
+                    <MudTd>@context.Rol</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.ManageAccounts"
+                                       Color="Color.Warning"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ConfirmarCambioRol(context))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ConfirmarEliminar(context))" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </section>
+
+</main>
 
 @* Diálogo para crear un usuario nuevo *@
 <MudDialog @bind-Visible="dialogoCrearAbierto">
