@@ -452,13 +452,13 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.9": {
+      "Microsoft.NET.ILLink.Tasks/9.0.12": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
-      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.9": {
+      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.12": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Sdk.WebAssembly.Pack.props": {},
@@ -942,13 +942,13 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/9.0.9": {
+      "Microsoft.NET.ILLink.Tasks/9.0.12": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
-      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.9": {
+      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.12": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Sdk.WebAssembly.Pack.props": {},
@@ -1806,10 +1806,10 @@
         "microsoft.jsinterop.webassembly.nuspec"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/9.0.9": {
-      "sha512": "cHi1os/s6aobEgNkbOh/jW+ru//rHuedvj4PmTh2mMY7et/mJjqphBeXeKCesDvMd0+E2JyX9EPZZC4VRKslXg==",
+    "Microsoft.NET.ILLink.Tasks/9.0.12": {
+      "sha512": "StA3kyImQHqDo8A8ZHaSxgASbEuT5UIqgeCvK5SzUPj//xE1QSys421J9pEs4cYuIVwq7CJvWSKxtyH7aPr1LA==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/9.0.9",
+      "path": "microsoft.net.illink.tasks/9.0.12",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1823,7 +1823,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.9.0.9.nupkg.sha512",
+        "microsoft.net.illink.tasks.9.0.12.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -1857,10 +1857,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.9": {
-      "sha512": "Nx4yF/l8YyzwHM+xBRFOSGv77mjBZP0XkImzLMdrSBGYPB32nEZNXTSwhH9viDhxMhGij+fVUjJj5iAtUdMBww==",
+    "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.12": {
+      "sha512": "c3yi+Cd4xnmpcXOf5H2so5VFaYM2gI+FYVuQ5Q2g6Nyw9E1FHnJYMOlJkI1aPBHiC7/pkhW9sFg2xaS7lYEW7g==",
       "type": "package",
-      "path": "microsoft.net.sdk.webassembly.pack/9.0.9",
+      "path": "microsoft.net.sdk.webassembly.pack/9.0.12",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1891,7 +1891,7 @@
         "build/Microsoft.NET.Sdk.WebAssembly.Pack.targets",
         "build/Wasm.web.config",
         "build/browser.runtimeconfig.template.json",
-        "microsoft.net.sdk.webassembly.pack.9.0.9.nupkg.sha512",
+        "microsoft.net.sdk.webassembly.pack.9.0.12.nupkg.sha512",
         "microsoft.net.sdk.webassembly.pack.nuspec",
         "tools/net472/Microsoft.NET.Sdk.WebAssembly.Pack.Tasks.dll",
         "tools/net472/Microsoft.NET.WebAssembly.Webcil.dll",
@@ -1935,29 +1935,29 @@
     "net9.0": [
       "Microsoft.AspNetCore.Components.WebAssembly >= 9.0.9",
       "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 9.0.9",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.9",
-      "Microsoft.NET.Sdk.WebAssembly.Pack >= 9.0.9",
+      "Microsoft.NET.ILLink.Tasks >= 9.0.12",
+      "Microsoft.NET.Sdk.WebAssembly.Pack >= 9.0.12",
       "MudBlazor >= 9.3.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nikva\\.nuget\\packages\\": {},
+    "C:\\Users\\Raquel\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Evently.Web.csproj",
+      "projectUniqueName": "C:\\Evently\\frontend\\Evently.Web\\Evently.Web.csproj",
       "projectName": "Evently.Web",
-      "projectPath": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\Evently.Web.csproj",
-      "packagesPath": "C:\\Users\\nikva\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nikva\\Desktop\\Proyecto Final\\Evently\\frontend\\Evently.Web\\obj\\",
+      "projectPath": "C:\\Evently\\frontend\\Evently.Web\\Evently.Web.csproj",
+      "packagesPath": "C:\\Users\\Raquel\\.nuget\\packages\\",
+      "outputPath": "C:\\Evently\\frontend\\Evently.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\nikva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Raquel\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2002,13 +2002,13 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.9, )",
+            "version": "[9.0.12, )",
             "autoReferenced": true
           },
           "Microsoft.NET.Sdk.WebAssembly.Pack": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.9, )",
+            "version": "[9.0.12, )",
             "autoReferenced": true
           },
           "MudBlazor": {
@@ -2030,7 +2030,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-            "version": "[9.0.9, 9.0.9]"
+            "version": "[9.0.12, 9.0.12]"
           }
         ],
         "frameworkReferences": {
@@ -2038,7 +2038,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
