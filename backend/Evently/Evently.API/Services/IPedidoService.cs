@@ -12,5 +12,6 @@ namespace Evently.API.Services
         Task<PedidoDto?> EditarAsync(int id, CrearPedidoDto crearPedidoDto);
         Task<bool> EliminarAsync(int id);
         Task<PedidoDto?> ConfirmarAsync(ConfirmarPedidoDto confirmarDto);
+        Task<PedidoDto?> CambiarEstadoAsync(int idPedido, int idEstado);
     }
 }

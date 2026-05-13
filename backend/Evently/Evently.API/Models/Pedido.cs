@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Evently.API.Models
 {
     // Representa un pedido o reserva realizado por un cliente
-    // IMPORTANTE: el carrito se modela como un pedido en estado "Pendiente"
+    // El pedido se crea cuando el usuario confirma el carrito
     public class Pedido
     {
         [Key]

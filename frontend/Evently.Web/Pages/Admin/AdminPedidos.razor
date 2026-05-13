@@ -5,7 +5,6 @@
 @inject ISnackbar Snackbar
 @inject EstadoAuthService EstadoAuth
 @inject NavigationManager Navegacion
-@inject HttpClient Http
 
 <PageTitle>Admin — Pedidos</PageTitle>
 
@@ -83,13 +82,15 @@ else
                 @pedidoSeleccionado.FechaConfirm.ToString("dd/MM/yyyy HH:mm")
             </MudText>
 
-            <MudSelect T="int" @bind-Value="nuevoIdEstado"
+            <MudSelect T="int"
+                       Value="nuevoIdEstado"
+                       ValueChanged="EstadoSeleccionado"
                        Label="Cambiar estado"
                        Variant="Variant.Outlined"
                        Class="mb-2">
             @foreach (var estado in estados)
                 {
-                    <MudSelectItem T="int" Value="estado.IdEstado">
+                    <MudSelectItem T="int" Value="@estado.IdEstado">
                         @estado.NombreEstado
                     </MudSelectItem>
                 }
@@ -185,27 +186,26 @@ else
         dialogoAbierto = true;
     }
 
+    private void EstadoSeleccionado(int idEstado)
+    {
+        nuevoIdEstado = idEstado;
+    }
+
     private async Task CambiarEstado()
     {
-        if (pedidoSeleccionado == null) return;
-
-        Http.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue(
-                "Bearer", EstadoAuth.Token);
-
-        var dto = new
+        if (pedidoSeleccionado == null)
         {
-            IdCliente = pedidoSeleccionado.IdCliente,
-            IdEstado = nuevoIdEstado
-        };
+            return;
+        }
 
-        var respuesta = await Http.PutAsJsonAsync(
-            $"api/pedidos/{pedidoSeleccionado.IdPedido}", dto);
+        var pedidoActualizado = await PedidoService.CambiarEstadoAsync(
+            pedidoSeleccionado.IdPedido,
+            nuevoIdEstado,
+            EstadoAuth.Token);
 
-        if (respuesta.IsSuccessStatusCode)
+        if (pedidoActualizado != null)
         {
-            Snackbar.Add("Estado actualizado correctamente", Severity.Success);
-            await CargarDatos();
+            Snackbar.Add($"Estado actualizado correctamente. Nuevo estado: {nuevoIdEstado}", Severity.Success); await CargarDatos();
             dialogoAbierto = false;
         }
         else
