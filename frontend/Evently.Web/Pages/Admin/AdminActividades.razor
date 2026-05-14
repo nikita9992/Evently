@@ -459,15 +459,12 @@
     {
         if (actividadAEliminar == null) return;
 
-        var resultado = await ActividadService.EliminarAsync(
-            actividadAEliminar.IdActividad, tokenAdmin);
+        var (exito, mensaje) = await ActividadService.EliminarAsync(actividadAEliminar.IdActividad, tokenAdmin);
 
-        if (resultado)
-            Snackbar.Add("Actividad eliminada correctamente", Severity.Success);
+        if (exito)
+            Snackbar.Add(mensaje, Severity.Success);
         else
-            Snackbar.Add(
-                "No se puede eliminar: la actividad tiene pedidos asociados",
-                Severity.Warning);
+            Snackbar.Add(mensaje, Severity.Error);
 
         dialogoEliminarAbierto = false;
         await CargarDatos();

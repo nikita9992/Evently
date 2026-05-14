@@ -42,13 +42,23 @@ namespace Evently.Web.Services
         }
 
         //Eliminar categoría 
-        public async Task<bool> EliminarAsync(int id, string token)
+        public async Task<(bool exito, string mensaje)> EliminarAsync(int id, string token)
         {
-            _http.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             var respuesta = await _http.DeleteAsync($"api/categorias/{id}");
-            return respuesta.IsSuccessStatusCode;
+
+            if (respuesta.IsSuccessStatusCode)
+                return (true, "Categoría eliminada correctamente");
+
+            var error = await respuesta.Content.ReadFromJsonAsync<RespuestaError>();
+            return (false, error?.Mensaje ?? "Error al eliminar la categoría");
+        }
+
+        //Зara leer el JSON del backend
+        private class RespuestaError
+        {
+            public string? Mensaje { get; set; }
         }
     }
 }

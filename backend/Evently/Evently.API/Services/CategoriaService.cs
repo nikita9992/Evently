@@ -86,12 +86,16 @@ namespace Evently.API.Services
         }
 
         // Eliminar una categoría
-        public async Task<bool> EliminarAsync(int id)
+        public async Task<bool?> EliminarAsync(int id)
         {
             var categoria = await _contexto.Categorias
                 .FirstOrDefaultAsync(c => c.IdCategoria == id);
 
-            if (categoria == null) return false;
+            if (categoria == null) return null;
+
+            bool tieneActividades = await _contexto.Actividades.AnyAsync(a => a.IdCategoria == id);
+
+            if (tieneActividades) return false;
 
             _contexto.Categorias.Remove(categoria);
             await _contexto.SaveChangesAsync();

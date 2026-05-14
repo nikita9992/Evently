@@ -52,12 +52,22 @@ namespace Evently.Web.Services
         }
 
         // Elimina un estado por su id
-        public async Task<bool> EliminarAsync(int idEstado, string token)
+        public async Task<(bool exito, string mensaje)> EliminarAsync(int idEstado, string token)
         {
-            _http.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
             var respuesta = await _http.DeleteAsync($"api/estados/{idEstado}");
-            return respuesta.IsSuccessStatusCode;
+
+            if (respuesta.IsSuccessStatusCode)
+                return (true, "Estado eliminado correctamente");
+
+            var error = await respuesta.Content.ReadFromJsonAsync<RespuestaError>();
+            return (false, error?.Mensaje ?? "Error al eliminar el estado");
+        }
+
+        private class RespuestaError
+        {
+            public string? Mensaje { get; set; }
         }
     }
 }

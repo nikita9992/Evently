@@ -13,6 +13,6 @@ namespace Evently.API.Services
 
         Task<CategoriaDto?> EditarAsync(int id, CrearCategoriaDto crearCategoriaDto);
 
-        Task<bool> EliminarAsync(int id);
+        Task<bool?> EliminarAsync(int id);
     }
 }

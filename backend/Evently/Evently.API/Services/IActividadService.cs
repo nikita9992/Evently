@@ -9,6 +9,6 @@ namespace Evently.API.Services
         Task<ActividadDto?> ObtenerPorIdAsync(int id);
         Task<ActividadDto> CrearAsync(CrearActividadDto crearActividadDto);
         Task<ActividadDto?> EditarAsync(int id, CrearActividadDto crearActividadDto);
-        Task<bool> EliminarAsync(int id);
+        Task<bool?> EliminarAsync(int id);
     }
 }

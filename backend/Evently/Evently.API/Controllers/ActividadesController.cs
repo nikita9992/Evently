@@ -80,8 +80,11 @@ namespace Evently.API.Controllers
         {
             var resultado = await _actividadService.EliminarAsync(id);
 
-            if (!resultado)
+            if (resultado == null)
                 return NotFound(new { mensaje = "Actividad no encontrada" });
+
+            if (resultado == false)
+                return Conflict(new { mensaje = "No se puede eliminar la actividad porque tiene pedidos asociados" });
 
             return Ok(new { mensaje = "Actividad eliminada correctamente" });
         }

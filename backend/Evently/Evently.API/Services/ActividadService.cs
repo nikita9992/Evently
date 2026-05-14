@@ -180,11 +180,16 @@ namespace Evently.API.Services
         }
 
         // Eliminar una actividad
-        public async Task<bool> EliminarAsync(int id)
+        public async Task<bool?> EliminarAsync(int id)
         {
-            var actividad = await _contexto.Actividades.FirstOrDefaultAsync(a => a.IdActividad == id);
+            var actividad = await _contexto.Actividades
+                .FirstOrDefaultAsync(a => a.IdActividad == id);
 
-            if (actividad == null) return false;
+            if (actividad == null) return null;
+
+            bool tienePedidos = await _contexto.DetallesPedido.AnyAsync(d => d.IdActividad == id);
+
+            if (tienePedidos) return false;
 
             _contexto.Actividades.Remove(actividad);
             await _contexto.SaveChangesAsync();

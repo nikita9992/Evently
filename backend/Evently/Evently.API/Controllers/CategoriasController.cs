@@ -72,8 +72,11 @@ namespace Evently.API.Controllers
         {
             var resultado = await _categoriaService.EliminarAsync(id);
 
-            if (!resultado)
+            if (resultado == null)
                 return NotFound(new { mensaje = "Categoría no encontrada" });
+
+            if (resultado == false)
+                return Conflict(new { mensaje = "No se puede eliminar la categoría porque tiene actividades asociadas" });
 
             return Ok(new { mensaje = "Categoría eliminada correctamente" });
         }

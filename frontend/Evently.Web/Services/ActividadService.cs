@@ -54,13 +54,22 @@ namespace Evently.Web.Services
         }
 
         //Eliminar actividad 
-        public async Task<bool> EliminarAsync(int id, string token)
+        public async Task<(bool exito, string mensaje)> EliminarAsync(int id, string token)
         {
-            _http.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            _http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             var respuesta = await _http.DeleteAsync($"api/actividades/{id}");
-            return respuesta.IsSuccessStatusCode;
+
+            if (respuesta.IsSuccessStatusCode)
+                return (true, "Actividad eliminada correctamente");
+
+            var error = await respuesta.Content.ReadFromJsonAsync<RespuestaError>();
+            return (false, error?.Mensaje ?? "Error al eliminar la actividad");
+        }
+
+        private class RespuestaError
+        {
+            public string? Mensaje { get; set; }
         }
     }
 }

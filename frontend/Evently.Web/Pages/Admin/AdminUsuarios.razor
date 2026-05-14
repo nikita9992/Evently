@@ -74,7 +74,7 @@
 
 </main>
 
-@* Diálogo para crear un usuario nuevo *@
+@*Diálogo para crear un usuario nuevo*@
 <MudDialog @bind-Visible="dialogoCrearAbierto">
     <TitleContent>
         <MudText Typo="Typo.h6">Nuevo usuario</MudText>
@@ -104,7 +104,7 @@
     </DialogActions>
 </MudDialog>
 
-@* Diálogo de confirmación para cambiar el rol *@
+@*Diálogo de confirmación para cambiar el rol*@
 <MudDialog @bind-Visible="dialogoCambioRolAbierto">
     <TitleContent>
         <MudText Typo="Typo.h6">Cambiar rol</MudText>
@@ -123,7 +123,7 @@
     </DialogActions>
 </MudDialog>
 
-@* Diálogo de confirmación para eliminar *@
+@*Diálogo de confirmación para eliminar*@
 <MudDialog @bind-Visible="dialogoEliminarAbierto">
     <TitleContent>
         <MudText Typo="Typo.h6">Eliminar usuario</MudText>
@@ -144,31 +144,21 @@
     private List<ModeloUsuario> usuarios = new();
     private bool cargando = true;
     private string textoBusqueda = string.Empty;
-
-    // Control del diálogo de crear usuario
     private bool dialogoCrearAbierto = false;
     private string emailNuevo = string.Empty;
     private string passwordNuevo = string.Empty;
     private string rolNuevo = "usuario";
-
-    // Control del diálogo de cambio de rol
     private bool dialogoCambioRolAbierto = false;
-
-    // Control del diálogo de eliminar
     private bool dialogoEliminarAbierto = false;
-
-    // Usuario que se está editando o eliminando
     private ModeloUsuario? usuarioSeleccionado = null;
 
     protected override async Task OnAfterRenderAsync(bool primeraCarga)
     {
         if (primeraCarga)
         {
-            // Cargamos el token antes de pedir datos al backend
             if (!EstadoAuth.EstaAutenticado)
                 await EstadoAuth.CargarDesdeLocalStorageAsync();
 
-            // Si no es administrador lo mandamos al inicio
             if (!EstadoAuth.EsAdministrador)
             {
                 Navegacion.NavigateTo("/");
@@ -180,7 +170,7 @@
         }
     }
 
-    // Obtiene todos los usuarios del backend
+    //Obtiene todos los usuarios del backend
     private async Task CargarUsuarios()
     {
         cargando = true;
@@ -205,7 +195,7 @@
         cargando = false;
     }
 
-    // Filtra los usuarios según el texto de búsqueda
+    //Filtra los usuarios según el texto de búsqueda
     private bool FiltrarUsuario(ModeloUsuario usuario)
     {
         if (string.IsNullOrWhiteSpace(textoBusqueda)) return true;
@@ -213,7 +203,7 @@
             || usuario.Rol.Contains(textoBusqueda, StringComparison.OrdinalIgnoreCase);
     }
 
-    // Abre el formulario para crear un usuario nuevo
+    //Abre el formulario para crear un usuario nuevo
     private void AbrirFormularioCrear()
     {
         emailNuevo = string.Empty;
@@ -222,7 +212,7 @@
         dialogoCrearAbierto = true;
     }
 
-    // Crea un usuario nuevo en el backend
+    //Crea un usuario nuevo en el backend
     private async Task CrearUsuario()
     {
         if (string.IsNullOrWhiteSpace(emailNuevo) || string.IsNullOrWhiteSpace(passwordNuevo))
@@ -248,19 +238,18 @@
         await CargarUsuarios();
     }
 
-    // Abre el diálogo de confirmación para cambiar el rol
+    //abre el diálogo de confirmación para cambiar el rol
     private void ConfirmarCambioRol(ModeloUsuario usuario)
     {
         usuarioSeleccionado = usuario;
         dialogoCambioRolAbierto = true;
     }
 
-    // Cambia el rol del usuario seleccionado
+    //Cambia el rol del usuario seleccionado
     private async Task CambiarRol()
     {
         if (usuarioSeleccionado == null) return;
 
-        // Evitamos que el administrador cambie su propio rol mientras tiene la sesión iniciada
         if (usuarioSeleccionado.IdUsuario == EstadoAuth.IdUsuario)
         {
             Snackbar.Add("No puedes cambiar tu propio rol mientras tienes la sesión iniciada.", Severity.Warning);
@@ -287,19 +276,18 @@
         await CargarUsuarios();
     }
 
-    // Abre el diálogo de confirmación para eliminar
+    //Abre el diálogo de confirmación para eliminar
     private void ConfirmarEliminar(ModeloUsuario usuario)
     {
         usuarioSeleccionado = usuario;
         dialogoEliminarAbierto = true;
     }
 
-    // Elimina el usuario seleccionado
+    //Elimina el usuario seleccionado
     private async Task EliminarUsuario()
     {
         if (usuarioSeleccionado == null) return;
 
-        // Evitamos que el administrador elimine su propia cuenta mientras tiene la sesión iniciada
         if (usuarioSeleccionado.IdUsuario == EstadoAuth.IdUsuario)
         {
             Snackbar.Add("No puedes eliminar tu propio usuario mientras tienes la sesión iniciada.", Severity.Warning);
@@ -311,18 +299,23 @@
 
         HttpResponseMessage respuesta = await Http.DeleteAsync($"api/Usuarios/{usuarioSeleccionado.IdUsuario}");
 
-        if (!respuesta.IsSuccessStatusCode)
-        {
-            Snackbar.Add("No se pudo eliminar el usuario.", Severity.Error);
-            return;
-        }
+        var respuestaMensaje = await respuesta.Content.ReadFromJsonAsync<RespuestaMensaje>(
+            new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        Snackbar.Add("Usuario eliminado", Severity.Info);
+        if (respuesta.IsSuccessStatusCode)
+            Snackbar.Add(respuestaMensaje?.Mensaje ?? "Usuario eliminado correctamente", Severity.Success);
+        else
+            Snackbar.Add(respuestaMensaje?.Mensaje ?? "No se pudo eliminar el usuario.", Severity.Error);
+
         dialogoEliminarAbierto = false;
         await CargarUsuarios();
     }
+    private class RespuestaMensaje
+    {
+        public string? Mensaje { get; set; }
+    }
 
-    // Asigna el token JWT a las peticiones protegidas del panel administrador
+    //Asigna el token JWT a las peticiones protegidas del panel administrador
     private void PonerToken()
     {
         if (string.IsNullOrWhiteSpace(EstadoAuth.Token))
@@ -332,7 +325,7 @@
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", EstadoAuth.Token);
     }
 
-    // Modelo que representa los datos de un usuario en esta página
+    //Modelo que representa los datos de un usuario en esta página
     private class ModeloUsuario
     {
         public int IdUsuario { get; set; }

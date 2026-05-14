@@ -210,13 +210,12 @@
     {
         if (categoriaAEliminar == null) return;
 
-        var resultado = await CategoriaService.EliminarAsync(
-            categoriaAEliminar.IdCategoria, tokenAdmin);
+        var (exito, mensaje) = await CategoriaService.EliminarAsync(categoriaAEliminar.IdCategoria, tokenAdmin);
 
-        if (resultado)
-            Snackbar.Add("Categoría eliminada correctamente", Severity.Success);
+        if (exito)
+            Snackbar.Add(mensaje, Severity.Success);
         else
-            Snackbar.Add("Error al eliminar la categoría", Severity.Error);
+            Snackbar.Add(mensaje, Severity.Error);
 
         dialogoEliminarAbierto = false;
         await CargarDatos();

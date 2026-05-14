@@ -198,15 +198,13 @@
     // Elimina un estado
     private async Task ConfirmarEliminar(EstadoDto estado)
     {
-        bool eliminado = await EstadoService.EliminarAsync(estado.IdEstado, EstadoAuth.Token);
+        var (exito, mensaje) = await EstadoService.EliminarAsync(estado.IdEstado, EstadoAuth.Token);
 
-        if (!eliminado)
-        {
-            Snackbar.Add("No se pudo eliminar el estado.", Severity.Error);
-            return;
-        }
+        if (exito)
+            Snackbar.Add(mensaje, Severity.Success);
+        else
+            Snackbar.Add(mensaje, Severity.Error);
 
-        Snackbar.Add("Estado eliminado", Severity.Info);
         await CargarEstados();
     }
 }
