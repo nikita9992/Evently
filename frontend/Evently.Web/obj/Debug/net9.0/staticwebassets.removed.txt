@@ -1,3 +1,0 @@
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\carritoHelper.js
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\css\app.css
-C:\Users\nikva\Desktop\Proyecto Final\Evently\frontend\Evently.Web\wwwroot\index.html
