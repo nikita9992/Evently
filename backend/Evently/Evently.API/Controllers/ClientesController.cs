@@ -2,6 +2,7 @@
 using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Evently.API.Controllers
 {
@@ -26,8 +27,26 @@ namespace Evently.API.Controllers
             return Ok(clientes);
         }
 
+        // Devuelve el cliente del usuario que ha iniciado sesión
+        [HttpGet("actual")]
+        public async Task<IActionResult> GetClienteActual()
+        {
+            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
+                return Unauthorized();
+
+            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
+
+            if (cliente == null)
+                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
+
+            return Ok(cliente);
+        }
+
         // Devuelve un cliente concreto con sus pedidos
         [HttpGet("{id}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetCliente(int id)
         {
             var cliente = await _clienteService.ObtenerPorIdAsync(id);
@@ -40,6 +59,7 @@ namespace Evently.API.Controllers
 
         // Devuelve el cliente asociado a un usuario concreto
         [HttpGet("usuario/{idUsuario}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetClientePorUsuario(int idUsuario)
         {
             var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
@@ -50,10 +70,17 @@ namespace Evently.API.Controllers
             return Ok(cliente);
         }
 
-        // Crea un nuevo cliente
+        // Crea el cliente asociado al usuario que ha iniciado sesión
         [HttpPost]
         public async Task<IActionResult> PostCliente([FromBody] CrearClienteDto crearClienteDto)
         {
+            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
+                return Unauthorized();
+
+            crearClienteDto.IdUsuario = idUsuario;
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -63,9 +90,25 @@ namespace Evently.API.Controllers
         }
 
         // Actualiza los datos de un cliente
+        // Actualiza los datos del cliente asociado al usuario que ha iniciado sesión
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, [FromBody] CrearClienteDto crearClienteDto)
         {
+            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
+                return Unauthorized();
+
+            var clienteActual = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
+
+            if (clienteActual == null)
+                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
+
+            if (clienteActual.IdCliente != id)
+                return Forbid();
+
+            crearClienteDto.IdUsuario = idUsuario;
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

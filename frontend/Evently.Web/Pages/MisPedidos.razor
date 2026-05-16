@@ -172,8 +172,7 @@
                 return;
             }
 
-            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
-                EstadoAuth.IdUsuario, EstadoAuth.Token);
+            var cliente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
 
             if (cliente == null)
             {
@@ -183,8 +182,7 @@
                 return;
             }
 
-            listaPedidos = await PedidoService.ObtenerPorClienteAsync(
-                cliente.IdCliente, EstadoAuth.Token);
+            listaPedidos = await PedidoService.ObtenerPedidosClienteActualAsync(EstadoAuth.Token);
 
             estaCargando = false;
             StateHasChanged();

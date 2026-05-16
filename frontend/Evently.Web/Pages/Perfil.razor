@@ -101,15 +101,13 @@
                 return;
             }
 
-            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
-                EstadoAuth.IdUsuario, EstadoAuth.Token);
+            var cliente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
 
             if (cliente != null)
             {
                 idCliente = cliente.IdCliente;
                 datosCliente = new CrearClienteDto
                 {
-                    IdUsuario = cliente.IdUsuario,
                     Nombre = cliente.Nombre,
                     Apellidos = cliente.Apellidos,
                     Telefono = cliente.Telefono,
@@ -118,10 +116,6 @@
                     Direccion = cliente.Direccion,
                     InfoAdicional = cliente.InfoAdicional
                 };
-            }
-            else
-            {
-                datosCliente.IdUsuario = EstadoAuth.IdUsuario;
             }
 
             estaCargando = false;
@@ -135,8 +129,6 @@
         estGuardando = true;
         errorMensaje = string.Empty;
         guardadoCorrectamente = false;
-
-        datosCliente.IdUsuario = EstadoAuth.IdUsuario;
 
         ClienteDto? resultado;
 

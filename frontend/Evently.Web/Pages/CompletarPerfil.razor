@@ -95,8 +95,7 @@
             }
 
             // si ya tiene perfil completo
-            var clienteExistente = await ClienteService.ObtenerPorUsuarioAsync(
-                EstadoAuth.IdUsuario, EstadoAuth.Token);
+            var clienteExistente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
 
             if (clienteExistente != null
                 && !string.IsNullOrEmpty(clienteExistente.Nombre)
@@ -106,7 +105,6 @@
                 return;
             }
 
-            datosCliente.IdUsuario = EstadoAuth.IdUsuario;
             StateHasChanged();
         }
     }
@@ -124,8 +122,6 @@
             cargando = false;
             return;
         }
-
-        datosCliente.IdUsuario = EstadoAuth.IdUsuario;
 
         var resultado = await ClienteService.CrearAsync(
             datosCliente, EstadoAuth.Token);

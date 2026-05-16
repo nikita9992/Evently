@@ -36,7 +36,7 @@ else
 
         <MudGrid>
 
-            <!-- Columna izquierda: info de la actividad -->
+            @* Columna izquierda: info de la actividad *@
             <MudItem xs="12" md="8">
                 <article class="articulo-actividad">
 
@@ -46,7 +46,7 @@ else
                         </MudText>
                     </header>
 
-                    <!-- Galería de imágenes -->
+                    @* Galería de imágenes *@
                     @if (actividad.Imagenes.Any())
                     {
                         <figure class="galeria-imagenes">
@@ -77,19 +77,19 @@ else
                         </figure>
                     }
 
-                    <!-- Categoría -->
+                    @* Categoría *@
                     <MudChip T="string" Color="Color.Primary" Class="mb-3">
                         @actividad.NombreCatego
                     </MudChip>
 
-                    <!-- Descripción -->
+                    @* Descripción *@
                     <p class="descripcion-detalle">
                         @actividad.Descripcion
                     </p>
 
                     <MudDivider Class="mb-4" />
 
-                    <!-- Fecha y plazas -->
+                    @* Fecha y plazas *@
                     <section class="seccion-info-detalle">
                         <MudGrid>
                             @if (actividad.FechaActiv.HasValue)
@@ -125,12 +125,12 @@ else
                 </article>
             </MudItem>
 
-            <!-- Columna derecha: panel de compra -->
+            @* Columna derecha: panel de compra *@
             <MudItem xs="12" md="4">
                 <aside class="panel-compra">
                     <MudPaper Class="pa-4" Elevation="3">
 
-                        <!-- Valoración media -->
+                        @* Valoración media *@
                         @if (resumenValoracion.TotalValoraciones > 0)
                         {
                             var mediaCompra = (int)Math.Round(resumenValoracion.Media);
@@ -156,7 +156,7 @@ else
 
                         <MudDivider Class="mb-4" />
 
-                        <!-- Alertas de plazas -->
+                        @* Alertas de plazas *@
                         @if (actividad.PlazasDisponibles == 0)
                         {
                             <MudAlert Severity="Severity.Error" Class="mb-3">
@@ -211,11 +211,11 @@ else
 
         <MudDivider Class="my-6" />
 
-        <!-- Sección valoraciones y comentarios -->
+        @* Sección valoraciones y comentarios *@
         <section id="seccion-resenas">
             <MudGrid>
 
-                <!-- Resumen de valoraciones -->
+                @* Resumen de valoraciones *@
                 <MudItem xs="12">
                     <header class="cabecera-seccion">
                         <MudText Typo="Typo.h5" GutterBottom="true">
@@ -254,7 +254,7 @@ else
                     }
                 </MudItem>
 
-                <!-- Selector de valoración (solo si compró) -->
+                @* Selector de valoración (solo si compró) *@
                 @if (puedeValorar)
                 {
                     <MudItem xs="12">
@@ -289,7 +289,7 @@ else
                     </MudItem>
                 }
 
-                <!-- Formulario de comentario -->
+                @* Formulario de comentario *@
                 <MudItem xs="12">
                     @if (EstadoAuth.EstaAutenticado)
                     {
@@ -333,7 +333,7 @@ else
                     }
                 </MudItem>
 
-                <!-- Lista de comentarios -->
+                @* Lista de comentarios *@
                 <MudItem xs="12">
                     <MudText Typo="Typo.h6" GutterBottom="true">
                         Comentarios (@comentarios.Count)
@@ -439,8 +439,7 @@ else
                 puedeValorar = await ValoracionService.PuedeValorarAsync(
                     Id, EstadoAuth.Token);
 
-                var cliente = await ClienteService.ObtenerPorUsuarioAsync(
-                    EstadoAuth.IdUsuario, EstadoAuth.Token);
+                var cliente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
 
                 tienePerfilCompleto = cliente != null
                     && !string.IsNullOrEmpty(cliente.Nombre)
@@ -469,8 +468,7 @@ else
             puedeValorar = await ValoracionService.PuedeValorarAsync(
                 Id, EstadoAuth.Token);
 
-            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
-                EstadoAuth.IdUsuario, EstadoAuth.Token);
+            var cliente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
 
             tienePerfilCompleto = cliente != null
                 && !string.IsNullOrEmpty(cliente.Nombre)

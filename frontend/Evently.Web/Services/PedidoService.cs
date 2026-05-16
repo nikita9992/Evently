@@ -24,13 +24,13 @@ namespace Evently.Web.Services
             return await respuesta.Content.ReadFromJsonAsync<PedidoDto>();
         }
 
-        // Obtener pedidos de un cliente
-        public async Task<List<PedidoDto>> ObtenerPorClienteAsync(int idCliente, string token)
+        // Obtener pedidos del cliente asociado al usuario que ha iniciado sesión
+        public async Task<List<PedidoDto>> ObtenerPedidosClienteActualAsync(string token)
         {
             PonerToken(token);
 
             var resultado = await _http.GetFromJsonAsync<List<PedidoDto>>(
-                $"api/pedidos/cliente/{idCliente}");
+                "api/pedidos/cliente-actual");
 
             return resultado ?? new List<PedidoDto>();
         }
