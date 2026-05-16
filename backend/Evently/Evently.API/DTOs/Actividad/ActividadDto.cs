@@ -16,5 +16,6 @@
         public double MediaValoracion { get; set; }
         public int TotalValoraciones { get; set; }
         public int? PlazasDisponibles { get; set; }
+        public bool EsDestacada { get; set; }
     }
 }

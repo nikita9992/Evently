@@ -30,7 +30,7 @@ namespace Evently.API.Services
                     a.Titulo.ToLower().Contains(filtro.Titulo.ToLower()));
 
             var actividades = await consulta.ToListAsync();
-            var result = new List<ActividadDto>();
+            var actividadesDto = new List<ActividadDto>();
 
             foreach (var a in actividades)
             {
@@ -38,7 +38,7 @@ namespace Evently.API.Services
                     .Where(v => v.IdActividad == a.IdActividad)
                     .ToListAsync();
 
-                result.Add(new ActividadDto
+                actividadesDto.Add(new ActividadDto
                 {
                     IdActividad = a.IdActividad,
                     IdCategoria = a.IdCategoria,
@@ -49,13 +49,53 @@ namespace Evently.API.Services
                     FechaActiv = a.FechaActiv,
                     CupoMaximo = a.CupoMaximo,
                     PlazasDisponibles = a.PlazasDisponibles,
+                    EsDestacada = a.EsDestacada,
                     Imagenes = a.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList(),
                     MediaValoracion = valoraciones.Any() ? Math.Round(valoraciones.Average(v => v.Puntuacion), 1) : 0,
                     TotalValoraciones = valoraciones.Count
                 });
             }
 
-            return result;
+            return actividadesDto;
+        }
+
+        // Obtener actividades marcadas para mostrarse en la página de inicio
+        public async Task<List<ActividadDto>> ObtenerDestacadasAsync()
+        {
+            var actividades = await _contexto.Actividades
+                .Include(a => a.Categoria)
+                .Include(a => a.Imagenes)
+                .Where(a => a.EsDestacada)
+                .OrderBy(a => a.FechaActiv)
+                .ToListAsync();
+
+            var actividadesDto = new List<ActividadDto>();
+
+            foreach (var a in actividades)
+            {
+                var valoraciones = await _contexto.Valoraciones
+                    .Where(v => v.IdActividad == a.IdActividad)
+                    .ToListAsync();
+
+                actividadesDto.Add(new ActividadDto
+                {
+                    IdActividad = a.IdActividad,
+                    IdCategoria = a.IdCategoria,
+                    NombreCatego = a.Categoria.NombreCatego,
+                    Titulo = a.Titulo,
+                    Descripcion = a.Descripcion,
+                    Precio = a.Precio,
+                    FechaActiv = a.FechaActiv,
+                    CupoMaximo = a.CupoMaximo,
+                    PlazasDisponibles = a.PlazasDisponibles,
+                    EsDestacada = a.EsDestacada,
+                    Imagenes = a.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList(),
+                    MediaValoracion = valoraciones.Any() ? Math.Round(valoraciones.Average(v => v.Puntuacion), 1) : 0,
+                    TotalValoraciones = valoraciones.Count
+                });
+            }
+
+            return actividadesDto;
         }
 
         //Obtener una actividad por id
@@ -76,6 +116,7 @@ namespace Evently.API.Services
                 FechaActiv = actividad.FechaActiv,
                 CupoMaximo = actividad.CupoMaximo,
                 PlazasDisponibles = actividad.PlazasDisponibles,
+                EsDestacada = actividad.EsDestacada,
                 Imagenes = actividad.Imagenes.OrderBy(i => i.Orden).Select(i => i.Url).ToList()
             };
         }
@@ -90,8 +131,9 @@ namespace Evently.API.Services
                 Descripcion = crearActividadDto.Descripcion,
                 Precio = crearActividadDto.Precio,
                 FechaActiv = crearActividadDto.FechaActiv.HasValue
-                            ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc) : null,
-                CupoMaximo = crearActividadDto.CupoMaximo
+                ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc) : null,
+                CupoMaximo = crearActividadDto.CupoMaximo,
+                EsDestacada = crearActividadDto.EsDestacada
             };
 
             _contexto.Actividades.Add(nuevaActividad);
@@ -125,6 +167,7 @@ namespace Evently.API.Services
                 FechaActiv = nuevaActividad.FechaActiv,
                 CupoMaximo = nuevaActividad.CupoMaximo,
                 PlazasDisponibles = nuevaActividad.PlazasDisponibles,
+                EsDestacada = nuevaActividad.EsDestacada
             };
         }
 
@@ -145,6 +188,7 @@ namespace Evently.API.Services
                                 ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc)
                                 : null;
             actividad.CupoMaximo = crearActividadDto.CupoMaximo;
+            actividad.EsDestacada = crearActividadDto.EsDestacada;
 
 
             await _contexto.SaveChangesAsync();
@@ -175,7 +219,8 @@ namespace Evently.API.Services
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
                 CupoMaximo = actividad.CupoMaximo,
-                PlazasDisponibles = actividad.PlazasDisponibles, 
+                PlazasDisponibles = actividad.PlazasDisponibles,
+                EsDestacada = actividad.EsDestacada
             };
         }
 

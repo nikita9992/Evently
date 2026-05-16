@@ -24,6 +24,8 @@ namespace Evently.API.DTOs.Actividad
         [Range(1, int.MaxValue, ErrorMessage = "El cupo máximo debe ser mayor que 0")]
         public int? CupoMaximo { get; set; }
 
+        public bool EsDestacada { get; set; }
+
         public List<string> Imagenes { get; set; } = new();
     }
 }
