@@ -23,14 +23,13 @@
         public decimal ImporteLinea { get; set; }
     }
 
-    //Para confirmar pedido desde el carrito
+    // Para confirmar pedido desde el carrito
     public class ConfirmarPedidoDto
     {
-        public int IdCliente { get; set; }
         public List<ItemCarritoDto> Actividades { get; set; } = new();
     }
 
-    //Cada actividad del carrito
+    // Cada actividad del carrito
     public class ItemCarritoDto
     {
         public int IdActividad { get; set; }
@@ -38,7 +37,7 @@
         public decimal PrecioUnitario { get; set; }
     }
 
-    //Modelo del carrito en localStorage
+    // Modelo del carrito en localStorage
     public class ItemCarrito
     {
         public int IdActividad { get; set; }

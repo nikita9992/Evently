@@ -2,6 +2,7 @@
 using Evently.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Evently.API.Controllers
 {
@@ -11,10 +12,12 @@ namespace Evently.API.Controllers
     public class PedidosController : ControllerBase
     {
         private readonly IPedidoService _pedidoService;
+        private readonly IClienteService _clienteService;
 
-        public PedidosController(IPedidoService pedidoService)
+        public PedidosController(IPedidoService pedidoService, IClienteService clienteService)
         {
             _pedidoService = pedidoService;
+            _clienteService = clienteService;
         }
 
         // Devuelve todos los pedidos con sus datos relacionados
@@ -26,8 +29,28 @@ namespace Evently.API.Controllers
             return Ok(pedidos);
         }
 
+        // Devuelve los pedidos del cliente asociado al usuario que ha iniciado sesión
+        [HttpGet("cliente-actual")]
+        public async Task<IActionResult> GetPedidosClienteActual()
+        {
+            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
+                return Unauthorized();
+
+            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
+
+            if (cliente == null)
+                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
+
+            var pedidos = await _pedidoService.ObtenerPorClienteAsync(cliente.IdCliente);
+
+            return Ok(pedidos);
+        }
+
         // Devuelve un pedido concreto con todos sus datos
         [HttpGet("{id}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetPedido(int id)
         {
             var pedido = await _pedidoService.ObtenerPorIdAsync(id);
@@ -40,6 +63,7 @@ namespace Evently.API.Controllers
 
         // Devuelve todos los pedidos de un cliente concreto
         [HttpGet("cliente/{idCliente}")]
+        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetPedidosPorCliente(int idCliente)
         {
             var pedidos = await _pedidoService.ObtenerPorClienteAsync(idCliente);
@@ -108,10 +132,22 @@ namespace Evently.API.Controllers
             return Ok(new { mensaje = "Pedido eliminado correctamente" });
         }
 
-        // Confirma el pedido con las actividades del carrito
+        // Confirma el pedido del cliente asociado al usuario que ha iniciado sesión
         [HttpPost("confirmar")]
         public async Task<IActionResult> ConfirmarPedido([FromBody] ConfirmarPedidoDto confirmarDto)
         {
+            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
+                return Unauthorized();
+
+            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
+
+            if (cliente == null)
+                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
+
+            confirmarDto.IdCliente = cliente.IdCliente;
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

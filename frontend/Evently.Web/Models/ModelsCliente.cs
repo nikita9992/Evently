@@ -18,7 +18,6 @@
     // Para crear o editar datos personales
     public class CrearClienteDto
     {
-        public int IdUsuario { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Apellidos { get; set; } = string.Empty;
         public string? Telefono { get; set; }

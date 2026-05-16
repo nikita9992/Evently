@@ -13,15 +13,15 @@ namespace Evently.Web.Services
             _http = http;
         }
 
-        // Obtener datos del cliente por idUsuario
-        public async Task<ClienteDto?> ObtenerPorUsuarioAsync(int idUsuario, string token)
+        // Obtener datos del cliente del usuario que ha iniciado sesión
+        public async Task<ClienteDto?> ObtenerClienteActualAsync(string token)
         {
             try
             {
                 _http.DefaultRequestHeaders.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                var respuesta = await _http.GetAsync($"api/clientes/usuario/{idUsuario}");
+                var respuesta = await _http.GetAsync("api/clientes/actual");
 
                 if (!respuesta.IsSuccessStatusCode) return null;
 
