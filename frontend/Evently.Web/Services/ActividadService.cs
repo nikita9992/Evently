@@ -25,6 +25,14 @@ namespace Evently.Web.Services
             return resultado ?? new List<ActividadDto>();
         }
 
+        // Obtener actividades destacadas para la página de inicio
+        public async Task<List<ActividadDto>> ObtenerDestacadasAsync()
+        {
+            var resultado = await _http.GetFromJsonAsync<List<ActividadDto>>("api/actividades/destacadas");
+
+            return resultado ?? new List<ActividadDto>();
+        }
+
         // Obtener una actividad por ID
         public async Task<ActividadDto?> ObtenerPorIdAsync(int id)
         {

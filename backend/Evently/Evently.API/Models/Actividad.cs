@@ -29,6 +29,9 @@ namespace Evently.API.Models
 
         public int? CupoMaximo { get; set; }
 
+        // Indica si la actividad se muestra como destacada en la página de inicio(Escaparate)
+        public bool EsDestacada { get; set; } = false;
+
         // Número de plazas ya ocupadas por pedidos
         public int PlazasOcupadas { get; set; } = 0;
         [NotMapped]

@@ -15,6 +15,7 @@
         public double MediaValoracion { get; set; }
         public int TotalValoraciones { get; set; }
         public int? PlazasDisponibles { get; set; }
+        public bool EsDestacada { get; set; }
     }
 
     public class CrearActividadDto
@@ -25,6 +26,7 @@
         public decimal Precio { get; set; }
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }
+        public bool EsDestacada { get; set; }
         public List<string> Imagenes { get; set; } = new();
     }
 }

@@ -32,6 +32,14 @@ namespace Evently.API.Controllers
             return Ok(actividades);
         }
 
+        // GET api/actividades/destacadas
+        [HttpGet("destacadas")]
+        public async Task<IActionResult> ObtenerDestacadas()
+        {
+            var actividades = await _actividadService.ObtenerDestacadasAsync();
+            return Ok(actividades);
+        }
+
         // GET api/actividades/1
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerPorId(int id)
