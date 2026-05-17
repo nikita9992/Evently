@@ -1,0 +1,100 @@
+﻿@page "/contacto"
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Contacto — Evently</PageTitle>
+
+<section class="paginaInformativa">
+
+    <header class="cabeceraInformativa">
+        <h1 class="tituloPaginaInfo">Contacta con nosotros</h1>
+        <p class="subtituloPaginaInfo">
+            Si tienes alguna duda sobre una reserva, una actividad o
+            simplemente quieres contarnos algo, estamos aquí.
+        </p>
+    </header>
+
+    <section class="contenidoContacto">
+
+        <section class="formularioContacto">
+            <h2 class="tituloBloque">Escríbenos</h2>
+
+            <MudTextField @bind-Value="nombre"
+                          Label="Nombre"
+                          Variant="Variant.Outlined"
+                          Class="mb-3"
+                          FullWidth="true" />
+
+            <MudTextField @bind-Value="email"
+                          Label="Correo electrónico"
+                          Variant="Variant.Outlined"
+                          Class="mb-3"
+                          FullWidth="true"
+                          InputType="InputType.Email" />
+
+            <MudTextField @bind-Value="mensaje"
+                          Label="Mensaje"
+                          Variant="Variant.Outlined"
+                          Class="mb-6"
+                          FullWidth="true"
+                          Lines="5"
+                          MaxLength="500" />
+
+            @if (enviado)
+            {
+                <MudAlert Severity="Severity.Success" Class="mb-3">
+                    Mensaje enviado correctamente. Te responderemos en menos de 48 horas.
+                </MudAlert>
+            }
+
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       FullWidth="true"
+                       Size="Size.Large"
+                       OnClick="EnviarFormulario"
+                       Disabled="enviado">
+                Enviar mensaje
+            </MudButton>
+        </section>
+
+        <section class="infoContacto">
+            <h2 class="tituloBloque">También puedes encontrarnos aquí</h2>
+
+            <article class="itemContacto">
+                <MudIcon Icon="@Icons.Material.Filled.Email"
+                         Class="iconoContacto" />
+                <section>
+                    <p class="etiquetaContacto">Email</p>
+                    <p class="valorContacto">contacto@evently.es</p>
+                </section>
+            </article>            
+
+            <section class="notaRespuesta">
+                <p>
+                    Respondemos todos los mensajes en un plazo máximo de
+                    48 horas laborables. Para consultas sobre reservas ya
+                    realizadas, indica el número de pedido en el mensaje.
+                </p>
+            </section>
+        </section>
+
+    </section>
+
+</section>
+
+@code {
+    private string nombre = string.Empty;
+    private string email = string.Empty;
+    private string mensaje = string.Empty;
+    private bool enviado = false;
+
+    // Simula el envío — en producción aquí iría la llamada al backend
+    private void EnviarFormulario()
+    {
+        if (string.IsNullOrWhiteSpace(nombre) ||
+            string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(mensaje))
+            return;
+
+        enviado = true;
+    }
+}

@@ -584,3 +584,250 @@
         padding: 8px;
     }
 }
+
+/* PÁGINAS INFORMATIVAS */
+
+.paginaInformativa {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 0 32px;
+}
+
+.cabeceraInformativa {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.tituloPaginaInfo {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 16px 0;
+}
+
+.subtituloPaginaInfo {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* SOBRE NOSOTROS */
+
+.bloqueInfo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+.textoInfo p {
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.tituloBloque {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 20px 0;
+}
+
+.imagenBloque {
+    margin: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 48px rgba(0,0,0,0.1);
+}
+
+.fotoBloque {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+}
+
+.bloqueValores {
+    background: #f8f7ff;
+    border-radius: 24px;
+    padding: 56px 48px;
+    margin-bottom: 80px;
+}
+
+.rejillaValores {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 40px;
+}
+
+.tarjetaValor {
+    text-align: center;
+}
+
+.iconoValor {
+    font-size: 2.4rem !important;
+    color: #7c3aed;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.tituloValor {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+}
+
+.textoValor {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.bloqueCierre {
+    background: #0f172a;
+    border-radius: 24px;
+    padding: 56px 48px;
+    text-align: center;
+}
+
+.tituloCierre {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 12px 0;
+}
+
+.textoCierre {
+    color: #94a3b8;
+    margin: 0 0 32px 0;
+    font-size: 1rem;
+}
+
+/* CONTACTO */
+
+.contenidoContacto {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.infoContacto {
+    padding-top: 8px;
+}
+
+.itemContacto {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.iconoContacto {
+    font-size: 1.4rem !important;
+    color: #7c3aed;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.etiquetaContacto {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8;
+    margin: 0 0 4px 0;
+}
+
+.valorContacto {
+    font-size: 15px;
+    color: #0f172a;
+    font-weight: 500;
+    margin: 0;
+}
+
+.notaRespuesta {
+    background: #f8f7ff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+}
+
+    .notaRespuesta p {
+        font-size: 14px;
+        color: #64748b;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+/* TÉRMINOS */
+
+.contenidoTerminos {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.bloqueTermino p {
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+    .bloqueTermino p:last-child {
+        margin-bottom: 0;
+    }
+
+.tituloTermino {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.enlaceTermino {
+    color: #7c3aed;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+    .enlaceTermino:hover {
+        text-decoration: underline;
+    }
+
+/* RESPONSIVE PÁGINAS INFORMATIVAS */
+
+@media (max-width: 768px) {
+    .bloqueInfo {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .imagenBloque {
+        display: none;
+    }
+
+    .rejillaValores {
+        grid-template-columns: 1fr;
+    }
+
+    .contenidoContacto {
+        grid-template-columns: 1fr;
+    }
+
+    .bloqueValores,
+    .bloqueCierre {
+        padding: 40px 24px;
+    }
+}
