@@ -15,9 +15,23 @@ namespace Evently.API.DTOs.Actividad
         [MaxLength(500, ErrorMessage = "La descripción no puede superar 500 caracteres")]
         public string? Descripcion { get; set; }
 
+        [Required(ErrorMessage = "La ciudad es obligatoria")]
+        [MaxLength(100, ErrorMessage = "La ciudad no puede superar 100 caracteres")]
+        public string Ciudad { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "La ubicación es obligatoria")]
+        [MaxLength(150, ErrorMessage = "La ubicación no puede superar 150 caracteres")] 
+        public string Ubicacion { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "El precio es obligatorio")]
         [Range(0, double.MaxValue, ErrorMessage = "El precio no puede ser negativo")]
         public decimal Precio { get; set; }
+
+        public string PrecioCadena
+        {
+            get { return Convert.ToString(Precio).Replace(',', '.'); }
+            set { Precio = Convert.ToDecimal(value.Replace('.', ',')); }
+        }
 
         public DateTime? FechaActiv { get; set; }
 

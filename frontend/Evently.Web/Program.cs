@@ -2,6 +2,7 @@ using Evently.Web;
 using Evently.Web.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -23,9 +24,13 @@ builder.Services.AddScoped<ActividadService>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<PedidoService>();
 builder.Services.AddScoped<ClienteService>();
-builder.Services.AddSingleton<EstadoAuthService>();
+builder.Services.AddScoped<EstadoAuthService>();
 builder.Services.AddScoped<EstadoService>();
 builder.Services.AddScoped<ComentarioService>();
 builder.Services.AddScoped<ValoracionService>();
+
+var cultura = new System.Globalization.CultureInfo("es-ES");
+System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultura;
+System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultura;
 
 await builder.Build().RunAsync();

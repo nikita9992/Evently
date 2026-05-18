@@ -16,13 +16,13 @@
         </MudText>
     </header>
 
-    <!-- Filtros -->
+    @* Filtros *@
     <section id="seccion-filtros" class="contenedor-filtros">
         <MudExpansionPanels Class="mb-4">
             <MudExpansionPanel Text="Filtros de búsqueda"
                                Icon="@Icons.Material.Filled.FilterList">
                 <MudGrid>
-                    <MudItem xs="12" sm="6">
+                    <MudItem xs="12" sm="6" md="4">
                         <MudTextField @bind-Value="filtroPorTitulo"
                                       Label="Buscar por nombre"
                                       Variant="Variant.Outlined"
@@ -31,7 +31,7 @@
                                       Immediate="true"
                                       OnKeyUp="FiltrarActividades" />
                     </MudItem>
-                    <MudItem xs="12" sm="6">
+                    <MudItem xs="12" sm="6" md="4">
                         <MudSelect T="int?" @bind-Value="filtroPorCategoria"
                                    Label="Filtrar por categoría"
                                    Variant="Variant.Outlined"
@@ -47,7 +47,23 @@
                             }
                         </MudSelect>
                     </MudItem>
-                    <MudItem xs="12">
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudSelect T="string" @bind-Value="filtroPorCiudad"
+                                   Label="Filtrar por ciudad"
+                                   Variant="Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("")">
+                                Todas las ciudades
+                            </MudSelectItem>
+                            @foreach (var ciudad in ciudadesDisponibles)
+                            {
+                                <MudSelectItem T="string" Value="@ciudad">
+                                    @ciudad
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                    <MudItem xs="12" Class="d-flex justify-center gap-2">
                         <MudButton Variant="Variant.Filled"
                                    Color="Color.Primary"
                                    OnClick="FiltrarActividades"
@@ -59,7 +75,7 @@
                                    OnClick="LimpiarFiltros"
                                    Class="ml-2"
                                    StartIcon="@Icons.Material.Filled.Clear">
-                            Limpiar
+                            Limpiar filtros
                         </MudButton>
                     </MudItem>
                 </MudGrid>
@@ -67,13 +83,13 @@
         </MudExpansionPanels>
     </section>
 
-    <!-- Lista de actividades -->
+    @* Lista de actividades *@
     <section id="seccion-actividades">
         @if (cargando)
         {
-            <div class="contenedor-cargando">
+            <section class="contenedor-cargando">
                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-            </div>
+            </section>
         }
         else if (!actividades.Any())
         {
@@ -84,12 +100,12 @@
         else
         {
             <MudGrid>
-                @foreach (var actividad in actividades)
+                @foreach (var actividad in actividadesPaginadas)
                 {
                     <MudItem xs="12" sm="6" md="4" Class="item-actividad">
                         <MudCard Elevation="3" Class="tarjeta-actividad">
 
-                            <!-- Imagen de la actividad -->
+                            @* Imagen de la actividad *@
                             @if (!string.IsNullOrEmpty(actividad.ImagenPrincipal))
                             {
                                 <MudCardMedia Image="@actividad.ImagenPrincipal"
@@ -114,12 +130,12 @@
 
                             <MudCardContent Class="contenido-tarjeta">
 
-                                <!-- Valoración -->
+                                @* Valoración *@
                                 <section class="seccion-valoracion">
                                     @if (actividad.TotalValoraciones > 0)
                                     {
                                         var mediaCard = (int)Math.Round(actividad.MediaValoracion);
-                                        <div class="estrellas-valoracion">
+                                        <section class="estrellas-valoracion">
                                             @for (int s = 1; s <= 5; s++)
                                             {
                                                 int estrella = s;
@@ -131,7 +147,7 @@
                                                 @actividad.MediaValoracion.ToString("F1")
                                                 (@actividad.TotalValoraciones)
                                             </MudText>
-                                        </div>
+                                        </section>
                                     }
                                     else
                                     {
@@ -143,12 +159,12 @@
                                     }
                                 </section>
 
-                                <!-- Descripción -->
+                                @* Descripción *@
                                 <p class="descripcion-actividad">
                                     @actividad.Descripcion
                                 </p>
 
-                                <!-- Fecha y plazas -->
+                                @* Fecha y plazas *@
                                 <footer class="pie-info-actividad">
                                     @if (actividad.FechaActiv.HasValue)
                                     {
@@ -186,6 +202,14 @@
                                             </span>
                                         }
                                     }
+                                    @if (!string.IsNullOrEmpty(actividad.Ciudad))
+                                    {
+                                        <span class="info-fecha">
+                                            <MudIcon Icon="@Icons.Material.Filled.LocationCity"
+                                                     Size="Size.Small" />
+                                            @actividad.Ciudad
+                                        </span>
+                                    }
                                 </footer>
 
                             </MudCardContent>
@@ -207,6 +231,28 @@
                     </MudItem>
                 }
             </MudGrid>
+
+            @if (totalPaginas > 0)
+            {
+                <section class="controlesDeParginacion">
+                    <MudText Typo="Typo.body2">Mostrar:</MudText>
+                    <MudSelect T="int"
+                               Value="actividadesPorPagina"
+                               ValueChanged="@((int v) => { actividadesPorPagina = v; paginaActual = 1; ActualizarPaginacion(); })"
+                               Variant="Variant.Outlined"
+                               Dense="true"
+                               Class="selectorPagina">
+                        @foreach (var opcion in opcionesPagina)
+                        {
+                            <MudSelectItem T="int" Value="opcion">@opcion por página</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudPagination Count="totalPaginas"
+                                   Selected="paginaActual"
+                                   SelectedChanged="@((int p) => { paginaActual = p; ActualizarPaginacion(); })"
+                                   Color="Color.Primary" />
+                </section>
+            }            
         }
     </section>
 
@@ -218,29 +264,65 @@
     private string? filtroPorTitulo;
     private int? filtroPorCategoria;
     private bool cargando = true;
+    private string filtroPorCiudad = string.Empty;
+    private int paginaActual = 1;
+    private int actividadesPorPagina = 9;
+    private List<ActividadDto> todasLasActividades = new();
+    private List<string> ciudadesDisponibles = new();
+    private List<ActividadDto> actividadesPaginadas = new();
+    private int totalPaginas = 0;
+    private List<int> opcionesPagina = new() { 3, 6, 9, 21, 51 };
+
+    private void ActualizarPaginacion()
+    {
+        totalPaginas = (int)Math.Ceiling(actividades.Count / (double)actividadesPorPagina);
+        actividadesPaginadas = actividades
+            .Skip((paginaActual - 1) * actividadesPorPagina)
+            .Take(actividadesPorPagina)
+            .ToList();
+        ciudadesDisponibles = todasLasActividades
+            .Where(a => !string.IsNullOrEmpty(a.Ciudad))
+            .Select(a => a.Ciudad ?? string.Empty)
+            .Where(c => c != string.Empty)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+    }
 
     protected override async Task OnInitializedAsync()
     {
         categorias  = await CategoriaService.ObtenerTodasAsync();
         actividades = await ActividadService.ObtenerTodasAsync();
+        todasLasActividades = actividades.ToList();
         cargando    = false;
+        ActualizarPaginacion();
     }
 
     /* Aplicar filtros */
     private async Task FiltrarActividades()
     {
-        cargando    = true;
-        actividades = await ActividadService.ObtenerTodasAsync(
+        cargando = true;
+        paginaActual = 1;
+
+        var todas = await ActividadService.ObtenerTodasAsync(
             filtroPorCategoria,
             filtroPorTitulo);
+
+        actividades = string.IsNullOrEmpty(filtroPorCiudad)
+            ? todas
+            : todas.Where(a => a.Ciudad == filtroPorCiudad).ToList();
+
+        ActualizarPaginacion();
         cargando = false;
     }
 
     /* Limpiar filtros */
     private async Task LimpiarFiltros()
     {
-        filtroPorTitulo    = null;
+        filtroPorTitulo = null;
         filtroPorCategoria = null;
+        filtroPorCiudad = string.Empty;
+        paginaActual = 1;
         await FiltrarActividades();
     }
 

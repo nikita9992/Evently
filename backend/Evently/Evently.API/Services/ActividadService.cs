@@ -45,6 +45,8 @@ namespace Evently.API.Services
                     NombreCatego = a.Categoria.NombreCatego,
                     Titulo = a.Titulo,
                     Descripcion = a.Descripcion,
+                    Ciudad = a.Ciudad,
+                    Ubicacion = a.Ubicacion,
                     Precio = a.Precio,
                     FechaActiv = a.FechaActiv,
                     CupoMaximo = a.CupoMaximo,
@@ -84,6 +86,8 @@ namespace Evently.API.Services
                     NombreCatego = a.Categoria.NombreCatego,
                     Titulo = a.Titulo,
                     Descripcion = a.Descripcion,
+                    Ciudad = a.Ciudad,
+                    Ubicacion = a.Ubicacion,
                     Precio = a.Precio,
                     FechaActiv = a.FechaActiv,
                     CupoMaximo = a.CupoMaximo,
@@ -112,6 +116,8 @@ namespace Evently.API.Services
                 NombreCatego = actividad.Categoria.NombreCatego,
                 Titulo = actividad.Titulo,
                 Descripcion = actividad.Descripcion,
+                Ciudad = actividad.Ciudad,
+                Ubicacion = actividad.Ubicacion,
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
                 CupoMaximo = actividad.CupoMaximo,
@@ -129,6 +135,8 @@ namespace Evently.API.Services
                 IdCategoria = crearActividadDto.IdCategoria,
                 Titulo = crearActividadDto.Titulo,
                 Descripcion = crearActividadDto.Descripcion,
+                Ciudad = crearActividadDto.Ciudad,
+                Ubicacion = crearActividadDto.Ubicacion,
                 Precio = crearActividadDto.Precio,
                 FechaActiv = crearActividadDto.FechaActiv.HasValue
                 ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc) : null,
@@ -163,6 +171,8 @@ namespace Evently.API.Services
                 NombreCatego = nuevaActividad.Categoria.NombreCatego,
                 Titulo = nuevaActividad.Titulo,
                 Descripcion = nuevaActividad.Descripcion,
+                Ciudad = nuevaActividad.Ciudad,
+                Ubicacion = nuevaActividad.Ubicacion,
                 Precio = nuevaActividad.Precio,
                 FechaActiv = nuevaActividad.FechaActiv,
                 CupoMaximo = nuevaActividad.CupoMaximo,
@@ -183,13 +193,14 @@ namespace Evently.API.Services
             actividad.IdCategoria = crearActividadDto.IdCategoria;
             actividad.Titulo = crearActividadDto.Titulo;
             actividad.Descripcion = crearActividadDto.Descripcion;
+            actividad.Ciudad = crearActividadDto.Ciudad;
+            actividad.Ubicacion = crearActividadDto.Ubicacion;
             actividad.Precio = crearActividadDto.Precio;
             actividad.FechaActiv = crearActividadDto.FechaActiv.HasValue
                                 ? DateTime.SpecifyKind(crearActividadDto.FechaActiv.Value, DateTimeKind.Utc)
                                 : null;
             actividad.CupoMaximo = crearActividadDto.CupoMaximo;
             actividad.EsDestacada = crearActividadDto.EsDestacada;
-
 
             await _contexto.SaveChangesAsync();
 
@@ -216,6 +227,8 @@ namespace Evently.API.Services
                 NombreCatego = actividad.Categoria.NombreCatego,
                 Titulo = actividad.Titulo,
                 Descripcion = actividad.Descripcion,
+                Ciudad = actividad.Ciudad,
+                Ubicacion = actividad.Ubicacion,    
                 Precio = actividad.Precio,
                 FechaActiv = actividad.FechaActiv,
                 CupoMaximo = actividad.CupoMaximo,

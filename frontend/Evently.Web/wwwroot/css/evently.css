@@ -435,6 +435,19 @@
     padding-top: 8px;
 }
 
+.mud-table-cell .mud-input-control {
+    justify-content: center;
+}
+
+.mud-table-cell .mud-checkbox {
+    margin: 0 auto;
+}
+
+.mud-table-cell .mud-checkbox {
+    display: flex;
+    justify-content: center;
+}
+
 /* PÁGINA DEL CARRITO */
 
 .estado-carrito {
@@ -547,6 +560,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .mud-table-root {
+        font-size: 12px;
+    }
 }
 
 /*RESPONSIVE*/
@@ -945,4 +964,20 @@
     font-weight: 700;
     color: #7c3aed;
     margin: 0;
+}
+
+
+.controlesDeParginacion {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+
+.selectorPagina {
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
 }

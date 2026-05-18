@@ -37,7 +37,8 @@
                                       Variant="Variant.Outlined"
                                       Adornment="Adornment.Start"
                                       AdornmentIcon="@Icons.Material.Filled.Search"
-                                      Immediate="true" />
+                                      Immediate="true"
+                                      OnKeyUp="ActualizarFiltros" />
                     </MudItem>
 
                     <MudItem xs="12" sm="6">
@@ -58,11 +59,35 @@
                         </MudSelect>
                     </MudItem>
 
+                    <MudItem xs="12" sm="6">
+                        <MudSelect T="string" @bind-Value="filtroPorCiudad"
+                                   Label="Filtrar por ciudad"
+                                   Variant="Variant.Outlined"
+                                   AnchorOrigin="Origin.BottomCenter">
+                            <MudSelectItem T="string" Value="@("")">
+                                Todas las ciudades
+                            </MudSelectItem>
+                            @foreach (var ciudad in ciudadesDisponibles)
+                            {
+                                <MudSelectItem T="string" Value="@ciudad">
+                                    @ciudad
+                                </MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+
                     <MudItem xs="12">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.FilterList"
+                                   OnClick="ActualizarFiltros">
+                            Aplicar filtros
+                        </MudButton>
                         <MudButton Variant="Variant.Outlined"
                                    Color="Color.Secondary"
                                    StartIcon="@Icons.Material.Filled.Clear"
-                                   OnClick="LimpiarFiltros">
+                                   OnClick="LimpiarFiltros"
+                                   Class="ml-2">
                             Limpiar filtros
                         </MudButton>
                     </MudItem>
@@ -81,12 +106,12 @@
         }
         else
         {
-            <MudTable Items="ActividadesFiltradas" Hover="true" Striped="true" Elevation="3">
+            <MudTable Items="actividadesPaginadas" Hover="true" Striped="true" Elevation="3" RowsPerPage="10">
                 <HeaderContent>
-                    <MudTh>ID</MudTh>
                     <MudTh>Imagen</MudTh>
                     <MudTh>Título</MudTh>
-                    <MudTh>Categoría</MudTh>
+                    <MudTh>Ciudad</MudTh>
+                    @* <MudTh>Categoría</MudTh> *@
                     <MudTh>Precio</MudTh>
                     <MudTh>Fecha</MudTh>
                     <MudTh>Plazas</MudTh>
@@ -95,8 +120,6 @@
                 </HeaderContent>
 
                 <RowTemplate>
-                    <MudTd>@context.IdActividad</MudTd>
-
                     <MudTd>
                         @if (context.Imagenes.Any())
                         {
@@ -113,11 +136,13 @@
 
                 <MudTd>@context.Titulo</MudTd>
 
-                <MudTd>
+                <MudTd>@(context.Ciudad ?? "—")</MudTd>
+
+                @* <MudTd>
                     <MudChip T="string" Color="Color.Primary" Size="Size.Small">
                         @context.NombreCatego
                     </MudChip>
-                </MudTd>
+                </MudTd> *@
 
                 <MudTd>@context.Precio.ToString("C")</MudTd>
 
@@ -158,6 +183,27 @@
                     </MudTd>
                 </RowTemplate>
             </MudTable>
+            @if (totalPaginas > 0)
+            {
+                <section class="controlesDeParginacion">
+                    <MudText Typo="Typo.body2">Mostrar:</MudText>
+                    <MudSelect T="int"
+                               Value="actividadesPorPagina"
+                               ValueChanged="@((int v) => { actividadesPorPagina = v; paginaActual = 1; ActualizarPaginacion(); })"
+                               Variant="Variant.Outlined"
+                               Dense="true"
+                               Class="selectorPagina">
+                        @foreach (var opcion in opcionesPagina)
+                        {
+                            <MudSelectItem T="int" Value="opcion">@opcion por página</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudPagination Count="totalPaginas"
+                                   Selected="paginaActual"
+                                   SelectedChanged="@((int p) => { paginaActual = p; ActualizarPaginacion(); })"
+                                   Color="Color.Primary" />
+                </section>
+            }
         }
     </section>
 
@@ -173,16 +219,20 @@
     </TitleContent>
 
     <DialogContent>
+        <MudForm @ref="formularioMud" @bind-IsValid="formularioValido">
         <MudTextField @bind-Value="formulario.Titulo"
                       Label="Título"
                       Variant="Variant.Outlined"
                       Class="mb-3"
-                      Required="true" />
+                      Required="true"
+                      RequiredError="El título es obligatorio" />
 
         <MudSelect T="int" @bind-Value="formulario.IdCategoria"
                    Label="Categoría"
                    Variant="Variant.Outlined"
-                   Class="mb-3">
+                   Class="mb-3"
+                   Required="true"
+                   RequiredError="La categoría es obligatoria">
             @foreach (var categoria in categorias)
             {
                 <MudSelectItem T="int" Value="categoria.IdCategoria">
@@ -197,14 +247,28 @@
                       Lines="3"
                       Class="mb-3" />
 
-        <MudNumericField @bind-Value="formulario.Precio"
-                         Label="Precio (€)"
-                         Variant="Variant.Outlined"
-                         Min="0"
-                         Format="F2"
-                         Adornment="Adornment.Start"
-                         AdornmentText="€"
-                         Class="mb-3" />
+        <MudTextField @bind-Value="formulario.Ciudad"
+                      Label="Ciudad"
+                      Variant="Variant.Outlined"
+                      Class="mb-3"
+                      Required="true"
+                      RequiredError="La ciudad es obligatoria" />
+
+        <MudTextField @bind-Value="formulario.Ubicacion"
+                      Label="Ubicación"
+                      Variant="Variant.Outlined"
+                      Class="mb-3"
+                      Required="true"
+                      RequiredError="La ubicación es obligatoria" />
+
+        <MudTextField @bind-Value="formulario.PrecioCadena"
+                        Label="Precio (€)"
+                        Variant="Variant.Outlined"
+                        Adornment="Adornment.End"
+                        AdornmentText="€"
+                        Class="mb-3"
+                        Required="true"
+                        RequiredError="El precio es obligatorio" />
 
         @* Fecha y hora *@
         <MudGrid Class="mb-3">
@@ -288,6 +352,7 @@
                 Añadir imagen
             </MudButton>
         }
+        </MudForm>
     </DialogContent>
 
     <DialogActions>
@@ -348,16 +413,56 @@
     private List<string> listaImagenes = new() { "" };
     private string filtroPorTitulo = string.Empty;
     private int? filtroPorCategoria = null;
+    private string filtroPorCiudad = string.Empty;
+    private List<ActividadDto> todasLasActividades = new();
+    private MudForm formularioMud = null!;
+    private bool formularioValido = false;
 
-    private IEnumerable<ActividadDto> ActividadesFiltradas => actividades
-        .Where(a =>
-            (string.IsNullOrEmpty(filtroPorTitulo)
-             || a.Titulo.ToLower().Contains(filtroPorTitulo.ToLower()))
-            &&
-            (!filtroPorCategoria.HasValue
-             || a.IdCategoria == filtroPorCategoria.Value));
+    private List<string> ciudadesDisponibles = new();
+    private List<ActividadDto> actividadesFiltradas = new();
 
     private string tokenAdmin => EstadoAuth.Token;
+
+    private int paginaActual = 1;
+    private int actividadesPorPagina = 10;
+    private List<ActividadDto> actividadesPaginadas = new();
+    private int totalPaginas = 0;
+    private List<int> opcionesPagina = new() { 5, 10, 20, 50 };
+
+    private void ActualizarPaginacion()
+    {
+        totalPaginas = (int)Math.Ceiling(actividadesFiltradas.Count / (double)actividadesPorPagina);
+        actividadesPaginadas = actividadesFiltradas
+            .Skip((paginaActual - 1) * actividadesPorPagina)
+            .Take(actividadesPorPagina)
+            .ToList();
+    }
+
+    private void ActualizarFiltros()
+    {
+        actividadesFiltradas = actividades
+            .Where(a =>
+                (string.IsNullOrEmpty(filtroPorTitulo)
+                 || a.Titulo.ToLower().Contains(filtroPorTitulo.ToLower()))
+                &&
+                (!filtroPorCategoria.HasValue
+                 || a.IdCategoria == filtroPorCategoria.Value)
+                &&
+                (string.IsNullOrEmpty(filtroPorCiudad)
+                 || (a.Ciudad ?? string.Empty) == filtroPorCiudad))
+            .ToList();
+
+        ciudadesDisponibles = todasLasActividades
+            .Where(a => !string.IsNullOrEmpty(a.Ciudad))
+            .Select(a => a.Ciudad ?? string.Empty)
+            .Where(c => c != string.Empty)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+
+        paginaActual = 1;
+        ActualizarPaginacion();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -384,7 +489,9 @@
     {
         cargando = true;
         actividades = await ActividadService.ObtenerTodasAsync();
+        todasLasActividades = actividades.ToList();
         categorias = await CategoriaService.ObtenerTodasAsync();
+        ActualizarFiltros();
         cargando = false;
     }
 
@@ -392,6 +499,8 @@
     {
         filtroPorTitulo = string.Empty;
         filtroPorCategoria = null;
+        filtroPorCiudad = string.Empty;
+        ActualizarFiltros();
     }
 
     private void AbrirFormularioCrear()
@@ -412,6 +521,8 @@
             IdCategoria = actividad.IdCategoria,
             Titulo = actividad.Titulo,
             Descripcion = actividad.Descripcion,
+            Ciudad = actividad.Ciudad ?? string.Empty,
+            Ubicacion = actividad.Ubicacion ?? string.Empty,
             Precio = actividad.Precio,
             CupoMaximo = actividad.CupoMaximo,
             EsDestacada = actividad.EsDestacada
@@ -432,6 +543,20 @@
 
     private async Task GuardarActividad()
     {
+        await formularioMud.ValidateAsync();
+
+        if (!formularioValido) return;
+
+        var imagenesValidas = listaImagenes
+            .Where(url => !string.IsNullOrWhiteSpace(url))
+            .ToList();
+
+        if (imagenesValidas.Count == 0)
+        {
+            Snackbar.Add("Debes añadir al menos una imagen", Severity.Warning);
+            return;
+        }
+
         if (fechaSeleccionada.HasValue)
         {
             var fecha = fechaSeleccionada.Value.Date;
@@ -439,18 +564,12 @@
             formulario.FechaActiv = DateTime.SpecifyKind(fecha + hora, DateTimeKind.Utc);
         }
         else
-        {
             formulario.FechaActiv = null;
-        }
 
         if (!tieneCupoMaximo)
-        {
             formulario.CupoMaximo = null;
-        }
 
-        formulario.Imagenes = listaImagenes
-            .Where(url => !string.IsNullOrWhiteSpace(url))
-            .ToList();
+        formulario.Imagenes = imagenesValidas;
 
         if (modoEdicion)
         {
@@ -458,7 +577,11 @@
                 actividadEditandoId, formulario, tokenAdmin);
 
             if (resultado != null)
+            {
                 Snackbar.Add("Actividad actualizada correctamente", Severity.Success);
+                dialogoAbierto = false;
+                await CargarDatos();
+            }
             else
                 Snackbar.Add("Error al actualizar la actividad", Severity.Error);
         }
@@ -467,13 +590,14 @@
             var resultado = await ActividadService.CrearAsync(formulario, tokenAdmin);
 
             if (resultado != null)
+            {
                 Snackbar.Add("Actividad creada correctamente", Severity.Success);
+                dialogoAbierto = false;
+                await CargarDatos();
+            }
             else
                 Snackbar.Add("Error al crear la actividad", Severity.Error);
         }
-
-        dialogoAbierto = false;
-        await CargarDatos();
     }
 
     private async Task CambiarDestacadaDesdeTabla(ActividadDto actividad, bool esDestacada)
@@ -483,6 +607,8 @@
             IdCategoria = actividad.IdCategoria,
             Titulo = actividad.Titulo,
             Descripcion = actividad.Descripcion,
+            Ciudad = actividad.Ciudad ?? string.Empty,
+            Ubicacion = actividad.Ubicacion ?? string.Empty,
             Precio = actividad.Precio,
             FechaActiv = actividad.FechaActiv,
             CupoMaximo = actividad.CupoMaximo,

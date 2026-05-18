@@ -8,6 +8,8 @@
         public string NombreCatego { get; set; } = string.Empty;
         public string Titulo { get; set; } = string.Empty;
         public string? Descripcion { get; set; }
+        public string? Ciudad { get; set; }
+        public string? Ubicacion { get; set; }
         public decimal Precio { get; set; }
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }

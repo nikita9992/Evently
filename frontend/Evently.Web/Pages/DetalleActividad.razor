@@ -119,6 +119,33 @@ else
                                     </MudPaper>
                                 </MudItem>
                             }
+
+                            @if (!string.IsNullOrEmpty(actividad.Ciudad))
+                            {
+                                <MudItem xs="12" sm="6">
+                                    <MudPaper Class="pa-3" Elevation="1">
+                                        <MudText Typo="Typo.caption">Ciudad</MudText>
+                                        <MudText Typo="Typo.body1">
+                                            <MudIcon Icon="@Icons.Material.Filled.LocationCity"
+                                                     Size="Size.Small" />
+                                            @actividad.Ciudad
+                                        </MudText>
+                                    </MudPaper>
+                                </MudItem>
+                            }
+                            @if (!string.IsNullOrEmpty(actividad.Ubicacion))
+                            {
+                                <MudItem xs="12" sm="6">
+                                    <MudPaper Class="pa-3" Elevation="1">
+                                        <MudText Typo="Typo.caption">Punto de encuentro</MudText>
+                                        <MudText Typo="Typo.body1">
+                                            <MudIcon Icon="@Icons.Material.Filled.Place"
+                                                     Size="Size.Small" />
+                                            @actividad.Ubicacion
+                                        </MudText>
+                                    </MudPaper>
+                                </MudItem>
+                            }
                         </MudGrid>
                     </section>
 
