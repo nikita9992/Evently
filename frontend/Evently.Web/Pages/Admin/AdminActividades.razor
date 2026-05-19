@@ -38,7 +38,7 @@
                                       Adornment="Adornment.Start"
                                       AdornmentIcon="@Icons.Material.Filled.Search"
                                       Immediate="true"
-                                      OnKeyUp="ActualizarFiltros" />
+                                      OnKeyUp="FiltrarActividades" />
                     </MudItem>
 
                     <MudItem xs="12" sm="6">
@@ -80,7 +80,7 @@
                         <MudButton Variant="Variant.Filled"
                                    Color="Color.Primary"
                                    StartIcon="@Icons.Material.Filled.FilterList"
-                                   OnClick="ActualizarFiltros">
+                                   OnClick="FiltrarActividades">
                             Aplicar filtros
                         </MudButton>
                         <MudButton Variant="Variant.Outlined"
@@ -137,12 +137,6 @@
                 <MudTd>@context.Titulo</MudTd>
 
                 <MudTd>@(context.Ciudad ?? "—")</MudTd>
-
-                @* <MudTd>
-                    <MudChip T="string" Color="Color.Primary" Size="Size.Small">
-                        @context.NombreCatego
-                    </MudChip>
-                </MudTd> *@
 
                 <MudTd>@context.Precio.ToString("C")</MudTd>
 
@@ -398,9 +392,6 @@
 </MudDialog>
 
 @code {
-    private List<ActividadDto> actividades = new();
-    private List<CategoriaDto> categorias = new();
-    private bool cargando = true;
     private bool dialogoAbierto = false;
     private bool dialogoEliminarAbierto = false;
     private bool modoEdicion = false;
@@ -410,58 +401,56 @@
     private bool tieneCupoMaximo = false;
     private int actividadEditandoId;
     private ActividadDto? actividadAEliminar;
-    private List<string> listaImagenes = new() { "" };
-    private string filtroPorTitulo = string.Empty;
-    private int? filtroPorCategoria = null;
-    private string filtroPorCiudad = string.Empty;
-    private List<ActividadDto> todasLasActividades = new();
+    private List<string> listaImagenes = new() { "" };    
     private MudForm formularioMud = null!;
     private bool formularioValido = false;
-
-    private List<string> ciudadesDisponibles = new();
-    private List<ActividadDto> actividadesFiltradas = new();
-
     private string tokenAdmin => EstadoAuth.Token;
+
+
+    private string filtroPorTitulo = string.Empty;
+    private int? filtroPorCategoria = null;
+    private bool cargando = true;
+    private string filtroPorCiudad = string.Empty;
+
+    private List<ActividadDto> actividades = new();
+    private List<ActividadDto> todasLasActividades = new();
+    private List<ActividadDto> actividadesFiltradas = new();
+    private List<ActividadDto> actividadesPaginadas = new();
+
+
+    private List<CategoriaDto> categorias = new();
+    private List<string> ciudadesDisponibles = new();
 
     private int paginaActual = 1;
     private int actividadesPorPagina = 10;
-    private List<ActividadDto> actividadesPaginadas = new();
     private int totalPaginas = 0;
     private List<int> opcionesPagina = new() { 5, 10, 20, 50 };
 
     private void ActualizarPaginacion()
     {
         totalPaginas = (int)Math.Ceiling(actividadesFiltradas.Count / (double)actividadesPorPagina);
+
         actividadesPaginadas = actividadesFiltradas
             .Skip((paginaActual - 1) * actividadesPorPagina)
             .Take(actividadesPorPagina)
             .ToList();
     }
 
-    private void ActualizarFiltros()
+    private async Task FiltrarActividades()
     {
-        actividadesFiltradas = actividades
-            .Where(a =>
-                (string.IsNullOrEmpty(filtroPorTitulo)
-                 || a.Titulo.ToLower().Contains(filtroPorTitulo.ToLower()))
-                &&
-                (!filtroPorCategoria.HasValue
-                 || a.IdCategoria == filtroPorCategoria.Value)
-                &&
-                (string.IsNullOrEmpty(filtroPorCiudad)
-                 || (a.Ciudad ?? string.Empty) == filtroPorCiudad))
-            .ToList();
-
-        ciudadesDisponibles = todasLasActividades
-            .Where(a => !string.IsNullOrEmpty(a.Ciudad))
-            .Select(a => a.Ciudad ?? string.Empty)
-            .Where(c => c != string.Empty)
-            .Distinct()
-            .OrderBy(c => c)
-            .ToList();
-
+        cargando = true;
         paginaActual = 1;
+
+        actividades = await ActividadService.ObtenerTodasAsync(
+            filtroPorCategoria,
+            filtroPorTitulo,
+            filtroPorCiudad);
+
+        actividadesFiltradas = actividades.ToList();
+
         ActualizarPaginacion();
+
+        cargando = false;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -488,19 +477,33 @@
     private async Task CargarDatos()
     {
         cargando = true;
+
+        categorias = await CategoriaService.ObtenerTodasAsync();
+
         actividades = await ActividadService.ObtenerTodasAsync();
         todasLasActividades = actividades.ToList();
-        categorias = await CategoriaService.ObtenerTodasAsync();
-        ActualizarFiltros();
+        actividadesFiltradas = actividades.ToList();
+
+        ciudadesDisponibles = todasLasActividades
+            .Where(a => !string.IsNullOrEmpty(a.Ciudad))
+            .Select(a => a.Ciudad ?? string.Empty)
+            .Where(c => c != string.Empty)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+
+        ActualizarPaginacion();
+
         cargando = false;
     }
 
-    private void LimpiarFiltros()
+    private async Task LimpiarFiltros()
     {
         filtroPorTitulo = string.Empty;
         filtroPorCategoria = null;
         filtroPorCiudad = string.Empty;
-        ActualizarFiltros();
+
+        await FiltrarActividades();
     }
 
     private void AbrirFormularioCrear()

@@ -11,15 +11,27 @@ namespace Evently.Web.Services
         {
             _http = http;
         }
-
+                
         // Obtener todas las actividades con filtros 
         public async Task<List<ActividadDto>> ObtenerTodasAsync(
             int? idCategoria = null,
-            string? titulo = null)
+            string? titulo = null,
+            string? ciudad = null)
         {
-            var url = "api/actividades?";
-            if (idCategoria.HasValue) url += $"idCategoria={idCategoria}&";
-            if (!string.IsNullOrEmpty(titulo)) url += $"titulo={titulo}";
+            var parametros = new List<string>();
+            var url = "api/actividades";
+
+            if (idCategoria.HasValue)
+                parametros.Add($"idCategoria={idCategoria.Value}");
+
+            if (!string.IsNullOrEmpty(titulo))
+                parametros.Add($"titulo={Uri.EscapeDataString(titulo)}");
+
+            if (!string.IsNullOrEmpty(ciudad))
+                parametros.Add($"ciudad={Uri.EscapeDataString(ciudad)}");            
+
+            if (parametros.Any())
+                url += "?" + string.Join("&", parametros);
 
             var resultado = await _http.GetFromJsonAsync<List<ActividadDto>>(url);
             return resultado ?? new List<ActividadDto>();

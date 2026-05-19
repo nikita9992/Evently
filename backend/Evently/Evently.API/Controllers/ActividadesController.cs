@@ -16,16 +16,17 @@ namespace Evently.API.Controllers
             _actividadService = actividadService;
         }
 
-        //GET api/actividades?idCategoria=1&titulo=surf
-        [HttpGet]
+        // GET api/actividades?idCategoria=1&titulo=surf&ciudad=Madrid        [HttpGet]
         public async Task<IActionResult> ObtenerTodas(
             [FromQuery] int? idCategoria,
-            [FromQuery] string? titulo)
+            [FromQuery] string? titulo,
+            [FromQuery] string? ciudad)
         {
             var filtro = new FiltroActividadDto
             {
                 IdCategoria = idCategoria,
-                Titulo = titulo
+                Titulo = titulo,
+                Ciudad = ciudad
             };
 
             var actividades = await _actividadService.ObtenerTodasAsync(filtro);

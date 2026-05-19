@@ -91,7 +91,8 @@
                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
             </section>
         }
-        else if (!actividades.Any())
+        @* else if (!actividades.Any()) *@
+        else if (!actividadesFiltradas.Any())
         {
             <MudAlert Severity="Severity.Info">
                 No se encontraron actividades con los filtros seleccionados.
@@ -261,6 +262,8 @@
 @code {
     private List<ActividadDto> actividades = new();
     private List<CategoriaDto> categorias = new();
+    private List<ActividadDto> actividadesFiltradas = new();
+
     private string? filtroPorTitulo;
     private int? filtroPorCategoria;
     private bool cargando = true;
@@ -275,11 +278,13 @@
 
     private void ActualizarPaginacion()
     {
-        totalPaginas = (int)Math.Ceiling(actividades.Count / (double)actividadesPorPagina);
-        actividadesPaginadas = actividades
+        totalPaginas = (int)Math.Ceiling(actividadesFiltradas.Count / (double)actividadesPorPagina);
+
+        actividadesPaginadas = actividadesFiltradas
             .Skip((paginaActual - 1) * actividadesPorPagina)
             .Take(actividadesPorPagina)
             .ToList();
+
         ciudadesDisponibles = todasLasActividades
             .Where(a => !string.IsNullOrEmpty(a.Ciudad))
             .Select(a => a.Ciudad ?? string.Empty)
@@ -294,6 +299,9 @@
         categorias  = await CategoriaService.ObtenerTodasAsync();
         actividades = await ActividadService.ObtenerTodasAsync();
         todasLasActividades = actividades.ToList();
+        actividadesFiltradas = actividades.ToList();
+
+
         cargando    = false;
         ActualizarPaginacion();
     }
@@ -304,25 +312,24 @@
         cargando = true;
         paginaActual = 1;
 
-        var todas = await ActividadService.ObtenerTodasAsync(
+        actividades = await ActividadService.ObtenerTodasAsync(
             filtroPorCategoria,
-            filtroPorTitulo);
+            filtroPorTitulo,
+            filtroPorCiudad);        
 
-        actividades = string.IsNullOrEmpty(filtroPorCiudad)
-            ? todas
-            : todas.Where(a => a.Ciudad == filtroPorCiudad).ToList();
+        actividadesFiltradas = actividades.ToList();
 
         ActualizarPaginacion();
         cargando = false;
     }
-
+        
     /* Limpiar filtros */
     private async Task LimpiarFiltros()
     {
-        filtroPorTitulo = null;
+        filtroPorTitulo = string.Empty;
         filtroPorCategoria = null;
         filtroPorCiudad = string.Empty;
-        paginaActual = 1;
+
         await FiltrarActividades();
     }
 
