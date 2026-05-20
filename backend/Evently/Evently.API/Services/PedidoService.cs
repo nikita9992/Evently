@@ -18,6 +18,7 @@ namespace Evently.API.Services
         // Obtener todos los pedidos con sus datos relacionados
         public async Task<List<PedidoDto>> ObtenerTodosAsync()
         {
+
             return await _contexto.Pedidos
                 .Include(p => p.Cliente)
                 .Include(p => p.Estado)
@@ -45,7 +46,7 @@ namespace Evently.API.Services
         }
 
         // Obtener un pedido concreto con todos sus datos
-        public async Task<PedidoDto?> ObtenerPorIdAsync(int id)
+        public async Task<PedidoDto?> ObtenerPorIdAsync(int id, int idUsuario, bool esAdmin)
         {
             var pedido = await _contexto.Pedidos
                 .Include(p => p.Cliente)
@@ -55,6 +56,8 @@ namespace Evently.API.Services
                 .FirstOrDefaultAsync(p => p.IdPedido == id);
 
             if (pedido == null) return null;
+
+            if (!esAdmin && pedido.Cliente.IdUsuario != idUsuario) return null;
 
             return new PedidoDto
             {
@@ -77,8 +80,15 @@ namespace Evently.API.Services
         }
 
         // Obtener todos los pedidos de un cliente concreto
-        public async Task<List<PedidoDto>> ObtenerPorClienteAsync(int idCliente)
+        public async Task<List<PedidoDto>?> ObtenerPorClienteAsync(int idCliente, int idUsuario, bool esAdmin)
         {
+            var cliente = await _contexto.Clientes
+                .FirstOrDefaultAsync(c => c.IdCliente == idCliente);
+
+            if (cliente == null) return null;
+
+            if (!esAdmin && cliente.IdUsuario != idUsuario) return null;
+
             return await _contexto.Pedidos
                 .Include(p => p.Cliente)
                 .Include(p => p.Estado)
@@ -296,11 +306,16 @@ namespace Evently.API.Services
         }
 
         // Confirma el pedido con las actividades del carrito (localStorage)
-        public async Task<PedidoDto?> ConfirmarAsync(ConfirmarPedidoDto confirmarDto)
+        public async Task<PedidoDto?> ConfirmarAsync(ConfirmarPedidoDto confirmarDto, int idUsuario)
         {
             var cliente = await ObtenerClienteAsync(confirmarDto.IdCliente);
 
             if (cliente == null)
+            {
+                return null;
+            }
+
+            if (cliente.IdUsuario != idUsuario)
             {
                 return null;
             }

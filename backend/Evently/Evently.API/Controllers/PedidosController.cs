@@ -12,12 +12,10 @@ namespace Evently.API.Controllers
     public class PedidosController : ControllerBase
     {
         private readonly IPedidoService _pedidoService;
-        private readonly IClienteService _clienteService;
 
-        public PedidosController(IPedidoService pedidoService, IClienteService clienteService)
+        public PedidosController(IPedidoService pedidoService)
         {
             _pedidoService = pedidoService;
-            _clienteService = clienteService;
         }
 
         // Devuelve todos los pedidos con sus datos relacionados
@@ -29,31 +27,18 @@ namespace Evently.API.Controllers
             return Ok(pedidos);
         }
 
-        // Devuelve los pedidos del cliente asociado al usuario que ha iniciado sesión
-        [HttpGet("cliente-actual")]
-        public async Task<IActionResult> GetPedidosClienteActual()
-        {
-            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
-                return Unauthorized();
-
-            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
-
-            if (cliente == null)
-                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
-
-            var pedidos = await _pedidoService.ObtenerPorClienteAsync(cliente.IdCliente);
-
-            return Ok(pedidos);
-        }
-
         // Devuelve un pedido concreto con todos sus datos
         [HttpGet("{id}")]
-        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetPedido(int id)
         {
-            var pedido = await _pedidoService.ObtenerPorIdAsync(id);
+            var idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioStr, out int idUsuario))
+                return Unauthorized();
+
+            var esAdmin = User.IsInRole("administrador");
+
+            var pedido = await _pedidoService.ObtenerPorIdAsync(id, idUsuario, esAdmin);
 
             if (pedido == null)
                 return NotFound(new { mensaje = "Pedido no encontrado" });
@@ -63,10 +48,20 @@ namespace Evently.API.Controllers
 
         // Devuelve todos los pedidos de un cliente concreto
         [HttpGet("cliente/{idCliente}")]
-        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetPedidosPorCliente(int idCliente)
         {
-            var pedidos = await _pedidoService.ObtenerPorClienteAsync(idCliente);
+            var idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioStr, out int idUsuario))
+                return Unauthorized();
+
+            var esAdmin = User.IsInRole("administrador");
+
+            var pedidos = await _pedidoService.ObtenerPorClienteAsync(idCliente, idUsuario, esAdmin);
+
+            if (pedidos == null)
+                return NotFound(new { mensaje = "Cliente no encontrado" });
+
             return Ok(pedidos);
         }
 
@@ -132,26 +127,19 @@ namespace Evently.API.Controllers
             return Ok(new { mensaje = "Pedido eliminado correctamente" });
         }
 
-        // Confirma el pedido del cliente asociado al usuario que ha iniciado sesión
+        // Confirma el pedido con las actividades del carrito
         [HttpPost("confirmar")]
         public async Task<IActionResult> ConfirmarPedido([FromBody] ConfirmarPedidoDto confirmarDto)
         {
-            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
-                return Unauthorized();
-
-            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
-
-            if (cliente == null)
-                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
-
-            confirmarDto.IdCliente = cliente.IdCliente;
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var pedido = await _pedidoService.ConfirmarAsync(confirmarDto);
+            var idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioStr, out int idUsuario))
+                return Unauthorized();
+
+            var pedido = await _pedidoService.ConfirmarAsync(confirmarDto, idUsuario);
 
             if (pedido == null)
                 return BadRequest(new { mensaje = "El cliente no existe o el carrito está vacío" });

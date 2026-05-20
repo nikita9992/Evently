@@ -239,6 +239,7 @@ else
 @code {
     private List<ItemCarrito> elementosCarrito = new();
     private Dictionary<int, ActividadDto> actividadesInfo = new();
+    private int idCliente = 0;
     private bool estaConfirmando = false;
     private bool pedidoConfirmado = false;
     private bool cargando = true;
@@ -327,7 +328,8 @@ else
             return;
         }
 
-        var cliente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
+        var cliente = await ClienteService.ObtenerPorUsuarioAsync(EstadoAuth.IdUsuario, 
+                                                                  EstadoAuth.Token);
 
         if (cliente == null
             || string.IsNullOrEmpty(cliente.Nombre)
@@ -337,10 +339,12 @@ else
             return;
         }
 
+        idCliente = cliente.IdCliente;
         estaConfirmando = true;
 
         var dto = new ConfirmarPedidoDto
         {
+            IdCliente = idCliente,
             Actividades = elementosCarrito.Select(e => new ItemCarritoDto
             {
                 IdActividad = e.IdActividad,

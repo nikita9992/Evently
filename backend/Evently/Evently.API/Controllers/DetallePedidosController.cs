@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Evently.API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "administrador")]
     [ApiController]
     [Route("api/[controller]")]
+
     public class DetallePedidosController : ControllerBase
     {
         private readonly IDetallePedidoService _detallePedidoService;
@@ -19,7 +20,6 @@ namespace Evently.API.Controllers
 
         // Devuelve todos los detalles de pedidos
         [HttpGet]
-        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetDetallesPedido()
         {
             var detalles = await _detallePedidoService.ObtenerTodosAsync();

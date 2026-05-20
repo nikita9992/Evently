@@ -101,7 +101,8 @@
                 return;
             }
 
-            var cliente = await ClienteService.ObtenerClienteActualAsync(EstadoAuth.Token);
+            var cliente = await ClienteService.ObtenerPorUsuarioAsync(
+                EstadoAuth.IdUsuario, EstadoAuth.Token);
 
             if (cliente != null)
             {

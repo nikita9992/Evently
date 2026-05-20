@@ -27,23 +27,6 @@ namespace Evently.API.Controllers
             return Ok(clientes);
         }
 
-        // Devuelve el cliente del usuario que ha iniciado sesión
-        [HttpGet("actual")]
-        public async Task<IActionResult> GetClienteActual()
-        {
-            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
-                return Unauthorized();
-
-            var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
-
-            if (cliente == null)
-                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
-
-            return Ok(cliente);
-        }
-
         // Devuelve un cliente concreto con sus pedidos
         [HttpGet("{id}")]
         [Authorize(Roles = "administrador")]
@@ -59,9 +42,18 @@ namespace Evently.API.Controllers
 
         // Devuelve el cliente asociado a un usuario concreto
         [HttpGet("usuario/{idUsuario}")]
-        [Authorize(Roles = "administrador")]
         public async Task<IActionResult> GetClientePorUsuario(int idUsuario)
         {
+            var idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioStr, out int idUsuarioToken))
+                return Unauthorized();
+
+            var esAdmin = User.IsInRole("administrador");
+
+            if (idUsuarioToken != idUsuario && !esAdmin)
+                return Forbid();
+
             var cliente = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
 
             if (cliente == null)
@@ -74,48 +66,47 @@ namespace Evently.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCliente([FromBody] CrearClienteDto crearClienteDto)
         {
-            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
+            var idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioStr, out int idUsuario))
                 return Unauthorized();
 
             crearClienteDto.IdUsuario = idUsuario;
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var cliente = await _clienteService.CrearAsync(crearClienteDto);
+
             return CreatedAtAction(nameof(GetCliente),
                 new { id = cliente.IdCliente }, cliente);
         }
 
         // Actualiza los datos de un cliente
-        // Actualiza los datos del cliente asociado al usuario que ha iniciado sesión
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, [FromBody] CrearClienteDto crearClienteDto)
         {
-            var idUsuarioTexto = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!int.TryParse(idUsuarioTexto, out int idUsuario))
-                return Unauthorized();
-
-            var clienteActual = await _clienteService.ObtenerPorUsuarioAsync(idUsuario);
-
-            if (clienteActual == null)
-                return NotFound(new { mensaje = "Cliente no encontrado para el usuario actual" });
-
-            if (clienteActual.IdCliente != id)
-                return Forbid();
-
-            crearClienteDto.IdUsuario = idUsuario;
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var cliente = await _clienteService.EditarAsync(id, crearClienteDto);
+            var clienteActual = await _clienteService.ObtenerPorIdAsync(id);
 
-            if (cliente == null)
+            if (clienteActual == null)
                 return NotFound(new { mensaje = "Cliente no encontrado" });
+
+            var idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!int.TryParse(idUsuarioStr, out int idUsuario))
+                return Unauthorized();
+
+            var esAdmin = User.IsInRole("administrador");
+
+            if (clienteActual.IdUsuario != idUsuario && !esAdmin)
+                return Forbid();
+
+            crearClienteDto.IdUsuario = clienteActual.IdUsuario;
+
+            var cliente = await _clienteService.EditarAsync(id, crearClienteDto);
 
             return Ok(cliente);
         }

@@ -26,6 +26,7 @@
     // Para confirmar pedido desde el carrito
     public class ConfirmarPedidoDto
     {
+        public int IdCliente { get; set; }
         public List<ItemCarritoDto> Actividades { get; set; } = new();
     }
 
