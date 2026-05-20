@@ -1,18 +1,119 @@
 ﻿@page "/"
-@using MudBlazor
+@using Evently.Web.Models
+@using Evently.Web.Services
+@inject ActividadService ActividadService
+@inject CategoriaService CategoriaService
+@inject NavigationManager Navegacion
 
-<PageTitle>Evently</PageTitle>
+<PageTitle>Evently — Reserva actividades de ocio</PageTitle>
 
-<MudText Typo="Typo.h4" GutterBottom="true">
-    Bienvenido a Evently
-</MudText>
-<MudText Typo="Typo.subtitle1" Class="mb-4">
+@* HERO *@
+<section class="heroOscuro">
+    <section class="contenidoHeroOscuro">
+        <p class="etiquetaHero">Descubre · Reserva · Disfruta</p>
+        <h1 class="tituloHeroOscuro">
+            Reserva la experiencia<br />
+            <span class="accentOscuro">perfecta.</span>
+        </h1>
+        <p class="subtituloHeroOscuro">
+            Actividades únicas cerca de ti. Desde kayak hasta catas de vino.
+        </p>
+        <MudButton Variant="Variant.Outlined"
+                   Color="Color.Inherit"
+                   Size="Size.Large"
+                   Href="/actividades"
+                   Class="botonHeroOscuro"
+                   EndIcon="@Icons.Material.Filled.ArrowForward">
+            Ver actividades
+        </MudButton>
+    </section>
+</section>
 
-</MudText>
+@* ACTIVIDADES DESTACADAS *@
+<section class="seccionDestacadasOscura">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        @if (estaCargando)
+        {
+            <section class="contenedorCargando">
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            </section>
+        }
+        else if (actividades.Count > 0)
+        {
+            <header class="cabeceraSeccionOscura">
+                <h2 class="tituloSeccionOscura">Destacadas</h2>
+                <a href="/actividades" class="verTodasOscuro">Ver todas →</a>
+            </header>
+            <section class="listaDestacadasOscura">
+                @foreach (var actividad in actividades)
+                {
+                    <article class="tarjetaHorizontal"
+                             @onclick="@(() => Navegacion.NavigateTo($"/actividades/{actividad.IdActividad}"))">
+                        @if (!string.IsNullOrEmpty(actividad.ImagenPrincipal))
+                        {
+                            <img src="@actividad.ImagenPrincipal"
+                                 alt="@actividad.Titulo"
+                                 class="imagenTarjetaHorizontal" />
+                        }
+                        else
+                        {
+                            <figure class="placeholderTarjetaHorizontal fondo-gradiente-evently">
+                                <MudIcon Icon="@Icons.Material.Filled.EventNote" Class="icono-placeholder" />
+                            </figure>
+                        }
+                        <section class="cuerpoTarjetaHorizontal">
+                            <p class="categoriaChipOscuro">@actividad.NombreCatego</p>
+                            <h3 class="tituloTarjetaHorizontal">@actividad.Titulo</h3>
+                            <p class="precioTarjetaHorizontal">@actividad.Precio.ToString("C")</p>
+                        </section>
+                    </article>
+                }
+            </section>
+        }
+    </MudContainer>
+</section>
 
-<MudButton Variant="Variant.Filled"
-           Color="Color.Primary"
-           Href="/actividades"
-           StartIcon="@Icons.Material.Filled.EventNote">
-    Ver actividades
-</MudButton>
+@* CÓMO FUNCIONA *@
+<MudContainer MaxWidth="MaxWidth.Large">
+    <section class="seccionComoFunciona">
+        <h2 class="tituloSeccion tituloSeccionCentrado">¿Cómo funciona?</h2>
+        <section class="rejillaPasos">
+            <article class="paso">
+                <p class="numeroPaso">1</p>
+                <h3 class="tituloPaso">Explora</h3>
+                <p class="textoPaso">Elige entre decenas de actividades y filtra por categoría.</p>
+            </article>
+            <article class="paso">
+                <p class="numeroPaso">2</p>
+                <h3 class="tituloPaso">Reserva</h3>
+                <p class="textoPaso">Añade al carrito y confirma tu reserva en segundos.</p>
+            </article>
+            <article class="paso">
+                <p class="numeroPaso">3</p>
+                <h3 class="tituloPaso">Disfruta</h3>
+                <p class="textoPaso">Recibe la confirmación y preséntate en la actividad.</p>
+            </article>
+        </section>
+    </section>
+</MudContainer>
+
+@code {
+    private List<ActividadDto> actividades = new();
+    private List<CategoriaDto> categorias = new();
+    private bool estaCargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            actividades = await ActividadService.ObtenerDestacadasAsync();
+            categorias = await CategoriaService.ObtenerTodasAsync();
+        }
+        catch
+        {
+            actividades = new();
+            categorias = new();
+        }
+        estaCargando = false;
+    }
+}
