@@ -58,9 +58,13 @@ window.obtenerToken = () => {
     return localStorage.getItem("evently_token") || "";
 };
 
-// Eliminar token (cerrar sesión)
+// Cerrar sesión: eliminar token y datos del usuario guardados en localStorage
 window.eliminarToken = () => {
     localStorage.removeItem("evently_token");
+    localStorage.removeItem("evently_email");
+    localStorage.removeItem("evently_rol");
+    localStorage.removeItem("evently_idUsuario");
+    localStorage.removeItem("evently_expiracion");
 };
 
 // Guardar datos del usuario
