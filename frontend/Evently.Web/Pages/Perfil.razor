@@ -7,74 +7,75 @@
 
 
 <PageTitle>Mi perfil — Evently</PageTitle>
+<section class="perfilSection">
+    <MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
+        <MudPaper Elevation="3" Class="pa-6">
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="mt-8">
-    <MudPaper Elevation="3" Class="pa-6">
+            <MudText Typo="Typo.h5" GutterBottom="true">Mis datos personales</MudText>
 
-        <MudText Typo="Typo.h5" GutterBottom="true">Mis datos personales</MudText>
-
-        @if (estaCargando)
-        {
-            <MudProgressLinear Indeterminate="true" Class="mb-4" />
-        }
-        else
-        {
-            @if (!string.IsNullOrEmpty(errorMensaje))
+            @if (estaCargando)
             {
-                <MudAlert Severity="Severity.Error" Class="mb-4">@errorMensaje</MudAlert>
+                <MudProgressLinear Indeterminate="true" Class="mb-4" />
             }
-
-            @if (guardadoCorrectamente)
+            else
             {
-                <MudAlert Severity="Severity.Success" Class="mb-4">Datos guardados correctamente</MudAlert>
-            }
-
-            <MudTextField @bind-Value="datosCliente.Nombre"
-                          Label="Nombre"
-                          Variant="Variant.Outlined"
-                          Class="mb-3" />
-
-            <MudTextField @bind-Value="datosCliente.Apellidos"
-                          Label="Apellidos"
-                          Variant="Variant.Outlined"
-                          Class="mb-3" />
-
-            <MudTextField @bind-Value="datosCliente.Telefono"
-                          Label="Teléfono"
-                          Variant="Variant.Outlined"
-                          Class="mb-3" />
-
-            <MudTextField @bind-Value="datosCliente.Direccion"
-                          Label="Dirección"
-                          Variant="Variant.Outlined"
-                          Class="mb-3" />
-
-            <MudTextField @bind-Value="datosCliente.Ciudad"
-                          Label="Ciudad"
-                          Variant="Variant.Outlined"
-                          Class="mb-3" />
-
-            <MudTextField @bind-Value="datosCliente.CodPostal"
-                          Label="Código postal"
-                          Variant="Variant.Outlined"
-                          Class="mb-4" />
-
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       FullWidth="true"
-                       OnClick="GuardarDatos"
-                       Disabled="estGuardando">
-                @if (estGuardando)
+                @if (!string.IsNullOrEmpty(errorMensaje))
                 {
-                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                    <MudAlert Severity="Severity.Error" Class="mb-4">@errorMensaje</MudAlert>
                 }
-                Guardar cambios
-            </MudButton>
-        }
 
-    </MudPaper>
-</MudContainer>
+                @if (guardadoCorrectamente)
+                {
+                    <MudAlert Severity="Severity.Success" Class="mb-4">Datos guardados correctamente</MudAlert>
+                }
+            
+                    <MudTextField @bind-Value="datosCliente.Nombre"
+                                  Label="Nombre"
+                                  Variant="Variant.Outlined"
+                                  Class="mb-3" />
 
+                    <MudTextField @bind-Value="datosCliente.Apellidos"
+                                  Label="Apellidos"
+                                  Variant="Variant.Outlined"
+                                  Class="mb-3" />
+
+                    <MudTextField @bind-Value="datosCliente.Telefono"
+                                  Label="Teléfono"
+                                  Variant="Variant.Outlined"
+                                  Class="mb-3" />
+
+                    <MudTextField @bind-Value="datosCliente.Direccion"
+                                  Label="Dirección"
+                                  Variant="Variant.Outlined"
+                                  Class="mb-3" />
+
+                    <MudTextField @bind-Value="datosCliente.Ciudad"
+                                  Label="Ciudad"
+                                  Variant="Variant.Outlined"
+                                  Class="mb-3" />
+
+                    <MudTextField @bind-Value="datosCliente.CodPostal"
+                                  Label="Código postal"
+                                  Variant="Variant.Outlined"
+                                  Class="mb-4" />
+
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               FullWidth="true"
+                               OnClick="GuardarDatos"
+                               Disabled="estGuardando">
+                        @if (estGuardando)
+                        {
+                            <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                        }
+                        Guardar cambios
+                    </MudButton>
+            
+            }
+
+        </MudPaper>
+    </MudContainer>
+</section>
 @code {
     // Datos del formulario de perfil
     private CrearClienteDto datosCliente = new();

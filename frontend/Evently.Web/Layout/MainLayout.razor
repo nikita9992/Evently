@@ -165,8 +165,8 @@
         </MudNavMenu>
     </MudDrawer>
 
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
+    <MudMainContent Class="d-flex flex-column" Style="min-height:100vh">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 flex-grow-1">
             @Body
         </MudContainer>
 
@@ -180,7 +180,14 @@
                     <ul class="listaEnlacesPie">
                         <li><a href="/" class="enlacePie">Inicio</a></li>
                         <li><a href="/actividades" class="enlacePie">Actividades</a></li>
-                        <li><a href="/login" class="enlacePie">Iniciar sesión</a></li>
+                        @if (EstadoAuth.EstaAutenticado)
+                        {
+                            <li><a href="/perfil" class="enlacePie">Mi perfil</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="/login" class="enlacePie">Iniciar sesión</a></li>
+                        }
                     </ul>
                 </nav>
                 <nav>

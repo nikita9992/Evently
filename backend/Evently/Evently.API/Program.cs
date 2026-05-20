@@ -11,7 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Base de datos Neon.tech
 builder.Services.AddDbContext<EventlyDbContext>(opciones =>
     opciones.UseNpgsql(
-        builder.Configuration.GetConnectionString("ConexionEvently")
+        builder.Configuration.GetConnectionString("ConexionEvently"),
+        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorCodesToAdd: null
+        )
     )
 );
 
