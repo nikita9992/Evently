@@ -1001,16 +1001,36 @@
 .controlesDeParginacion {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
     margin-top: 16px;
-    justify-content: center;
 }
 
 
 .selectorPagina {
-    width: 160px !important;
-    min-width: 160px !important;
-    max-width: 160px !important;
+    width: 90px;
+    min-width: 90px;
+    max-width: 90px;
+}
+
+@media (max-width: 600px) {
+    .controlesDeParginacion {
+        justify-content: center;
+        gap: 8px;
+    }
+
+        .controlesDeParginacion .mud-pagination {
+            order: 3;
+            width: 100%;
+            justify-content: center;
+        }
+
+    .selectorPagina {
+        width: 80px;
+        min-width: 80px;
+        max-width: 80px;
+    }
 }
 
 /* PROPUESTA 1 — OSCURA */
