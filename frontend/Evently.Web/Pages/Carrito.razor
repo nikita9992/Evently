@@ -352,8 +352,9 @@ else
                                                                   EstadoAuth.Token);
 
         if (cliente == null
-            || string.IsNullOrEmpty(cliente.Nombre)
-            || string.IsNullOrEmpty(cliente.Apellidos))
+            || string.IsNullOrWhiteSpace(cliente.Nombre)
+            || string.IsNullOrWhiteSpace(cliente.Apellidos)
+            || string.IsNullOrWhiteSpace(cliente.Telefono))
         {
             NavManager.NavigateTo("/completar-perfil");
             return;
@@ -386,7 +387,6 @@ else
             elementosCarrito.Clear();
             await JS.InvokeVoidAsync("limpiarCarrito", EstadoAuth.IdUsuario);
             pedidoConfirmado = true;
-            Snackbar.Add("¡Pedido confirmado correctamente!", Severity.Success);
         }
 
         estaConfirmando = false;
