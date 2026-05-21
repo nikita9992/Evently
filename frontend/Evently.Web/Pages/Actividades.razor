@@ -235,6 +235,7 @@
             {
                 <section class="controlesDeParginacion">
                     <MudText Typo="Typo.body2">Mostrar:</MudText>
+
                     <MudSelect T="int"
                                Value="actividadesPorPagina"
                                ValueChanged="@((int v) => { actividadesPorPagina = v; paginaActual = 1; ActualizarPaginacion(); })"
@@ -243,15 +244,30 @@
                                Class="selectorPagina">
                         @foreach (var opcion in opcionesPagina)
                         {
-                            <MudSelectItem T="int" Value="opcion">@opcion por página</MudSelectItem>
+                            <MudSelectItem T="int" Value="opcion">@opcion</MudSelectItem>
                         }
                     </MudSelect>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.FirstPage"
+                                   Color="Color.Primary"
+                                   Disabled="@(paginaActual == 1)"
+                                   OnClick="IrPrimeraPagina" />
+
                     <MudPagination Count="totalPaginas"
                                    Selected="paginaActual"
                                    SelectedChanged="@((int p) => { paginaActual = p; ActualizarPaginacion(); })"
                                    Color="Color.Primary" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.LastPage"
+                                   Color="Color.Primary"
+                                   Disabled="@(paginaActual == totalPaginas)"
+                                   OnClick="IrUltimaPagina" />
+
+                    <MudText Typo="Typo.body2">
+                        @paginaActual / @totalPaginas
+                    </MudText>
                 </section>
-            }            
+            }
         }
     </section>
 
@@ -290,6 +306,18 @@
             .Distinct()
             .OrderBy(c => c)
             .ToList();
+    }
+
+    private void IrPrimeraPagina()
+    {
+        paginaActual = 1;
+        ActualizarPaginacion();
+    }
+
+    private void IrUltimaPagina()
+    {
+        paginaActual = totalPaginas;
+        ActualizarPaginacion();
     }
 
     protected override async Task OnInitializedAsync()
