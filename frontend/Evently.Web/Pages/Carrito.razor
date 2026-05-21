@@ -276,14 +276,34 @@ else
 
     private async Task CargarInfoActividades()
     {
+        var itemsAEliminar = new List<ItemCarrito>();
+
         foreach (var item in elementosCarrito)
         {
             if (!actividadesInfo.ContainsKey(item.IdActividad))
             {
-                var actividad = await ActividadService.ObtenerPorIdAsync(item.IdActividad);
-                if (actividad != null)
-                    actividadesInfo[item.IdActividad] = actividad;
+                try
+                {
+                    var actividad = await ActividadService.ObtenerPorIdAsync(item.IdActividad);
+                    if (actividad != null)
+                        actividadesInfo[item.IdActividad] = actividad;
+                    else
+                        itemsAEliminar.Add(item);
+                }
+                catch
+                {
+                    itemsAEliminar.Add(item);
+                }
             }
+        }
+
+        if (itemsAEliminar.Any())
+        {
+            foreach (var item in itemsAEliminar)
+                elementosCarrito.Remove(item);
+
+            await GuardarCarrito();
+            Snackbar.Add("Algunas actividades ya no están disponibles y se han eliminado del carrito.", Severity.Warning);
         }
     }
 
