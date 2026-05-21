@@ -5,6 +5,8 @@
 @inject ISnackbar Snackbar
 @inject EstadoAuthService EstadoAuth
 @inject NavigationManager Navegacion
+@inject ImagenService ImagenService
+@inject IJSRuntime JS
 
 <PageTitle>Admin — Actividades</PageTitle>
 
@@ -336,6 +338,23 @@
                             </MudText>
                         }
 
+                    <InputFile id="@($"inputFile_{indice}")"
+                               style="display:none"
+                               OnChange="@(e => SubirArchivoImagen(e, indice))"
+                               accept=".jpg,.jpeg,.png,.webp" />
+
+                    <MudTooltip Text="Subir imagen desde tu dispositivo">
+                        <MudIconButton Icon="@Icons.Material.Filled.Upload"
+                                       Color="Color.Primary"
+                                       Size="Size.Small"
+                                       OnClick="@(() => ActivarInputArchivo(indice))" />
+                    </MudTooltip>
+
+                    @if (subiendoImagen.Count > indice && subiendoImagen[indice])
+                    {
+                        <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="ml-1" />
+                    }
+
                     @if (!string.IsNullOrEmpty(listaImagenes[indice]))
                     {
                         <img src="@listaImagenes[indice]"
@@ -417,7 +436,8 @@
     private bool tieneCupoMaximo = false;
     private int actividadEditandoId;
     private ActividadDto? actividadAEliminar;
-    private List<string> listaImagenes = new() { "" };    
+    private List<string> listaImagenes = new() { "" };
+    private List<bool> subiendoImagen = new() { false }; 
     private MudForm formularioMud = null!;
     private bool formularioValido = false;
     private string tokenAdmin => EstadoAuth.Token;
@@ -541,6 +561,7 @@
         horaSeleccionada = null;
         tieneCupoMaximo = false;
         listaImagenes = new List<string> { "" };
+        subiendoImagen = new List<bool> { false }; 
         errorImagenes = false;
         errorFecha = false;
         errorPrecio = false;
@@ -572,6 +593,8 @@
         listaImagenes = actividad.Imagenes.Any()
             ? actividad.Imagenes.ToList()
             : new List<string> { "" };
+
+        subiendoImagen = listaImagenes.Select(_ => false).ToList(); 
 
         modoEdicion = true;
         dialogoAbierto = true;
@@ -708,15 +731,23 @@
     private void AnadirCampoImagen()
     {
         if (listaImagenes.Count < 8)
+        {
             listaImagenes.Add("");
+            subiendoImagen.Add(false);  
+        }
     }
 
     private void EliminarImagen(int indice)
     {
         listaImagenes.RemoveAt(indice);
+        if (subiendoImagen.Count > indice)
+            subiendoImagen.RemoveAt(indice); 
 
         if (listaImagenes.Count == 0)
+        {
             listaImagenes.Add("");
+            subiendoImagen.Add(false); 
+        }
     }
 
     private void ConfirmarEliminar(ActividadDto actividad)
@@ -743,5 +774,43 @@
     private void CerrarDialogo()
     {
         dialogoAbierto = false;
+    }
+    private async Task ActivarInputArchivo(int indice)
+    {
+        await JS.InvokeVoidAsync("eval",
+            $"document.getElementById('inputFile_{indice}').click()");
+    }
+
+    private async Task SubirArchivoImagen(InputFileChangeEventArgs e, int indice)
+    {
+        var archivo = e.File;
+
+        if (archivo.Size > 5 * 1024 * 1024)
+        {
+            Snackbar.Add("El archivo supera el límite de 5 MB", Severity.Warning);
+            return;
+        }
+
+        while (subiendoImagen.Count <= indice)
+            subiendoImagen.Add(false);
+
+        subiendoImagen[indice] = true;
+        StateHasChanged();
+
+        using var stream = archivo.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+        var url = await ImagenService.SubirImagenAsync(stream, archivo.Name, tokenAdmin);
+
+        if (url != null)
+        {
+            listaImagenes[indice] = url;
+            Snackbar.Add("Imagen subida correctamente", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Error al subir la imagen", Severity.Error);
+        }
+
+        subiendoImagen[indice] = false;
+        StateHasChanged();
     }
 }

@@ -28,6 +28,8 @@ builder.Services.AddScoped<EstadoAuthService>();
 builder.Services.AddScoped<EstadoService>();
 builder.Services.AddScoped<ComentarioService>();
 builder.Services.AddScoped<ValoracionService>();
+builder.Services.AddScoped<ImagenService>();
+
 
 var cultura = new System.Globalization.CultureInfo("es-ES");
 System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultura;

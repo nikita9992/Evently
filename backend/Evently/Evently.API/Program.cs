@@ -127,6 +127,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseStaticFiles();
 app.UseCors("PolicyEvently");
 app.UseAuthentication();
 app.UseAuthorization();
