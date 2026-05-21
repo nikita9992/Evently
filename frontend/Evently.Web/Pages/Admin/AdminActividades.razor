@@ -239,7 +239,11 @@
                       Label="Descripción"
                       Variant="Variant.Outlined"
                       Lines="3"
-                      Class="mb-3" />
+                      Class="mb-3"
+                      Required="true"
+                      RequiredError="La descripción es obligatoria"
+                      MaxLength="500"
+                      Counter="500" />
 
         <MudTextField @bind-Value="formulario.Ciudad"
                       Label="Ciudad"
@@ -256,20 +260,22 @@
                       RequiredError="La ubicación es obligatoria" />
 
         <MudTextField @bind-Value="formulario.PrecioCadena"
-                        Label="Precio (€)"
-                        Variant="Variant.Outlined"
-                        Adornment="Adornment.End"
-                        AdornmentText="€"
-                        Class="mb-3"
-                        Required="true"
-                        RequiredError="El precio es obligatorio" />
-
+                      Label="Precio (€)"
+                      Variant="Variant.Outlined"
+                      Adornment="Adornment.End"
+                      AdornmentText="€"
+                      Class="mb-3"
+                      Placeholder="0,00"
+                      Error="errorPrecio"
+                      ErrorText="@mensajeErrorPrecio" />
         @* Fecha y hora *@
         <MudGrid Class="mb-3">
             <MudItem xs="12" sm="6">
-                <MudDatePicker @bind-Date="fechaSeleccionada"
-                               Label="Fecha de la actividad"
-                               Variant="Variant.Outlined" />
+                    <MudDatePicker @bind-Date="fechaSeleccionada"
+                                   Label="Fecha de la actividad"
+                                   Variant="Variant.Outlined"
+                                   Error="errorFecha"
+                                   ErrorText="@mensajeErrorFecha" />
             </MudItem>
 
             <MudItem xs="12" sm="6">
@@ -318,7 +324,17 @@
                                   Label="@($"URL imagen {indice + 1}")"
                                   Variant="Variant.Outlined"
                                   FullWidth="true"
-                                  Placeholder="https://ejemplo.com/imagen.jpg" />
+                                  Placeholder="https://ejemplo.com/imagen.jpg"
+                                  Error="@(errorImagenes && indice == 0)" />
+
+                        @if (errorImagenes && indice == 0)
+                        {
+                            <MudText Color="Color.Error"
+                                     Typo="Typo.caption"
+                                     Class="mt-1">
+                                Debes añadir al menos una imagen
+                            </MudText>
+                        }
 
                     @if (!string.IsNullOrEmpty(listaImagenes[indice]))
                     {
@@ -426,6 +442,12 @@
     private int totalPaginas = 0;
     private List<int> opcionesPagina = new() { 5, 10, 20, 50 };
 
+    private bool errorImagenes = false;
+    private bool errorFecha = false;
+    private bool errorPrecio = false;
+    private string mensajeErrorFecha = string.Empty;
+    private string mensajeErrorPrecio = string.Empty;
+
     private void ActualizarPaginacion()
     {
         totalPaginas = (int)Math.Ceiling(actividadesFiltradas.Count / (double)actividadesPorPagina);
@@ -509,10 +531,21 @@
     private void AbrirFormularioCrear()
     {
         formulario = new CrearActividadDto();
+
+        if (categorias.Count > 0)
+        {
+            formulario.IdCategoria = categorias[0].IdCategoria;
+        }
+
         fechaSeleccionada = null;
         horaSeleccionada = null;
         tieneCupoMaximo = false;
         listaImagenes = new List<string> { "" };
+        errorImagenes = false;
+        errorFecha = false;
+        errorPrecio = false;
+        mensajeErrorFecha = string.Empty;
+        mensajeErrorPrecio = string.Empty;
         modoEdicion = false;
         dialogoAbierto = true;
     }
@@ -542,32 +575,59 @@
 
         modoEdicion = true;
         dialogoAbierto = true;
+        errorImagenes = false;
+        errorFecha = false;
+        errorPrecio = false;
+        mensajeErrorFecha = string.Empty;
+        mensajeErrorPrecio = string.Empty;
     }
 
     private async Task GuardarActividad()
     {
         await formularioMud.ValidateAsync();
 
-        if (!formularioValido) return;
+        errorImagenes = false;
+        errorFecha = false;
+        errorPrecio = false;
+        mensajeErrorFecha = string.Empty;
+        mensajeErrorPrecio = string.Empty;
+
+        if (!fechaSeleccionada.HasValue)
+        {
+            errorFecha = true;
+            mensajeErrorFecha = "La fecha de la actividad es obligatoria";
+        }
+        else if (fechaSeleccionada.Value.Date < DateTime.Today)
+        {
+            errorFecha = true;
+            mensajeErrorFecha = "La fecha de la actividad no puede ser anterior a hoy";
+        }
+
+        if (string.IsNullOrWhiteSpace(formulario.PrecioCadena))
+        {
+            errorPrecio = true;
+            mensajeErrorPrecio = "El precio es obligatorio";
+        }
+        else if (formulario.Precio <= 0)
+        {
+            errorPrecio = true;
+            mensajeErrorPrecio = "El precio debe ser mayor que 0";
+        }
 
         var imagenesValidas = listaImagenes
             .Where(url => !string.IsNullOrWhiteSpace(url))
             .ToList();
 
-        if (imagenesValidas.Count == 0)
+        errorImagenes = imagenesValidas.Count == 0;
+
+        if (!formularioValido || errorFecha || errorPrecio || errorImagenes)
         {
-            Snackbar.Add("Debes añadir al menos una imagen", Severity.Warning);
             return;
         }
 
-        if (fechaSeleccionada.HasValue)
-        {
-            var fecha = fechaSeleccionada.Value.Date;
-            var hora = horaSeleccionada ?? TimeSpan.Zero;
-            formulario.FechaActiv = DateTime.SpecifyKind(fecha + hora, DateTimeKind.Utc);
-        }
-        else
-            formulario.FechaActiv = null;
+        var fecha = fechaSeleccionada.Value.Date;
+        var hora = horaSeleccionada ?? TimeSpan.Zero;
+        formulario.FechaActiv = DateTime.SpecifyKind(fecha + hora, DateTimeKind.Utc);
 
         if (!tieneCupoMaximo)
             formulario.CupoMaximo = null;
@@ -586,7 +646,9 @@
                 await CargarDatos();
             }
             else
+            {
                 Snackbar.Add("Error al actualizar la actividad", Severity.Error);
+            }
         }
         else
         {
@@ -599,7 +661,9 @@
                 await CargarDatos();
             }
             else
+            {
                 Snackbar.Add("Error al crear la actividad", Severity.Error);
+            }
         }
     }
 

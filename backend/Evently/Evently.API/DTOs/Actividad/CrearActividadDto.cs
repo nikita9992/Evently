@@ -12,8 +12,9 @@ namespace Evently.API.DTOs.Actividad
         [MaxLength(150, ErrorMessage = "El título no puede superar 150 caracteres")]
         public string Titulo { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "La descripción es obligatoria")]
         [MaxLength(500, ErrorMessage = "La descripción no puede superar 500 caracteres")]
-        public string? Descripcion { get; set; }
+        public string? Descripcion { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La ciudad es obligatoria")]
         [MaxLength(100, ErrorMessage = "La ciudad no puede superar 100 caracteres")]
@@ -24,7 +25,7 @@ namespace Evently.API.DTOs.Actividad
         public string Ubicacion { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El precio es obligatorio")]
-        [Range(0, double.MaxValue, ErrorMessage = "El precio no puede ser negativo")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor que 0")]
         public decimal Precio { get; set; }
 
         public string PrecioCadena
@@ -33,8 +34,8 @@ namespace Evently.API.DTOs.Actividad
             set { Precio = Convert.ToDecimal(value.Replace('.', ',')); }
         }
 
+        [Required(ErrorMessage = "La fecha de la actividad es obligatoria")]
         public DateTime? FechaActiv { get; set; }
-
         [Range(1, int.MaxValue, ErrorMessage = "El cupo máximo debe ser mayor que 0")]
         public int? CupoMaximo { get; set; }
 

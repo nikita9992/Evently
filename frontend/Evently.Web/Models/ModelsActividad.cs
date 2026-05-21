@@ -30,8 +30,20 @@
         public decimal Precio { get; set; }
         public string PrecioCadena
         {
-            get { return Convert.ToString(Precio).Replace(',', '.'); }
-            set { Precio = Convert.ToDecimal(value.Replace('.', ',')); }
+            get
+            {
+                if (Precio == 0)
+                    return string.Empty;
+
+                return Convert.ToString(Precio).Replace(',', '.');
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    Precio = 0;
+                else
+                    Precio = Convert.ToDecimal(value.Replace('.', ','));
+            }
         }
         public DateTime? FechaActiv { get; set; }
         public int? CupoMaximo { get; set; }

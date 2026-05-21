@@ -29,9 +29,13 @@ namespace Evently.API.Services
                 consulta = consulta.Where(a =>
                     a.Titulo.ToLower().Contains(filtro.Titulo.ToLower()));
 
-            if (!string.IsNullOrEmpty(filtro.Ciudad))
-                consulta = consulta.Where(a => a.Ciudad == filtro.Ciudad);
-                        
+            if (!string.IsNullOrWhiteSpace(filtro.Ciudad))
+            {
+                var ciudad = filtro.Ciudad.Trim().ToLower();
+
+                consulta = consulta.Where(a => a.Ciudad.ToLower().Contains(ciudad));
+            }
+
             var actividades = await consulta.ToListAsync();
             var actividadesDto = new List<ActividadDto>();
 
