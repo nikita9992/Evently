@@ -89,7 +89,6 @@
                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
             </section>
         }
-        @* else if (!actividades.Any()) *@
         else if (!actividadesFiltradas.Any())
         {
             <MudAlert Severity="Severity.Info">
@@ -326,7 +325,6 @@
         actividades = await ActividadService.ObtenerTodasAsync();
         todasLasActividades = actividades.ToList();
         actividadesFiltradas = actividades.ToList();
-
 
         cargando    = false;
         ActualizarPaginacion();

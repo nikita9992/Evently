@@ -34,8 +34,10 @@ namespace Evently.API.DTOs.Actividad
             set { Precio = Convert.ToDecimal(value.Replace('.', ',')); }
         }
 
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "La fecha de la actividad es obligatoria")]
         public DateTime? FechaActiv { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "El cupo máximo debe ser mayor que 0")]
         public int? CupoMaximo { get; set; }
 

@@ -113,7 +113,6 @@
                     <MudTh>Imagen</MudTh>
                     <MudTh>Título</MudTh>
                     <MudTh>Ciudad</MudTh>
-                    @* <MudTh>Categoría</MudTh> *@
                     <MudTh>Precio</MudTh>
                     <MudTh>Fecha</MudTh>
                     <MudTh>Plazas</MudTh>
@@ -672,13 +671,14 @@
         errorImagenes = imagenesValidas.Count == 0;
 
         if (!formularioValido || errorFecha || errorPrecio || errorImagenes)
-        {
             return;
-        }
+
+        if (!fechaSeleccionada.HasValue)
+            return;
 
         var fecha = fechaSeleccionada.Value.Date;
         var hora = horaSeleccionada ?? TimeSpan.Zero;
-        formulario.FechaActiv = DateTime.SpecifyKind(fecha + hora, DateTimeKind.Utc);
+        formulario.FechaActiv = fecha + hora;
 
         if (!tieneCupoMaximo)
             formulario.CupoMaximo = null;
