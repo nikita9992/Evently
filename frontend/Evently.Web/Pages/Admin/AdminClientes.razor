@@ -28,7 +28,7 @@
         }
         else
         {
-            <MudTable Items="clientes" Hover="true" Striped="true" Elevation="3"
+            <MudTable Items="clientesPaginados" Hover="true" Striped="true" Elevation="3"
                       Filter="FiltrarCliente">
                 <ToolBarContent>
                     <MudTextField @bind-Value="textoBusqueda"
@@ -57,6 +57,43 @@
                     <MudTd>@(context.CodPostal ?? "—")</MudTd>
                 </RowTemplate>
             </MudTable>
+            @if (totalPaginas > 0)
+            {
+                <section class="controlesDeParginacion">
+                    <MudText Typo="Typo.body2">Mostrar:</MudText>
+
+                    <MudSelect T="int"
+                               Value="clientesPorPagina"
+                               ValueChanged="@((int v) => { clientesPorPagina = v; paginaActual = 1; ActualizarPaginacion(); })"
+                               Variant="Variant.Outlined"
+                               Dense="true"
+                               Class="selectorPagina">
+                        @foreach (var opcion in opcionesPagina)
+                        {
+                            <MudSelectItem T="int" Value="opcion">@opcion</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.FirstPage"
+                                   Color="Color.Primary"
+                                   Disabled="@(paginaActual == 1)"
+                                   OnClick="IrPrimeraPagina" />
+
+                    <MudPagination Count="totalPaginas"
+                                   Selected="paginaActual"
+                                   SelectedChanged="@((int p) => { paginaActual = p; ActualizarPaginacion(); })"
+                                   Color="Color.Primary" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.LastPage"
+                                   Color="Color.Primary"
+                                   Disabled="@(paginaActual == totalPaginas)"
+                                   OnClick="IrUltimaPagina" />
+
+                    <MudText Typo="Typo.body2">
+                        @paginaActual / @totalPaginas
+                    </MudText>
+                </section>
+            }
         }
     </section>
 
@@ -64,8 +101,13 @@
 
 @code {
     private List<ClienteDto> clientes = new();
+    private List<ClienteDto> clientesPaginados = new();
     private bool cargando = true;
     private string textoBusqueda = string.Empty;
+    private int paginaActual = 1;
+    private int clientesPorPagina = 10;
+    private int totalPaginas = 0;
+    private List<int> opcionesPagina = new() { 5, 10, 20, 50 };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -92,7 +134,30 @@
     {
         cargando = true;
         clientes = await ClienteService.ObtenerTodosAsync(EstadoAuth.Token);
+        ActualizarPaginacion();
         cargando = false;
+    }
+
+    private void ActualizarPaginacion()
+    {
+        totalPaginas = (int)Math.Ceiling(clientes.Count / (double)clientesPorPagina);
+
+        clientesPaginados = clientes
+            .Skip((paginaActual - 1) * clientesPorPagina)
+            .Take(clientesPorPagina)
+            .ToList();
+    }
+
+    private void IrPrimeraPagina()
+    {
+        paginaActual = 1;
+        ActualizarPaginacion();
+    }
+
+    private void IrUltimaPagina()
+    {
+        paginaActual = totalPaginas;
+        ActualizarPaginacion();
     }
 
     // Filtro de búsqueda
