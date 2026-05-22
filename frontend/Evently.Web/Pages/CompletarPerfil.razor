@@ -22,17 +22,23 @@
         <MudTextField @bind-Value="datosCliente.Nombre"
                       Label="Nombre"
                       Variant="Variant.Outlined"
-                      Class="mb-3" />
+                      Class="mb-3"
+                      Error="errorNombre"
+                      ErrorText="@mensajeErrorNombre" />
 
         <MudTextField @bind-Value="datosCliente.Apellidos"
                       Label="Apellidos"
                       Variant="Variant.Outlined"
-                      Class="mb-3" />
+                      Class="mb-3" 
+                      Error="errorApellidos"
+                      ErrorText="@mensajeErrorApellidos" />
 
         <MudTextField @bind-Value="datosCliente.Telefono"
                       Label="Teléfono"
                       Variant="Variant.Outlined"
-                      Class="mb-3" />
+                      Class="mb-3"
+                      Error="errorTelefono"
+                      ErrorText="@mensajeErrorTelefono" />
 
         <MudTextField @bind-Value="datosCliente.Ciudad"
                       Label="Ciudad"
@@ -77,6 +83,12 @@
 @code {
     private CrearClienteDto datosCliente = new();
     private bool cargando = false;
+    private bool errorNombre = false;
+    private bool errorApellidos = false;
+    private bool errorTelefono = false;
+    private string mensajeErrorNombre = string.Empty;
+    private string mensajeErrorApellidos = string.Empty;
+    private string mensajeErrorTelefono = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -98,9 +110,7 @@
             var clienteExistente = await ClienteService.ObtenerPorUsuarioAsync(
                 EstadoAuth.IdUsuario, EstadoAuth.Token);
 
-            if (clienteExistente != null
-                && !string.IsNullOrEmpty(clienteExistente.Nombre)
-                && !string.IsNullOrEmpty(clienteExistente.Apellidos))
+            if (clienteExistente != null)
             {
                 Navegacion.NavigateTo("/perfil");
                 return;
@@ -109,17 +119,38 @@
             StateHasChanged();
         }
     }
-
+        
     private async Task GuardarPerfil()
     {
         cargando = true;
 
-        if (string.IsNullOrWhiteSpace(datosCliente.Nombre)
-            || string.IsNullOrWhiteSpace(datosCliente.Apellidos))
+        errorNombre = false;
+        errorApellidos = false;
+        errorTelefono = false;
+        mensajeErrorNombre = string.Empty;
+        mensajeErrorApellidos = string.Empty;
+        mensajeErrorTelefono = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Nombre))
         {
-            Snackbar.Add(
-                "Por favor introduce al menos tu nombre y apellidos",
-                Severity.Warning);
+            errorNombre = true;
+            mensajeErrorNombre = "El nombre es obligatorio";
+        }
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Apellidos))
+        {
+            errorApellidos = true;
+            mensajeErrorApellidos = "Los apellidos son obligatorios";
+        }
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Telefono))
+        {
+            errorTelefono = true;
+            mensajeErrorTelefono = "El teléfono es obligatorio";
+        }
+       
+        if (errorNombre || errorApellidos || errorTelefono)
+        {
             cargando = false;
             return;
         }

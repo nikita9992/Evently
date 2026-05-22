@@ -32,17 +32,23 @@
                     <MudTextField @bind-Value="datosCliente.Nombre"
                                   Label="Nombre"
                                   Variant="Variant.Outlined"
-                                  Class="mb-3" />
+                                  Class="mb-3"
+                                  Error="errorNombre"
+                                  ErrorText="@mensajeErrorNombre" />
 
                     <MudTextField @bind-Value="datosCliente.Apellidos"
                                   Label="Apellidos"
                                   Variant="Variant.Outlined"
-                                  Class="mb-3" />
+                                  Class="mb-3"
+                                  Error="errorApellidos"
+                                  ErrorText="@mensajeErrorApellidos" />
 
                     <MudTextField @bind-Value="datosCliente.Telefono"
                                   Label="Teléfono"
                                   Variant="Variant.Outlined"
-                                  Class="mb-3" />
+                                  Class="mb-3"
+                                  Error="errorTelefono"
+                                  ErrorText="@mensajeErrorTelefono" />
 
                     <MudTextField @bind-Value="datosCliente.Direccion"
                                   Label="Dirección"
@@ -85,6 +91,13 @@
     private bool guardadoCorrectamente = false;
     private int idCliente = 0;
 
+    private bool errorNombre = false;
+    private bool errorApellidos = false;
+    private bool errorTelefono = false;
+    private string mensajeErrorNombre = string.Empty;
+    private string mensajeErrorApellidos = string.Empty;
+    private string mensajeErrorTelefono = string.Empty;
+
     // Al cargar la página obtenemos los datos del cliente
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -124,6 +137,7 @@
             StateHasChanged();
         }
     }
+     
 
     // Guarda los datos del perfil del cliente
     private async Task GuardarDatos()
@@ -131,6 +145,37 @@
         estGuardando = true;
         errorMensaje = string.Empty;
         guardadoCorrectamente = false;
+
+        errorNombre = false;
+        errorApellidos = false;
+        errorTelefono = false;
+        mensajeErrorNombre = string.Empty;
+        mensajeErrorApellidos = string.Empty;
+        mensajeErrorTelefono = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Nombre))
+        {
+            errorNombre = true;
+            mensajeErrorNombre = "El nombre es obligatorio";
+        }
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Apellidos))
+        {
+            errorApellidos = true;
+            mensajeErrorApellidos = "Los apellidos son obligatorios";
+        }
+
+        if (string.IsNullOrWhiteSpace(datosCliente.Telefono))
+        {
+            errorTelefono = true;
+            mensajeErrorTelefono = "El teléfono es obligatorio";
+        }
+
+        if (errorNombre || errorApellidos || errorTelefono)
+        {
+            estGuardando = false;
+            return;
+        }
 
         ClienteDto? resultado;
 

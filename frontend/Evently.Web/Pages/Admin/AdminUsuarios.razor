@@ -37,7 +37,7 @@
         }
         else
         {
-            <MudTable Items="usuarios" Hover="true" Striped="true" Elevation="3"
+            <MudTable Items="usuariosPaginados" Hover="true" Striped="true" Elevation="3"
                       Filter="FiltrarUsuario">
                 <ToolBarContent>
                     <MudTextField @bind-Value="textoBusqueda"
@@ -69,6 +69,43 @@
                     </MudTd>
                 </RowTemplate>
             </MudTable>
+            @if (totalPaginas > 0)
+            {
+                <section class="controlesDeParginacion">
+                    <MudText Typo="Typo.body2">Mostrar:</MudText>
+
+                    <MudSelect T="int"
+                               Value="usuariosPorPagina"
+                               ValueChanged="@((int v) => { usuariosPorPagina = v; paginaActual = 1; ActualizarPaginacion(); })"
+                               Variant="Variant.Outlined"
+                               Dense="true"
+                               Class="selectorPagina">
+                        @foreach (var opcion in opcionesPagina)
+                        {
+                            <MudSelectItem T="int" Value="opcion">@opcion</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudIconButton Icon="@Icons.Material.Filled.FirstPage"
+                                   Color="Color.Primary"
+                                   Disabled="@(paginaActual == 1)"
+                                   OnClick="IrPrimeraPagina" />
+
+                    <MudPagination Count="totalPaginas"
+                                   Selected="paginaActual"
+                                   SelectedChanged="@((int p) => { paginaActual = p; ActualizarPaginacion(); })"
+                                   Color="Color.Primary" />
+
+                    <MudIconButton Icon="@Icons.Material.Filled.LastPage"
+                                   Color="Color.Primary"
+                                   Disabled="@(paginaActual == totalPaginas)"
+                                   OnClick="IrUltimaPagina" />
+
+                    <MudText Typo="Typo.body2">
+                        @paginaActual / @totalPaginas
+                    </MudText>
+                </section>
+            }
         }
     </section>
 
@@ -83,12 +120,32 @@
         <MudTextField @bind-Value="emailNuevo"
                       Label="Email"
                       Variant="Variant.Outlined"
-                      Class="mb-3" />
+                      Immediate="true"
+                      AutoComplete="off"
+                      Class="mb-1"
+                      Error="@errorEmailNuevo" />
+
+        @if (errorEmailNuevo)
+        {
+            <MudText Color="Color.Error" Typo="Typo.caption" Class="mb-3">
+                @mensajeErrorEmailNuevo
+            </MudText>
+        }
         <MudTextField @bind-Value="passwordNuevo"
                       Label="Contraseña"
                       InputType="InputType.Password"
                       Variant="Variant.Outlined"
-                      Class="mb-3" />
+                      Immediate="true"
+                      AutoComplete="off"
+                      Class="mb-1"
+                      Error="@errorPasswordNuevo" />
+
+        @if (errorPasswordNuevo)
+        {
+            <MudText Color="Color.Error" Typo="Typo.caption" Class="mb-3">
+                @mensajeErrorPasswordNuevo
+            </MudText>
+        }
         <MudSelect @bind-Value="rolNuevo"
                    Label="Rol"
                    Variant="Variant.Outlined">
@@ -142,8 +199,13 @@
 @code {
     // Lista de usuarios cargados del backend
     private List<ModeloUsuario> usuarios = new();
+    private List<ModeloUsuario> usuariosPaginados = new();
     private bool cargando = true;
     private string textoBusqueda = string.Empty;
+    private int paginaActual = 1;
+    private int usuariosPorPagina = 10;
+    private int totalPaginas = 0;
+    private List<int> opcionesPagina = new() { 5, 10, 20, 50 };
     private bool dialogoCrearAbierto = false;
     private string emailNuevo = string.Empty;
     private string passwordNuevo = string.Empty;
@@ -151,6 +213,10 @@
     private bool dialogoCambioRolAbierto = false;
     private bool dialogoEliminarAbierto = false;
     private ModeloUsuario? usuarioSeleccionado = null;
+    private bool errorEmailNuevo = false;
+    private bool errorPasswordNuevo = false;
+    private string mensajeErrorEmailNuevo = string.Empty;
+    private string mensajeErrorPasswordNuevo = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool primeraCarga)
     {
@@ -185,6 +251,7 @@
             if (lista != null)
             {
                 usuarios = lista;
+                ActualizarPaginacion();
             }
         }
         catch
@@ -195,6 +262,28 @@
         cargando = false;
     }
 
+    private void ActualizarPaginacion()
+    {
+        totalPaginas = (int)Math.Ceiling(usuarios.Count / (double)usuariosPorPagina);
+
+        usuariosPaginados = usuarios
+            .Skip((paginaActual - 1) * usuariosPorPagina)
+            .Take(usuariosPorPagina)
+            .ToList();
+    }
+
+    private void IrPrimeraPagina()
+    {
+        paginaActual = 1;
+        ActualizarPaginacion();
+    }
+
+    private void IrUltimaPagina()
+    {
+        paginaActual = totalPaginas;
+        ActualizarPaginacion();
+    }
+
     //Filtra los usuarios según el texto de búsqueda
     private bool FiltrarUsuario(ModeloUsuario usuario)
     {
@@ -202,22 +291,87 @@
         return usuario.Email.Contains(textoBusqueda, StringComparison.OrdinalIgnoreCase)
             || usuario.Rol.Contains(textoBusqueda, StringComparison.OrdinalIgnoreCase);
     }
-
-    //Abre el formulario para crear un usuario nuevo
+        
     private void AbrirFormularioCrear()
     {
+        textoBusqueda = string.Empty;
+
         emailNuevo = string.Empty;
         passwordNuevo = string.Empty;
         rolNuevo = "usuario";
-        dialogoCrearAbierto = true;
-    }
 
+        errorEmailNuevo = false;
+        errorPasswordNuevo = false;
+        mensajeErrorEmailNuevo = string.Empty;
+        mensajeErrorPasswordNuevo = string.Empty;
+
+        dialogoCrearAbierto = true;
+    }      
+    
     //Crea un usuario nuevo en el backend
     private async Task CrearUsuario()
     {
-        if (string.IsNullOrWhiteSpace(emailNuevo) || string.IsNullOrWhiteSpace(passwordNuevo))
+        errorEmailNuevo = false;
+        errorPasswordNuevo = false;
+        mensajeErrorEmailNuevo = string.Empty;
+        mensajeErrorPasswordNuevo = string.Empty;
+
+        emailNuevo = emailNuevo.Trim();
+
+        int posicionArroba = emailNuevo.IndexOf("@");
+        int posicionPunto = emailNuevo.LastIndexOf(".");
+
+        if (string.IsNullOrWhiteSpace(emailNuevo))
         {
-            Snackbar.Add("El email y la contraseña son obligatorios.", Severity.Warning);
+            errorEmailNuevo = true;
+            mensajeErrorEmailNuevo = "El email es obligatorio";
+        }
+        else if (posicionArroba == -1 || posicionPunto == -1)
+        {
+            errorEmailNuevo = true;
+            mensajeErrorEmailNuevo = "El email no tiene un formato válido";
+        }
+        else if (posicionArroba == 0)
+        {
+            errorEmailNuevo = true;
+            mensajeErrorEmailNuevo = "El email no tiene un formato válido";
+        }
+        else if (posicionPunto < posicionArroba)
+        {
+            errorEmailNuevo = true;
+            mensajeErrorEmailNuevo = "El email no tiene un formato válido";
+        }
+        else if (posicionPunto == emailNuevo.Length - 1)
+        {
+            errorEmailNuevo = true;
+            mensajeErrorEmailNuevo = "El email no tiene un formato válido";
+        }
+        else
+        {
+            foreach (var usuario in usuarios)
+            {
+                if (usuario.Email.ToLower() == emailNuevo.ToLower())
+                {
+                    errorEmailNuevo = true;
+                    mensajeErrorEmailNuevo = "Ya existe un usuario con ese email";
+                }
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(passwordNuevo))
+        {
+            errorPasswordNuevo = true;
+            mensajeErrorPasswordNuevo = "La contraseña es obligatoria";
+        }
+        else if (passwordNuevo.Length < 8)
+        {
+            errorPasswordNuevo = true;
+            mensajeErrorPasswordNuevo = "La contraseña debe tener al menos 8 caracteres";
+        }
+
+        if (errorEmailNuevo || errorPasswordNuevo)
+        {
+            StateHasChanged();
             return;
         }
 
@@ -229,7 +383,7 @@
 
         if (!respuesta.IsSuccessStatusCode)
         {
-            Snackbar.Add("No se pudo crear el usuario.", Severity.Error);
+            Snackbar.Add("No se pudo crear el usuario", Severity.Error);
             return;
         }
 
@@ -238,7 +392,7 @@
         await CargarUsuarios();
     }
 
-    //abre el diálogo de confirmación para cambiar el rol
+    //Abre el diálogo de confirmación para cambiar el rol
     private void ConfirmarCambioRol(ModeloUsuario usuario)
     {
         usuarioSeleccionado = usuario;
@@ -299,22 +453,19 @@
 
         HttpResponseMessage respuesta = await Http.DeleteAsync($"api/Usuarios/{usuarioSeleccionado.IdUsuario}");
 
-        var respuestaMensaje = await respuesta.Content.ReadFromJsonAsync<RespuestaMensaje>(
-            new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
         if (respuesta.IsSuccessStatusCode)
-            Snackbar.Add(respuestaMensaje?.Mensaje ?? "Usuario eliminado correctamente", Severity.Success);
+        {
+            Snackbar.Add("Usuario eliminado correctamente", Severity.Success);
+        }
         else
-            Snackbar.Add(respuestaMensaje?.Mensaje ?? "No se pudo eliminar el usuario.", Severity.Error);
+        {
+            Snackbar.Add("No se pudo eliminar el usuario.", Severity.Error);
+        }
 
         dialogoEliminarAbierto = false;
         await CargarUsuarios();
     }
-    private class RespuestaMensaje
-    {
-        public string? Mensaje { get; set; }
-    }
-
+    
     //Asigna el token JWT a las peticiones protegidas del panel administrador
     private void PonerToken()
     {

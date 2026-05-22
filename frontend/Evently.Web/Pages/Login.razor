@@ -21,13 +21,34 @@
                       Label="Email"
                       InputType="InputType.Email"
                       Variant="Variant.Outlined"
-                      Class="mb-3" />
+                      Immediate="true"
+                      AutoFocus="true"
+                      AutoComplete="off"
+                      Class="mb-1"
+                      Error="@errorEmail" />
+
+        @if (errorEmail)
+        {
+            <MudText Color="Color.Error" Typo="Typo.caption" Class="mb-3">
+                @mensajeErrorEmail
+            </MudText>
+        }
 
         <MudTextField @bind-Value="datosLogin.Password"
                       Label="Contraseña"
                       InputType="InputType.Password"
                       Variant="Variant.Outlined"
-                      Class="mb-4" />
+                      Immediate="true"
+                      AutoComplete="off"
+                      Class="mb-1"
+                      Error="@errorPassword" />
+
+        @if (errorPassword)
+        {
+            <MudText Color="Color.Error" Typo="Typo.caption" Class="mb-4">
+                @mensajeErrorPassword
+            </MudText>
+        }
 
         <MudButton Variant="Variant.Filled"
                    Color="Color.Primary"
@@ -54,25 +75,91 @@
     private string mensajeError = string.Empty;
     private bool cargando = false;
 
+    private bool errorEmail = false;
+    private bool errorPassword = false;
+
+    private string mensajeErrorEmail = string.Empty;
+    private string mensajeErrorPassword = string.Empty;
+
     private async Task IniciarSesion()
     {
         cargando = true;
+
         mensajeError = string.Empty;
+        errorEmail = false;
+        errorPassword = false;
+        mensajeErrorEmail = string.Empty;
+        mensajeErrorPassword = string.Empty;
+
+        datosLogin.Email = datosLogin.Email.Trim();
+
+        int posicionArroba = datosLogin.Email.IndexOf("@");
+        int posicionPunto = datosLogin.Email.LastIndexOf(".");
+
+        if (string.IsNullOrWhiteSpace(datosLogin.Email))
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email es obligatorio";
+        }
+        else if (posicionArroba == -1 || posicionPunto == -1)
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email no tiene un formato válido";
+        }
+        else if (posicionArroba == 0)
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email no tiene un formato válido";
+        }
+        else if (posicionPunto < posicionArroba)
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email no tiene un formato válido";
+        }
+        else if (posicionPunto == datosLogin.Email.Length - 1)
+        {
+            errorEmail = true;
+            mensajeErrorEmail = "El email no tiene un formato válido";
+        }
+
+        if (string.IsNullOrWhiteSpace(datosLogin.Password))
+        {
+            errorPassword = true;
+            mensajeErrorPassword = "La contraseña es obligatoria";
+        }
+        else if (datosLogin.Password.Length < 8)
+        {
+            errorPassword = true;
+            mensajeErrorPassword = "La contraseña debe tener al menos 8 caracteres";
+        }
+
+        if (errorEmail || errorPassword)
+        {
+            cargando = false;
+            StateHasChanged();
+            return;
+        }
 
         var respuesta = await AutenticacionService.LoginAsync(datosLogin);
 
         if (respuesta == null)
         {
-            mensajeError = "Email o contraseña incorrectos";
+            mensajeError = "No se ha podido iniciar sesión. Comprueba el email y la contraseña.";
+
+            cargando = false;
+            StateHasChanged();
+            return;
+        }
+
+        await EstadoAuth.IniciarSesionAsync(respuesta);
+
+        if (respuesta.Rol == "administrador")
+        {
+            NavManager.NavigateTo("/admin/dashboard");
         }
         else
         {
-            
-            await EstadoAuth.IniciarSesionAsync(respuesta);
-            if (respuesta.Rol == "administrador")
-                NavManager.NavigateTo("/admin/dashboard");
-            else
-                NavManager.NavigateTo("/");
+            NavManager.NavigateTo("/");
         }
 
         cargando = false;
