@@ -16,7 +16,9 @@ namespace Evently.API.DTOs.Cliente
         [MaxLength(150, ErrorMessage = "Los apellidos no pueden superar 150 caracteres")]
         public string Apellidos { get; set; } = string.Empty;
 
-        [MaxLength(30, ErrorMessage = "El teléfono no puede superar 30 caracteres")]
+        [Required(ErrorMessage = "El teléfono es obligatorio")]
+        [RegularExpression(@"^[67]\d{8}$",
+            ErrorMessage = "El teléfono debe ser un móvil válido de 9 dígitos")]
         public string? Telefono { get; set; }
 
         [MaxLength(15, ErrorMessage = "El código postal no puede superar 15 caracteres")]
