@@ -251,6 +251,9 @@ else
             if (!EstadoAuth.EstaAutenticado)
                 await EstadoAuth.CargarDesdeLocalStorageAsync();
 
+            if (EstadoAuth.EstaAutenticado && EstadoAuth.IdUsuario > 0)
+                await JS.InvokeVoidAsync("migrarCarritoAnonimo", EstadoAuth.IdUsuario);
+
             await CargarCarrito();
             await CargarInfoActividades();
 

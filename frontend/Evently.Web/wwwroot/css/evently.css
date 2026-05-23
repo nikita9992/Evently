@@ -1241,6 +1241,11 @@
     margin: 0 auto;
 }
 
+.centradoVerificacion {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
 
 /*Responsive*/
 
@@ -1382,8 +1387,6 @@
         max-width: 80px;
     }
 }
-
-
 
 @media (max-width: 480px) {
     .pie {

@@ -84,3 +84,62 @@ window.obtenerUsuario = () => {
         expiracion: localStorage.getItem("evently_expiracion") || ""
     };
 };
+
+// Migrar el carrito anónimo al carrito del usuario logeado
+window.migrarCarritoAnonimo = (idUsuario) => {
+    if (!idUsuario || idUsuario <= 0) return;
+
+    const claveAnonimo = "evently_carrito_anonimo";
+    const rawAnonimo = localStorage.getItem(claveAnonimo);
+    if (!rawAnonimo) return;
+
+    try {
+        const datosAnonimo = JSON.parse(rawAnonimo);
+
+        // Si el carrito anónimo ha expirado lo borramos
+        if (Date.now() > datosAnonimo.expiracion) {
+            localStorage.removeItem(claveAnonimo);
+            return;
+        }
+
+        const itemsAnonimos = datosAnonimo.items || [];
+        if (itemsAnonimos.length === 0) {
+            localStorage.removeItem(claveAnonimo);
+            return;
+        }
+
+        const claveUsuario = `evently_carrito_${idUsuario}`;
+        const rawUsuario = localStorage.getItem(claveUsuario);
+        let itemsUsuario = [];
+
+        if (rawUsuario) {
+            try {
+                const datosUsuario = JSON.parse(rawUsuario);
+                if (Date.now() <= datosUsuario.expiracion) {
+                    itemsUsuario = datosUsuario.items || [];
+                }
+            } catch { }
+        }
+
+        // Si la misma actividad está en los dos, sumamos la cantidad
+        itemsAnonimos.forEach(itemAnonimo => {
+            const existente = itemsUsuario.find(i => i.IdActividad === itemAnonimo.IdActividad);
+            if (existente) {
+                existente.Cantidad += itemAnonimo.Cantidad;
+                existente.ImporteLinea = existente.Cantidad * existente.Precio;
+            } else {
+                itemsUsuario.push(itemAnonimo);
+            }
+        });
+
+        const datosCombinados = {
+            items: itemsUsuario,
+            expiracion: Date.now() + (12 * 60 * 60 * 1000)
+        };
+        localStorage.setItem(claveUsuario, JSON.stringify(datosCombinados));
+        localStorage.removeItem(claveAnonimo);
+
+    } catch {
+        localStorage.removeItem(claveAnonimo);
+    }
+};
