@@ -1,0 +1,455 @@
+﻿
+/* Panel de administración */
+
+/* Barra superior */
+
+.barraSuperior {
+    background: #1a2236;
+    min-height: 68px;
+    border-bottom: 1px solid #243044;
+}
+
+.barraSuperior .mud-toolbar {
+    min-height: 68px;
+    padding-left: 22px;
+    padding-right: 28px;
+}
+
+.marcaAdministrador {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.logoAdministrador {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+}
+
+.tituloAplicacion {
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.4px;
+    font-size: 23px;
+    line-height: 1;
+}
+
+.resaltadoTitulo {
+    color: #7c6fee;
+}
+
+.correoUsuario {
+    color: #cbd5e1;
+    font-size: 16px;
+}
+
+/* Menú lateral */
+
+.panelLateral {
+    background: #1a2236;
+    border-right: 1px solid #243044;
+}
+
+.contenedorEnlaces {
+    padding: 20px 10px;
+}
+
+.etiquetaGestion {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    padding: 0 14px;
+    margin-bottom: 14px;
+}
+
+.enlaceNavegacion,
+.botonCerrarSesion {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    align-items: center;
+    gap: 14px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: background 0.2s ease, color 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.enlaceNavegacion {
+    text-decoration: none;
+    color: #cbd5e1;
+}
+
+.enlaceNavegacion:hover {
+    background: rgba(124, 111, 238, 0.18);
+    color: #ffffff;
+}
+
+.enlaceNavegacionActivo {
+    background: rgba(124, 111, 238, 0.26);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.botonCerrarSesion {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #f87171;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.botonCerrarSesion:hover {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(248, 113, 113, 0.45);
+    color: #fecaca;
+}
+
+.iconoNavegacion,
+.textoNavegacion {
+    display: inline-flex;
+    align-items: center;
+}
+
+.iconoNavegacion {
+    font-size: 21px;
+    line-height: 1;
+}
+
+.textoNavegacion {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.separadorNavegacion {
+    border-top: 1px solid #243044;
+    margin: 16px 0;
+}
+
+/* Contenido principal */
+
+.fondoPrincipal {
+    background: #f1f5f9;
+    min-height: calc(100vh - 68px);
+}
+
+/* Dashboard de administración */
+
+/* Distribución general */
+
+.rejillaTarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 26px;
+    margin-top: 15px;
+    margin-bottom: 26px;
+}
+
+.rejillaGraficos {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 26px;
+}
+
+/* Tarjetas superiores */
+
+.tarjetaEstadistica {
+    background: white;
+    border-radius: 16px;
+    padding: 18px 24px;
+    min-height: 120px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tarjetaPedidos {
+    border-left: 5px solid #7c6fee;
+}
+
+.tarjetaIngresos {
+    border-left: 5px solid #06b6d4;
+}
+
+.tarjetaTicket {
+    border-left: 5px solid #3b82f6;
+}
+
+.tarjetaConfirmacion {
+    border-left: 5px solid #ff7b7b;
+}
+
+.tarjetaPedidos .etiquetaTarjeta {
+    color: #7c6fee;
+}
+
+.tarjetaIngresos .etiquetaTarjeta {
+    color: #06b6d4;
+}
+
+.tarjetaTicket .etiquetaTarjeta {
+    color: #3b82f6;
+}
+
+.tarjetaConfirmacion .etiquetaTarjeta {
+    color: #ff7b7b;
+}
+
+.etiquetaTarjeta {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    margin: 0 0 8px 0;
+}
+
+.valorTarjeta {
+    font-size: 38px;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    line-height: 1;
+}
+
+.descripcionTarjeta {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Tarjetas inferiores */
+
+.tarjetaGrafico {
+    background: white;
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.tituloTarjeta {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+}
+
+.subtituloTarjeta {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 16px 0;
+}
+
+.cabeceraTarjeta {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.botonVerTodos {
+    color: #7c6fee;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Gráfico */
+
+.donutSinLeyenda .mud-chart-legend {
+    display: none;
+}
+
+.contenedorGrafico {
+    position: relative;
+}
+
+.contenedorSinDatos {
+    height: 200px;
+    display: grid;
+    place-items: center;
+}
+
+.textoSinDatos {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.leyendaGrafico {
+    margin-top: 16px;
+}
+
+.itemLeyenda {
+    display: grid;
+    grid-template-columns: 12px 1fr;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.puntoLeyenda {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.puntoConfirmado {
+    background: #746EEA;
+}
+
+.puntoPendiente {
+    background: #00BDA1;
+}
+
+.puntoCancelado {
+    background: #00FCE7;
+}
+
+.textoLeyenda {
+    font-size: 14px;
+    color: #334155;
+}
+
+/* Últimos pedidos */
+
+.filaPedido {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.nombrePedido {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 2px 0;
+}
+
+.fechaPedido {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+.importePedido {
+    text-align: right;
+}
+
+.totalPedido {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+}
+
+.estadoPedido {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.estadoConfirmado {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.estadoCancelado {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.estadoPendiente {
+    background: #fef9c3;
+    color: #ca8a04;
+}
+
+#pagina-admin-actividades,
+#pagina-admin-categorias,
+#pagina-admin-clientes,
+#pagina-admin-estados,
+#pagina-admin-pedidos,
+#pagina-admin-usuarios {
+    padding: 8px 0;
+}
+
+#seccion-tabla-actividades,
+#seccion-tabla-categorias,
+#seccion-tabla-clientes,
+#seccion-tabla-estados,
+#seccion-tabla-pedidos,
+#seccion-tabla-usuarios {
+    margin-top: 8px;
+}
+
+.miniatura-tabla {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.lista-campos-imagen {
+    margin-bottom: 8px;
+}
+
+.fila-imagen {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.miniatura-preview {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.detalle-pedido {
+    padding: 4px 0;
+}
+
+.cabecera-detalle-pedido {
+    margin-bottom: 8px;
+}
+
+.panel-cambio-estado {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radio-tarjeta);
+    padding: 12px;
+}
+
+.lineas-pedido {
+    margin-bottom: 8px;
+}
+
+.pie-total-pedido {
+    padding-top: 8px;
+}
+
+.mud-table-cell .mud-input-control {
+    justify-content: center;
+}
+
+.mud-table-cell .mud-checkbox {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+/* Adaptación a pantallas pequeñas */
+
+@media (max-width: 900px) {
+    .rejillaGraficos {
+        grid-template-columns: 1fr;
+    }
+}
