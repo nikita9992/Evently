@@ -144,6 +144,13 @@ else
                             </section>
                         </section>
                     </article>
+                    @if (actividad?.PlazasDisponibles.HasValue == true && item.Cantidad > actividad.PlazasDisponibles)
+                    {
+                        <MudAlert Severity="Severity.Error" Dense="true" Class="mx-3 mb-3">
+                            Solo quedan @actividad.PlazasDisponibles plaza(s) disponibles, pero tienes @item.Cantidad en el carrito.
+                            Reduce la cantidad para poder confirmar el pedido.
+                        </MudAlert>
+                    }
                 </MudPaper>
             }
         </MudItem>
@@ -340,6 +347,49 @@ else
         await JS.InvokeVoidAsync("guardarCarrito", json, EstadoAuth.IdUsuario);
     }
 
+    private async Task<bool> ValidarStockCarrito()
+    {
+        var hayProblemas = false;
+
+        foreach (var item in elementosCarrito)
+        {
+            var actividad = await ActividadService.ObtenerPorIdAsync(item.IdActividad);
+
+            if (actividad == null)
+            {
+                Snackbar.Add(
+                    $"La actividad \"{item.Titulo}\" ya no está disponible y ha sido eliminada del carrito.",
+                    Severity.Error);
+                elementosCarrito.Remove(item);
+                await GuardarCarrito();
+                hayProblemas = true;
+                break;
+            }
+
+            actividadesInfo[item.IdActividad] = actividad; 
+
+            if (actividad.PlazasDisponibles.HasValue && item.Cantidad > actividad.PlazasDisponibles.Value)
+            {
+                if (actividad.PlazasDisponibles.Value == 0)
+                {
+                    Snackbar.Add(
+                        $"Ya no quedan plazas para \"{item.Titulo}\". Elimínala del carrito para continuar.",
+                        Severity.Error);
+                }
+                else
+                {
+                    Snackbar.Add(
+                        $"Solo quedan {actividad.PlazasDisponibles.Value} plaza(s) para \"{item.Titulo}\" " +
+                        $"pero tienes {item.Cantidad} en el carrito. Ajusta la cantidad para continuar.",
+                        Severity.Warning);
+                }
+                hayProblemas = true;
+            }
+        }
+
+        return !hayProblemas;
+    }
+
     private async Task ConfirmarPedido()
     {
         if (!EstadoAuth.EstaAutenticado)
@@ -348,8 +398,7 @@ else
             return;
         }
 
-        var cliente = await ClienteService.ObtenerPorUsuarioAsync(EstadoAuth.IdUsuario, 
-                                                                  EstadoAuth.Token);
+        var cliente = await ClienteService.ObtenerPorUsuarioAsync(EstadoAuth.IdUsuario, EstadoAuth.Token);
 
         if (cliente == null
             || string.IsNullOrWhiteSpace(cliente.Nombre)
@@ -362,6 +411,14 @@ else
 
         idCliente = cliente.IdCliente;
         estaConfirmando = true;
+
+        var stockOk = await ValidarStockCarrito();
+        if (!stockOk)
+        {
+            estaConfirmando = false;
+            StateHasChanged();
+            return;
+        }
 
         var dto = new ConfirmarPedidoDto
         {

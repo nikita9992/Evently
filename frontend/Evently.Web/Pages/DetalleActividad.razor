@@ -202,7 +202,7 @@ else
                                          Label="Cantidad"
                                          Variant="Variant.Outlined"
                                          Min="1"
-                                         Max="@(actividad.PlazasDisponibles ?? actividad.CupoMaximo ?? 10)"
+                                         Max="@(actividad.PlazasDisponibles.HasValue ? Math.Max(1, actividad.PlazasDisponibles.Value - cantidadEnCarrito) : actividad.CupoMaximo ?? 10)"
                                          Class="mb-4" />
 
                         <MudText Typo="Typo.subtitle1" Class="mb-4">
@@ -217,9 +217,11 @@ else
                                    Size="Size.Large"
                                    StartIcon="@Icons.Material.Filled.ShoppingCart"
                                    OnClick="AnadirAlCarrito"
-                                   Disabled="@(actividad.PlazasDisponibles == 0)">
+                                   Disabled="@(actividad.PlazasDisponibles == 0 || (actividad.PlazasDisponibles.HasValue && cantidadEnCarrito >= actividad.PlazasDisponibles.Value))">
                             @(actividad.PlazasDisponibles == 0
                                 ? "Sin plazas disponibles"
+                                : (actividad.PlazasDisponibles.HasValue && cantidadEnCarrito >= actividad.PlazasDisponibles.Value)
+                                ? "Ya tienes el máximo en el carrito"
                                 : "Añadir al carrito")
                         </MudButton>
 
@@ -438,6 +440,7 @@ else
     private int estrellaSeleccionada = 0;
     private int estrellaHover = 0;
     private bool tienePerfilCompleto = false;
+    private int cantidadEnCarrito = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -460,6 +463,8 @@ else
         if (firstRender && !EstadoAuth.EstaAutenticado)
         {
             await EstadoAuth.CargarDesdeLocalStorageAsync();
+            await CargarCantidadEnCarrito();
+            StateHasChanged();
 
             if (EstadoAuth.EstaAutenticado)
             {
@@ -475,7 +480,8 @@ else
 
                 if (resumenValoracion.ValoracionUsuario.HasValue)
                     estrellaSeleccionada = resumenValoracion.ValoracionUsuario.Value;
-
+                
+                await CargarCantidadEnCarrito();
                 StateHasChanged();
             }
         }
@@ -563,13 +569,30 @@ else
         if (actividad == null) return;
 
         var carritoJson = await ObtenerCarritoLocal();
-        var carrito     = string.IsNullOrEmpty(carritoJson) || carritoJson == "[]"
+        var carrito = string.IsNullOrEmpty(carritoJson) || carritoJson == "[]"
             ? new List<ItemCarrito>()
             : System.Text.Json.JsonSerializer.Deserialize<List<ItemCarrito>>(carritoJson)
               ?? new List<ItemCarrito>();
 
-        var itemExistente = carrito
-            .FirstOrDefault(i => i.IdActividad == actividad.IdActividad);
+        var itemExistente = carrito.FirstOrDefault(i => i.IdActividad == actividad.IdActividad);
+        int cantidadEnCarrito = itemExistente?.Cantidad ?? 0;
+
+        if (actividad.PlazasDisponibles.HasValue)
+        {
+            int plazasLibres = actividad.PlazasDisponibles.Value - cantidadEnCarrito;
+
+            if (plazasLibres <= 0)
+            {
+                Snackbar.Add("Ya tienes el máximo de plazas disponibles en el carrito", Severity.Warning);
+                return;
+            }
+
+            if (cantidad > plazasLibres)
+            {
+                Snackbar.Add($"Solo puedes añadir {plazasLibres} plaza(s) más", Severity.Warning);
+                return;
+            }
+        }
 
         if (itemExistente != null)
             itemExistente.Cantidad += cantidad;
@@ -577,14 +600,12 @@ else
             carrito.Add(new ItemCarrito
             {
                 IdActividad = actividad.IdActividad,
-                Titulo      = actividad.Titulo,
-                Precio      = actividad.Precio,
-                Cantidad    = cantidad
+                Titulo = actividad.Titulo,
+                Precio = actividad.Precio,
+                Cantidad = cantidad
             });
 
-        await GuardarCarritoLocal(
-            System.Text.Json.JsonSerializer.Serialize(carrito));
-
+        await GuardarCarritoLocal(System.Text.Json.JsonSerializer.Serialize(carrito));
         Snackbar.Add($"¡{actividad.Titulo} añadido al carrito!", Severity.Success);
     }
 
@@ -596,5 +617,17 @@ else
     private async Task GuardarCarritoLocal(string json)
     {
         await JS.InvokeVoidAsync("guardarCarrito", json, EstadoAuth.IdUsuario);
+    }
+
+    private async Task CargarCantidadEnCarrito()
+    {
+        var carritoJson = await ObtenerCarritoLocal();
+        if (string.IsNullOrEmpty(carritoJson) || carritoJson == "[]") return;
+
+        var carrito = System.Text.Json.JsonSerializer.Deserialize<List<ItemCarrito>>(carritoJson);
+        if (carrito == null) return;
+
+        var item = carrito.FirstOrDefault(i => i.IdActividad == Id);
+        cantidadEnCarrito = item?.Cantidad ?? 0;
     }
 }
