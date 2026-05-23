@@ -8,103 +8,113 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout>
-    @* Barra superior *@
-    <MudAppBar Elevation="2" Class="barraSuperior">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu"
-                       Color="Color.Inherit"
-                       Edge="Edge.Start"
-                       OnClick="AlternarMenuLateral" />
+@if (verificando)
+{
+    <section class="centradoVerificacion">
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+    </section>
+}
+else
+{
+    <MudLayout>
+        @* Barra superior *@
+        <MudAppBar Elevation="2" Class="barraSuperior">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                           Color="Color.Inherit"
+                           Edge="Edge.Start"
+                           OnClick="AlternarMenuLateral" />
 
-        <section class="marcaAdministrador" @onclick='@(() => Navegacion.NavigateTo("/admin/dashboard"))'>
-            <img src="img/icono-evently.png"
-                 alt="Logo de Evently"
-                 class="logoAdministrador" />
-            <span class="tituloAplicacion">
-                Evently <span class="resaltadoTitulo">Admin</span>
-            </span>
-        </section>
+            <section class="marcaAdministrador" @onclick='@(() => Navegacion.NavigateTo("/admin/dashboard"))'>
+                <img src="img/icono-evently.png"
+                     alt="Logo de Evently"
+                     class="logoAdministrador" />
+                <span class="tituloAplicacion">
+                    Evently <span class="resaltadoTitulo">Admin</span>
+                </span>
+            </section>
        
-        <MudSpacer />
-        <MudText Typo="Typo.body2" Class="correoUsuario mr-2 d-none d-sm-flex">
-            @EstadoAuth.Email
-        </MudText>
-    </MudAppBar>
+            <MudSpacer />
+            <MudText Typo="Typo.body2" Class="correoUsuario mr-2 d-none d-sm-flex">
+                @EstadoAuth.Email
+            </MudText>
+        </MudAppBar>
 
-    @* Menú lateral *@
-    <MudDrawer @bind-Open="menuLateralAbierto"
-               Elevation="1"
-               ClipMode="DrawerClipMode.Always"
-               Breakpoint="Breakpoint.Md"
-               Class="panelLateral">
+        @* Menú lateral *@
+        <MudDrawer @bind-Open="menuLateralAbierto"
+                   Elevation="1"
+                   ClipMode="DrawerClipMode.Always"
+                   Breakpoint="Breakpoint.Md"
+                   Class="panelLateral">
 
-        <nav class="contenedorEnlaces">
-            <p class="etiquetaGestion">GESTIÓN</p>
+            <nav class="contenedorEnlaces">
+                <p class="etiquetaGestion">GESTIÓN</p>
 
             
-            <NavLink href="/admin/actividades"
-                        class="enlaceNavegacion"
-                        activeClass="enlaceNavegacionActivo">
-                <span class="material-icons iconoNavegacion">event_note</span>
-                <span class="textoNavegacion">Actividades</span>
-            </NavLink>
+                <NavLink href="/admin/actividades"
+                            class="enlaceNavegacion"
+                            activeClass="enlaceNavegacionActivo">
+                    <span class="material-icons iconoNavegacion">event_note</span>
+                    <span class="textoNavegacion">Actividades</span>
+                </NavLink>
 
-            <NavLink href="/admin/categorias"
-                        class="enlaceNavegacion"
-                        activeClass="enlaceNavegacionActivo">
-                <span class="material-icons iconoNavegacion">category</span>
-                <span class="textoNavegacion">Categorías</span>
-            </NavLink>
+                <NavLink href="/admin/categorias"
+                            class="enlaceNavegacion"
+                            activeClass="enlaceNavegacionActivo">
+                    <span class="material-icons iconoNavegacion">category</span>
+                    <span class="textoNavegacion">Categorías</span>
+                </NavLink>
 
-            <NavLink href="/admin/pedidos"
-                        class="enlaceNavegacion"
-                        activeClass="enlaceNavegacionActivo">
-                <span class="material-icons iconoNavegacion">receipt_long</span>
-                <span class="textoNavegacion">Pedidos</span>
-            </NavLink>
+                <NavLink href="/admin/pedidos"
+                            class="enlaceNavegacion"
+                            activeClass="enlaceNavegacionActivo">
+                    <span class="material-icons iconoNavegacion">receipt_long</span>
+                    <span class="textoNavegacion">Pedidos</span>
+                </NavLink>
 
-            <NavLink href="/admin/clientes"
-                        class="enlaceNavegacion"
-                        activeClass="enlaceNavegacionActivo">
-                <span class="material-icons iconoNavegacion">groups</span>
-                <span class="textoNavegacion">Clientes</span>
-            </NavLink>
+                <NavLink href="/admin/clientes"
+                            class="enlaceNavegacion"
+                            activeClass="enlaceNavegacionActivo">
+                    <span class="material-icons iconoNavegacion">groups</span>
+                    <span class="textoNavegacion">Clientes</span>
+                </NavLink>
 
-            <NavLink href="/admin/usuarios"
-                        class="enlaceNavegacion"
-                        activeClass="enlaceNavegacionActivo">
-                <span class="material-icons iconoNavegacion">manage_accounts</span>
-                <span class="textoNavegacion">Usuarios</span>
-            </NavLink>
+                <NavLink href="/admin/usuarios"
+                            class="enlaceNavegacion"
+                            activeClass="enlaceNavegacionActivo">
+                    <span class="material-icons iconoNavegacion">manage_accounts</span>
+                    <span class="textoNavegacion">Usuarios</span>
+                </NavLink>
 
-            <NavLink href="/admin/estados"
-                        class="enlaceNavegacion"
-                        activeClass="enlaceNavegacionActivo">
-                <span class="material-icons iconoNavegacion">flag</span>
-                <span class="textoNavegacion">Estados</span>
-            </NavLink>
+                <NavLink href="/admin/estados"
+                            class="enlaceNavegacion"
+                            activeClass="enlaceNavegacionActivo">
+                    <span class="material-icons iconoNavegacion">flag</span>
+                    <span class="textoNavegacion">Estados</span>
+                </NavLink>
             
 
-            <hr class="separadorNavegacion" />
+                <hr class="separadorNavegacion" />
 
-            <button @onclick="CerrarSesion" class="botonCerrarSesion">
-                <span class="material-icons iconoNavegacion">logout</span>
-                <span class="textoNavegacion">Cerrar sesión</span>
-            </button>
-        </nav>
-    </MudDrawer>
+                <button @onclick="CerrarSesion" class="botonCerrarSesion">
+                    <span class="material-icons iconoNavegacion">logout</span>
+                    <span class="textoNavegacion">Cerrar sesión</span>
+                </button>
+            </nav>
+        </MudDrawer>
 
-    @* Contenido principal *@
-    <MudMainContent Class="fondoPrincipal">
-        <MudContainer MaxWidth="MaxWidth.Large" Class="pa-4 pa-sm-6">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+        @* Contenido principal *@
+        <MudMainContent Class="fondoPrincipal">
+            <MudContainer MaxWidth="MaxWidth.Large" Class="pa-4 pa-sm-6">
+                @Body
+            </MudContainer>
+        </MudMainContent>
+    </MudLayout>
+}
 
 @code {
     // Controla si el menú lateral está abierto o cerrado
     private bool menuLateralAbierto = true;
+    private bool verificando = true;
 
     protected override async Task OnAfterRenderAsync(bool primeraCarga)
     {
@@ -119,6 +129,7 @@
                 Navegacion.NavigateTo("/login");
                 return;
             }
+            verificando = false;
             EstadoAuth.OnCambio += StateHasChanged;
             StateHasChanged();
         }
