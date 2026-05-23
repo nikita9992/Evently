@@ -160,6 +160,18 @@ else
         {
             // Cargamos el token guardado en el navegador antes de pedir datos
             await EstadoAuth.CargarDesdeLocalStorageAsync();
+
+            if (!EstadoAuth.EstaAutenticado)
+            {
+                Navegacion.NavigateTo("/login");
+                return;
+            }
+
+            if (!EstadoAuth.EsAdministrador)
+            {
+                Navegacion.NavigateTo("/");
+                return;
+            }
             await CargarEstadisticas();
             StateHasChanged();
         }
