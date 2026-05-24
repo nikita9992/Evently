@@ -205,7 +205,8 @@ El proyecto necesita dos valores que **no están incluidos en el repositorio**: 
 1. En el **Explorador de Soluciones**, click derecho sobre el proyecto `Evently.API`
 2. Seleccionar **Administrar secretos de usuario**
 3. Visual Studio abrirá un archivo `secrets.json` vinculado al proyecto
-4. Añadir el contenido de `secret.txt`
+4. Copiar el contenido del archivo `secret.txt` que está en la raíz del repositorio y pegarlo en el `secrets.json`
+
 
 
 
@@ -238,5 +239,12 @@ La documentación Swagger estará disponible en `https://localhost:7174` mientra
 - `develop` → integración de ambas partes
 - `Mykyta` → rama de trabajo de Mykyta
 - `raquel` → rama de trabajo de Raquel
+
+## Usuarios de prueba
+
+| Perfil         | Email                        | Contraseña |
+| -------------- | ---------------------------- | ---------- |
+| Administrador  | raquel@evently.com           | Admin1234! |
+| Registrado     | prueba@gmail.com             | Admin1234! |
 
 _Proyecto Final Evently — DAW-M | Mare Nostrum Alicante | 2026_
